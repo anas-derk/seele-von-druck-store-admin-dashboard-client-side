@@ -37,12 +37,15 @@ export default function AddNewProduct() {
 
     const [bussinessCardCustomizations, setBussinessCardCustomizations] = useState({
         types: [
-            { content: "", price: 0 }
+            { content: "", price: 1 }
         ],
         quantities: [
-            { quantity: "", price: 0 }
+            { quantity: 1, price: 1 }
         ],
-        corners: "",
+        corner: {
+            type: "",
+            price: 0
+        },
         isExistDesign: false,
         isExistLogo: false,
         isAttachAFile: false,
@@ -598,31 +601,29 @@ export default function AddNewProduct() {
                             {selectedCategory === "Bussiness Card" && <>
                                 <div className="quantity-and-price-details mb-3">
                                     <h6 className="fw-bold">Quantities</h6>
-                                    <div className="row align-items-center">
-                                        {bussinessCardCustomizations.quantities.map((quantityDetails, quantityIndex) => <>
-                                            <div className="col-md-5">
-                                                <input
-                                                    type="number"
-                                                    className="form-control p-2 border-2 type-content-field"
-                                                    placeholder="Please Enter Quantity"
-                                                    onChange={(e) => setProductData({ ...productData, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" })}
-                                                    value={quantityDetails.quantity}
-                                                />
-                                            </div>
-                                            <div className="col-md-6">
-                                                <input
-                                                    type="number"
-                                                    className="form-control p-2 border-2 type-content-field"
-                                                    placeholder="Please Enter Price"
-                                                    onChange={(e) => setProductData({ ...productData, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" })}
-                                                    value={quantityDetails.price}
-                                                />
-                                            </div>
-                                            <div className="col-md-1">
-                                                <FaRegPlusSquare className="add-icon" />
-                                            </div>
-                                        </>)}
-                                    </div>
+                                    {bussinessCardCustomizations.quantities.map((quantityDetails, quantityIndex) => <div className="row align-items-center" key={quantityIndex}>
+                                        <div className="col-md-5">
+                                            <input
+                                                type="number"
+                                                className="form-control p-2 border-2 type-content-field"
+                                                placeholder="Please Enter Quantity"
+                                                onChange={(e) => setProductData({ ...productData, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" })}
+                                                value={quantityDetails.quantity}
+                                            />
+                                        </div>
+                                        <div className="col-md-6">
+                                            <input
+                                                type="number"
+                                                className="form-control p-2 border-2 type-content-field"
+                                                placeholder="Please Enter Price"
+                                                onChange={(e) => setProductData({ ...productData, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" })}
+                                                value={quantityDetails.price}
+                                            />
+                                        </div>
+                                        <div className="col-md-1">
+                                            <FaRegPlusSquare className="add-icon" />
+                                        </div>
+                                    </div>)}
                                 </div>
                                 <div className="corner-type mb-4">
                                     <h6 className="fw-bold mb-3">Corner Type</h6>
@@ -630,32 +631,34 @@ export default function AddNewProduct() {
                                         <input
                                             type="radio"
                                             id="rounded-corners-radio"
+                                            checked={bussinessCardCustomizations.corner.type === "rounded"}
                                             className="radio-input me-2"
                                             name="cornersTypeGroup"
-                                            onChange={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, corner: "rounded" })}
+                                            onChange={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, corner: { ...bussinessCardCustomizations.corner, type: "rounded" } })}
                                         />
-                                        <label htmlFor="rounded-corners-radio" className="me-4" onClick={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, corner: "rounded" })}>Rounded</label>
+                                        <label htmlFor="rounded-corners-radio" className="me-4" onClick={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, corner: { ...bussinessCardCustomizations.corner, type: "rounded" } })}>Rounded</label>
                                         <input
                                             type="number"
                                             className="form-control p-2 border-2 additional-price-field mt-2"
                                             placeholder="Please Enter Price"
-                                            onChange={(e) => setProductData({ ...productData, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" })}
+                                            onChange={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, corner: { ...bussinessCardCustomizations.corner, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" } })}
                                         />
                                     </div>
                                     <div className="corner-details">
                                         <input
                                             type="radio"
                                             id="sharp-corners-radio"
+                                            checked={bussinessCardCustomizations.corner.type === "sharp"}
                                             className="radio-input me-2"
                                             name="cornersTypeGroup"
-                                            onChange={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, corner: "sharp" })}
+                                            onChange={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, corner: { ...bussinessCardCustomizations.corner, type: "sharp" } })}
                                         />
-                                        <label htmlFor="sharp-corners-radio" onClick={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, corner: "sharp" })}>Sharp</label>
+                                        <label htmlFor="sharp-corners-radio" onClick={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, corner: { ...bussinessCardCustomizations.corner, type: "sharp" } })}>Sharp</label>
                                         <input
                                             type="number"
                                             className="form-control p-2 border-2 additional-price-field mt-2"
                                             placeholder="Please Enter Price"
-                                            onChange={(e) => setProductData({ ...productData, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" })}
+                                            onChange={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, corners: { ...bussinessCardCustomizations.corner, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" } })}
                                         />
                                     </div>
                                 </div>
