@@ -321,7 +321,7 @@ export default function AddNewProduct() {
                         {["Bussiness Card", "Panner", "Flex"].includes(selectedCategory) && <section className="customizations mb-4 border border-3 border-dark p-4">
                             <h6 className="fw-bold border-bottom border-2 border-dark pb-2 mb-3">Customizations</h6>
                             <div className="type-details mb-3">
-                            <h6 className="fw-bold">Type</h6>
+                                <h6 className="fw-bold">Type</h6>
                                 <div className="row align-items-center">
                                     <div className="col-md-5">
                                         <input
@@ -344,7 +344,63 @@ export default function AddNewProduct() {
                                     </div>
                                 </div>
                             </div>
+                            {(selectedCategory === "Flex" || selectedCategory === "Panner") && <div className="quantity-and-price-details mb-3">
+                                <h6 className="fw-bold">Width, Height And Price</h6>
+                                <div className="row align-items-center">
+                                    <div className="col-md-4">
+                                        <input
+                                            type="number"
+                                            className="form-control p-2 border-2 type-content-field"
+                                            placeholder="Please Enter Width"
+                                            onChange={(e) => setProductData({ ...productData, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" })}
+                                        />
+                                    </div>
+                                    <div className="col-md-4">
+                                        <input
+                                            type="number"
+                                            className="form-control p-2 border-2 type-content-field"
+                                            placeholder="Please Enter Price"
+                                            onChange={(e) => setProductData({ ...productData, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" })}
+                                        />
+                                    </div>
+                                    <div className="col-md-3">
+                                        <input
+                                            type="number"
+                                            className="form-control p-2 border-2 type-content-field"
+                                            placeholder="Please Enter Height"
+                                            onChange={(e) => setProductData({ ...productData, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" })}
+                                        />
+                                    </div>
+                                    <div className="col-md-1">
+                                        <FaRegPlusSquare className="add-icon" />
+                                    </div>
+                                </div>
+                            </div>}
                             {selectedCategory === "Bussiness Card" && <>
+                                <div className="quantity-and-price-details mb-3">
+                                    <h6 className="fw-bold">Quantity</h6>
+                                    <div className="row align-items-center">
+                                        <div className="col-md-5">
+                                            <input
+                                                type="number"
+                                                className="form-control p-2 border-2 type-content-field"
+                                                placeholder="Please Enter Quantity"
+                                                onChange={(e) => setProductData({ ...productData, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" })}
+                                            />
+                                        </div>
+                                        <div className="col-md-6">
+                                            <input
+                                                type="number"
+                                                className="form-control p-2 border-2 type-content-field"
+                                                placeholder="Please Enter Price"
+                                                onChange={(e) => setProductData({ ...productData, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" })}
+                                            />
+                                        </div>
+                                        <div className="col-md-1">
+                                            <FaRegPlusSquare className="add-icon" />
+                                        </div>
+                                    </div>
+                                </div>
                                 <div className="corners-type mb-4">
                                     <h6 className="fw-bold mb-3">Corners Type</h6>
                                     <div className="corner-details mb-3">
