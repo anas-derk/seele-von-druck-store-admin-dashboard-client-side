@@ -35,6 +35,20 @@ export default function AddNewProduct() {
         galleryImages: [],
     });
 
+    const [bussinessCardCustomizations, setBussinessCardCustomizations] = useState({
+        type: [
+            { content: "", price: 0 }
+        ],
+        quantities: [
+            { quantity: "", price: 0 }
+        ],
+        corners: "",
+        isExistDesign: false,
+        isExistLogo: false,
+        isAttachAFile: false,
+        isDisplayStock: false,
+    });
+
     const [selectedCategory, setSelectedCategory] = useState(-1);
 
     const [waitMsg, setWaitMsg] = useState("");
@@ -328,7 +342,7 @@ export default function AddNewProduct() {
                                             type="text"
                                             className="form-control p-2 border-2 type-content-field"
                                             placeholder="Please Enter Content"
-                                            onChange={(e) => setProductData({ ...productData, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" })}
+                                            // onChange={(e) => setBussinessCardCustomizations({ ...bussinessCardCustomizations, type: })}
                                         />
                                     </div>
                                     <div className="col-md-6">
@@ -440,78 +454,86 @@ export default function AddNewProduct() {
                                     <h6 className="fw-bold mb-3">Is Exist Design ?</h6>
                                     <input
                                         type="radio"
+                                        checked={bussinessCardCustomizations.isExistDesign}
                                         id="exist-design-radio"
                                         className="radio-input me-2"
                                         name="isExistDesignRadioGroup"
-                                        onChange={() => setPaymentGateway("tap")}
-                                    />
-                                    <label htmlFor="exist-design-radio" className="me-4" onClick={() => setPaymentGateway("tap")}>Yes</label>
+                                        onChange={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isExistDesign: true })}
+                                        />
+                                    <label htmlFor="exist-design-radio" className="me-4" onClick={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isExistDesign: true })}>Yes</label>
                                     <input
                                         type="radio"
+                                        checked={!bussinessCardCustomizations.isExistDesign}
                                         id="not-exist-design-radio"
                                         className="radio-input me-2"
                                         name="isExistDesignRadioGroup"
-                                        onChange={() => setPaymentGateway("tap")}
+                                        onChange={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isExistDesign: false })}
                                     />
-                                    <label htmlFor="not-exist-design-radio" onClick={() => setPaymentGateway("tap")}>No</label>
+                                    <label htmlFor="not-exist-design-radio" onClick={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isExistDesign: false })}>No</label>
                                 </div>
                                 <div className="is-exist-logo mb-4">
                                     <h6 className="fw-bold mb-3">Is Exist Logo ?</h6>
                                     <input
                                         type="radio"
+                                        checked={bussinessCardCustomizations.isExistLogo}
                                         id="exist-logo-radio"
                                         className="radio-input me-2"
                                         name="isExistLogoRadioGroup"
-                                        onChange={() => setPaymentGateway("tap")}
-                                    />
-                                    <label htmlFor="exist-logo-radio" className="me-4" onClick={() => setPaymentGateway("tap")}>Yes</label>
+                                        onChange={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isExistLogo: true })}
+                                        />
+                                    <label htmlFor="exist-logo-radio" className="me-4" onClick={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isExistLogo: true })}>Yes</label>
                                     <input
                                         type="radio"
+                                        checked={!bussinessCardCustomizations.isExistLogo}
                                         id="not-exist-logo-radio"
                                         className="radio-input me-2"
                                         name="isExistLogoRadioGroup"
-                                        onChange={() => setPaymentGateway("tap")}
+                                        onChange={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isExistLogo: false })}
                                     />
-                                    <label htmlFor="not-exist-design-radio" onClick={() => setPaymentGateway("tap")}>No</label>
+                                    <label htmlFor="not-exist-design-radio" onClick={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isExistLogo: false })}>No</label>
                                 </div>
                             </>}
                             <div className="is-attach-a-file mb-4">
                                 <h6 className="fw-bold mb-3">Is Attash A File ?</h6>
                                 <input
                                     type="radio"
+                                    checked={bussinessCardCustomizations.isAttachAFile}
                                     id="attach-a-file-radio"
                                     className="radio-input me-2"
                                     name="isAttachAFileRadioGroup"
-                                    onChange={() => setPaymentGateway("tap")}
+                                    onChange={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isAttachAFile: true })}
                                 />
-                                <label htmlFor="attach-a-file-radio" className="me-4" onClick={() => setPaymentGateway("tap")}>Yes</label>
+                                <label htmlFor="attach-a-file-radio" className="me-4" onClick={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isAttachAFile: true })}>Yes</label>
                                 <input
                                     type="radio"
+                                    checked={!bussinessCardCustomizations.isAttachAFile}
                                     id="not-attach-a-file-radio"
                                     className="radio-input me-2"
                                     name="isAttachAFileRadioGroup"
-                                    onChange={() => setPaymentGateway("tap")}
+                                    onChange={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isAttachAFile: false })}
                                 />
-                                <label htmlFor="not-attach-a-file-radio" onClick={() => setPaymentGateway("tap")}>No</label>
+                                <label htmlFor="not-attach-a-file-radio" onClick={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isAttachAFile: false })}>No</label>
                             </div>
                             <div className="is-display-stock mb-4">
                                 <h6 className="fw-bold mb-3">Is Display Stock ?</h6>
                                 <input
                                     type="radio"
+                                    checked={bussinessCardCustomizations.isDisplayStock}
                                     id="display-stock-radio"
                                     className="radio-input me-2"
-                                    name="isAttachAFileRadioGroup"
-                                    onChange={() => setPaymentGateway("tap")}
+                                    name="isDisplayStockRadioGroup"
+                                    onChange={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isDisplayStock: true })}
                                 />
-                                <label htmlFor="display-stock-radio" className="me-4" onClick={() => setPaymentGateway("tap")}>Yes</label>
+                                <label htmlFor="display-stock-radio" className="me-4" onClick={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isDisplayStock: true })}>Yes</label>
                                 <input
                                     type="radio"
+                                    checked={!bussinessCardCustomizations.isDisplayStock}
                                     id="not-display-stock-radio"
                                     className="radio-input me-2"
-                                    name="isAttachAFileRadioGroup"
-                                    onChange={() => setPaymentGateway("tap")}
+                                    name="isDisplayStockRadioGroup"
+                                    onChange={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isDisplayStock: false })}
                                 />
-                                <label htmlFor="not-display-stock-radio" onClick={() => setPaymentGateway("tap")}>No</label>
+                                <label htmlFor="not-display-stock-radio" onClick={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isDisplayStock: false })}>No</label>
                             </div>
                         </section>}
                         <section className="discount mb-4">
