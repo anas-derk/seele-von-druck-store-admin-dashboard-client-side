@@ -292,7 +292,7 @@ export default function AddNewProduct() {
     }
 
     const getTypes = (customizations) => {
-        return customizations.types.map((type, typeIndex) => <>
+        return customizations.types.map((type, typeIndex) => <div className="row align-items-center">
             <div className="col-md-5">
                 <input
                     type="text"
@@ -335,7 +335,66 @@ export default function AddNewProduct() {
             <div className="col-md-1">
                 <FaRegPlusSquare className="add-icon" />
             </div>
-        </>)
+        </div>)
+    }
+
+    const getDimentionsDetailsForFlexAndPanner = (customizations) => {
+        return customizations.types.map((dimentionDetailsIndex, dimentionIndex) => <div className="row align-items-center" key={dimentionIndex}>
+            <div className="col-md-4">
+                <input
+                    type="number"
+                    className="form-control p-2 border-2 width-field"
+                    placeholder="Please Enter Width"
+                    onChange={(e) => {
+                        let tempTypes = customizations.dimationsDetails;
+                        tempTypes[typeIndex].width = e.target.valueAsNumber ? e.target.valueAsNumber : "";
+                        if (selectedCategory === "Flex") {
+                            setFlexCustomizations({ ...customizations, types: tempTypes });
+                        } else {
+                            setPannerCustomizations({ ...customizations, types: tempTypes });
+                        }
+                    }}
+                    value={dimentionDetailsIndex.width}
+                />
+            </div>
+            <div className="col-md-4">
+                <input
+                    type="number"
+                    className="form-control p-2 border-2 height-field"
+                    placeholder="Please Enter Height"
+                    onChange={(e) => {
+                        let tempTypes = customizations.dimationsDetails;
+                        tempTypes[typeIndex].height = e.target.valueAsNumber ? e.target.valueAsNumber : "";
+                        if (selectedCategory === "Flex") {
+                            setFlexCustomizations({ ...customizations, types: tempTypes });
+                        } else {
+                            setPannerCustomizations({ ...customizations, types: tempTypes });
+                        }
+                    }}
+                    value={dimentionDetailsIndex.height}
+                />
+            </div>
+            <div className="col-md-3">
+                <input
+                    type="number"
+                    className="form-control p-2 border-2 price-field"
+                    placeholder="Please Enter Height"
+                    onChange={(e) => {
+                        let tempTypes = customizations.dimationsDetails;
+                        tempTypes[typeIndex].price = e.target.valueAsNumber ? e.target.valueAsNumber : "";
+                        if (selectedCategory === "Flex") {
+                            setFlexCustomizations({ ...customizations, types: tempTypes });
+                        } else {
+                            setPannerCustomizations({ ...customizations, types: tempTypes });
+                        }
+                    }}
+                    value={dimentionDetailsIndex.price}
+                />
+            </div>
+            <div className="col-md-1">
+                <FaRegPlusSquare className="add-icon" />
+            </div>
+        </div>);
     }
 
     const getMoreCustomizations = (customizations) => {
@@ -530,46 +589,11 @@ export default function AddNewProduct() {
                             <h6 className="fw-bold border-bottom border-2 border-dark pb-2 mb-3">Customizations</h6>
                             <div className="type-details mb-3">
                                 <h6 className="fw-bold">Types</h6>
-                                <div className="row align-items-center">
-                                    {getTypes(getSuitableCustomization(selectedCategory))}
-                                </div>
+                                {getTypes(getSuitableCustomization(selectedCategory))}
                             </div>
                             {(selectedCategory === "Flex" || selectedCategory === "Panner") && <div className="quantity-and-price-details mb-3">
                                 <h6 className="fw-bold">Width, Height And Price</h6>
-                                <div className="row align-items-center">
-                                    {bussinessCardCustomizations.types.map((dimationAndPrice) => <>
-                                        <div className="col-md-4">
-                                            <input
-                                                type="number"
-                                                className="form-control p-2 border-2 type-content-field"
-                                                placeholder="Please Enter Width"
-                                                onChange={(e) => {
-                                                    let tempTypes = bussinessCardCustomizations.types;
-                                                    tempTypes[typeIndex].price = e.target.valueAsNumber ? e.target.valueAsNumber : "";
-                                                    setBussinessCardCustomizations({ ...bussinessCardCustomizations, types: tempTypes });
-                                                }} />
-                                        </div>
-                                        <div className="col-md-4">
-                                            <input
-                                                type="number"
-                                                className="form-control p-2 border-2 type-content-field"
-                                                placeholder="Please Enter Price"
-                                                onChange={(e) => setProductData({ ...productData, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" })}
-                                            />
-                                        </div>
-                                        <div className="col-md-3">
-                                            <input
-                                                type="number"
-                                                className="form-control p-2 border-2 type-content-field"
-                                                placeholder="Please Enter Height"
-                                                onChange={(e) => setProductData({ ...productData, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" })}
-                                            />
-                                        </div>
-                                        <div className="col-md-1">
-                                            <FaRegPlusSquare className="add-icon" />
-                                        </div>
-                                    </>)}
-                                </div>
+                                {getDimentionsDetailsForFlexAndPanner(getSuitableCustomization(selectedCategory))}
                             </div>}
                             {selectedCategory === "Bussiness Card" && <>
                                 <div className="quantity-and-price-details mb-3">
