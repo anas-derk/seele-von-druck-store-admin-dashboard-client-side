@@ -11,6 +11,7 @@ import { useRouter } from "next/router";
 import { HiOutlineBellAlert } from "react-icons/hi2";
 import { countries } from "countries-list";
 import NotFoundError from "@/components/NotFoundError";
+import { FaRegPlusSquare } from "react-icons/fa";
 
 export default function AddNewProduct() {
 
@@ -33,6 +34,8 @@ export default function AddNewProduct() {
         image: null,
         galleryImages: [],
     });
+
+    const [selectedCategory, setSelectedCategory] = useState(-1);
 
     const [waitMsg, setWaitMsg] = useState("");
 
@@ -189,7 +192,7 @@ export default function AddNewProduct() {
                 formData.append("quantity", productData.quantity);
                 formData.append("country", productData.country);
                 formData.append("productImage", productData.image);
-                for(let galleryImage of productData.galleryImages) {
+                for (let galleryImage of productData.galleryImages) {
                     formData.append("galleryImages", galleryImage);
                 }
                 setWaitMsg("Please Wait To Add New Product ...");
@@ -254,7 +257,7 @@ export default function AddNewProduct() {
                 <div className="page-content d-flex justify-content-center align-items-center flex-column pt-5 pb-5 p-4">
                     <h1 className="fw-bold w-fit pb-2 mb-3">
                         <PiHandWavingThin className="me-2" />
-                        Hi, Mr { adminInfo.firstName + " " + adminInfo.lastName } In Your Add New Product Page
+                        Hi, Mr {adminInfo.firstName + " " + adminInfo.lastName} In Your Add New Product Page
                     </h1>
                     {allCategories.length > 0 ? <form className="add-new-product-form admin-dashbboard-form" onSubmit={(e) => addNewProduct(e, productData)}>
                         <section className="name mb-4">
@@ -302,6 +305,7 @@ export default function AddNewProduct() {
                                 onChange={(e) => {
                                     const categoryNameAndCategoryId = e.target.value.split("-id:");
                                     setProductData({ ...productData, category: categoryNameAndCategoryId[0], categoryId: categoryNameAndCategoryId[1] })
+                                    setSelectedCategory(categoryNameAndCategoryId[0]);
                                 }}
                             >
                                 <option defaultValue="" hidden>Please Select Your Category</option>
@@ -314,6 +318,146 @@ export default function AddNewProduct() {
                                 <span>{formValidationErrors["category"]}</span>
                             </p>}
                         </section>
+                        {["Bussiness Card", "Panner", "Flex"].includes(selectedCategory) && <section className="customizations mb-4 border border-3 border-dark p-4">
+                            <h6 className="fw-bold border-bottom border-2 border-dark pb-2 mb-3">Customizations</h6>
+                            <div className="type-details mb-3">
+                            <h6 className="fw-bold">Type</h6>
+                                <div className="row align-items-center">
+                                    <div className="col-md-5">
+                                        <input
+                                            type="text"
+                                            className="form-control p-2 border-2 type-content-field"
+                                            placeholder="Please Enter Content"
+                                            onChange={(e) => setProductData({ ...productData, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" })}
+                                        />
+                                    </div>
+                                    <div className="col-md-6">
+                                        <input
+                                            type="number"
+                                            className="form-control p-2 border-2 type-content-field"
+                                            placeholder="Please Enter Price"
+                                            onChange={(e) => setProductData({ ...productData, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" })}
+                                        />
+                                    </div>
+                                    <div className="col-md-1">
+                                        <FaRegPlusSquare className="add-icon" />
+                                    </div>
+                                </div>
+                            </div>
+                            {selectedCategory === "Bussiness Card" && <>
+                                <div className="corners-type mb-4">
+                                    <h6 className="fw-bold mb-3">Corners Type</h6>
+                                    <div className="corner-details mb-3">
+                                        <input
+                                            type="radio"
+                                            id="rounded-corners-radio"
+                                            className="radio-input me-2"
+                                            name="cornersTypeGroup"
+                                            onChange={() => setPaymentGateway("tap")}
+                                        />
+                                        <label htmlFor="rounded-corners-radio" className="me-4" onClick={() => setPaymentGateway("tap")}>Rounded</label>
+                                        <input
+                                            type="number"
+                                            className="form-control p-2 border-2 additional-price-field mt-2"
+                                            placeholder="Please Enter Price"
+                                            onChange={(e) => setProductData({ ...productData, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" })}
+                                        />
+                                    </div>
+                                    <div className="corner-details">
+                                        <input
+                                            type="radio"
+                                            id="sharp-corners-radio"
+                                            className="radio-input me-2"
+                                            name="cornersTypeGroup"
+                                            onChange={() => setPaymentGateway("tap")}
+                                        />
+                                        <label htmlFor="sharp-corners-radio" onClick={() => setPaymentGateway("tap")}>Sharp</label>
+                                        <input
+                                            type="number"
+                                            className="form-control p-2 border-2 additional-price-field mt-2"
+                                            placeholder="Please Enter Price"
+                                            onChange={(e) => setProductData({ ...productData, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" })}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="is-exist-design mb-4">
+                                    <h6 className="fw-bold mb-3">Is Exist Design ?</h6>
+                                    <input
+                                        type="radio"
+                                        id="exist-design-radio"
+                                        className="radio-input me-2"
+                                        name="isExistDesignRadioGroup"
+                                        onChange={() => setPaymentGateway("tap")}
+                                    />
+                                    <label htmlFor="exist-design-radio" className="me-4" onClick={() => setPaymentGateway("tap")}>Yes</label>
+                                    <input
+                                        type="radio"
+                                        id="not-exist-design-radio"
+                                        className="radio-input me-2"
+                                        name="isExistDesignRadioGroup"
+                                        onChange={() => setPaymentGateway("tap")}
+                                    />
+                                    <label htmlFor="not-exist-design-radio" onClick={() => setPaymentGateway("tap")}>No</label>
+                                </div>
+                                <div className="is-exist-logo mb-4">
+                                    <h6 className="fw-bold mb-3">Is Exist Logo ?</h6>
+                                    <input
+                                        type="radio"
+                                        id="exist-logo-radio"
+                                        className="radio-input me-2"
+                                        name="isExistLogoRadioGroup"
+                                        onChange={() => setPaymentGateway("tap")}
+                                    />
+                                    <label htmlFor="exist-logo-radio" className="me-4" onClick={() => setPaymentGateway("tap")}>Yes</label>
+                                    <input
+                                        type="radio"
+                                        id="not-exist-logo-radio"
+                                        className="radio-input me-2"
+                                        name="isExistLogoRadioGroup"
+                                        onChange={() => setPaymentGateway("tap")}
+                                    />
+                                    <label htmlFor="not-exist-design-radio" onClick={() => setPaymentGateway("tap")}>No</label>
+                                </div>
+                            </>}
+                            <div className="is-attach-a-file mb-4">
+                                <h6 className="fw-bold mb-3">Is Attash A File ?</h6>
+                                <input
+                                    type="radio"
+                                    id="attach-a-file-radio"
+                                    className="radio-input me-2"
+                                    name="isAttachAFileRadioGroup"
+                                    onChange={() => setPaymentGateway("tap")}
+                                />
+                                <label htmlFor="attach-a-file-radio" className="me-4" onClick={() => setPaymentGateway("tap")}>Yes</label>
+                                <input
+                                    type="radio"
+                                    id="not-attach-a-file-radio"
+                                    className="radio-input me-2"
+                                    name="isAttachAFileRadioGroup"
+                                    onChange={() => setPaymentGateway("tap")}
+                                />
+                                <label htmlFor="not-attach-a-file-radio" onClick={() => setPaymentGateway("tap")}>No</label>
+                            </div>
+                            <div className="is-display-stock mb-4">
+                                <h6 className="fw-bold mb-3">Is Display Stock ?</h6>
+                                <input
+                                    type="radio"
+                                    id="display-stock-radio"
+                                    className="radio-input me-2"
+                                    name="isAttachAFileRadioGroup"
+                                    onChange={() => setPaymentGateway("tap")}
+                                />
+                                <label htmlFor="display-stock-radio" className="me-4" onClick={() => setPaymentGateway("tap")}>Yes</label>
+                                <input
+                                    type="radio"
+                                    id="not-display-stock-radio"
+                                    className="radio-input me-2"
+                                    name="isAttachAFileRadioGroup"
+                                    onChange={() => setPaymentGateway("tap")}
+                                />
+                                <label htmlFor="not-display-stock-radio" onClick={() => setPaymentGateway("tap")}>No</label>
+                            </div>
+                        </section>}
                         <section className="discount mb-4">
                             <input
                                 type="number"

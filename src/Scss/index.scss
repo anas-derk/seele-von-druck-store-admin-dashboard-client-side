@@ -32,7 +32,6 @@ input, textarea, select, checkbox{
     border: 1px solid #FFF;
     border-radius: 3px;
     color: #FFF;
-    width: 100%;
     font-size: 11px !important;
     &::placeholder{
         color: #FFF;
@@ -401,6 +400,11 @@ input, textarea, select, checkbox{
     @media (min-width: 768px) and (max-width: 1199px) {
         width: 75%;
     }
+}
+
+.add-icon{
+    cursor: pointer;
+    font-size: 22px;
 }
 
 @keyframes rotation {
