@@ -47,15 +47,22 @@ export default function AdminPanelHeader({ isSuperAdmin = false }) {
                                 <Nav.Link href="/users-managment" as={Link}>Users</Nav.Link>
                                 <NavDropdown title="Global" id="global-nav-dropdown">
                                     <NavDropdown.Item href="/global-managment/show-and-hide-sections-managment" as={Link}>Show / Hide Sections</NavDropdown.Item>
-                                    {/* <NavDropdown.Divider /> */}
-                                    {/* <NavDropdown.Item href="/global-managment/change-bussiness-email-password" as={Link}>
+                                    <NavDropdown.Divider />
+                                    <NavDropdown.Item href="/global-managment/change-bussiness-email-password" as={Link}>
                                         Change Bussiness Email Password
-                                    </NavDropdown.Item> */}
+                                    </NavDropdown.Item>
                                 </NavDropdown>
                                 <NavDropdown title="Admins" id="admins-nav-dropdown">
                                     <NavDropdown.Item href="/admins-managment/add-new-admin" as={Link}>Add New</NavDropdown.Item>
                                     <NavDropdown.Divider />
                                     <NavDropdown.Item href="/admins-managment/update-and-delete-admins" as={Link}>
+                                        Update / Delete
+                                    </NavDropdown.Item>
+                                </NavDropdown>
+                                <NavDropdown title="Projects" id="projects-nav-dropdown">
+                                    <NavDropdown.Item href="/previous-projects-managment/add-new-project" as={Link}>Add New</NavDropdown.Item>
+                                    <NavDropdown.Divider />
+                                    <NavDropdown.Item href="/previous-projects-managment/update-and-delete-projects" as={Link}>
                                         Update / Delete
                                     </NavDropdown.Item>
                                 </NavDropdown>
