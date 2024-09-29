@@ -284,10 +284,10 @@ export default function AddNewProduct() {
     }
 
     const getSuitableCustomization = (selectedCategory) => {
-        switch(selectedCategory) {
+        switch (selectedCategory) {
             case "Bussiness Card": return bussinessCardCustomizations;
-            case "Flex" : return flexCustomizations;
-            case "Panner" : return pannerCustomizations;
+            case "Flex": return flexCustomizations;
+            case "Panner": return pannerCustomizations;
         }
     }
 
@@ -336,6 +336,123 @@ export default function AddNewProduct() {
                 <FaRegPlusSquare className="add-icon" />
             </div>
         </>)
+    }
+
+    const getMoreCustomizations = (customizations) => {
+        return <>
+            <div className="is-attach-a-file mb-4">
+                <h6 className="fw-bold mb-3">Is Attash A File ?</h6>
+                <input
+                    type="radio"
+                    checked={customizations.isAttachAFile}
+                    id="attach-a-file-radio"
+                    className="radio-input me-2"
+                    name="isAttachAFileRadioGroup"
+                    onChange={() => {
+                        if (selectedCategory === "Bussiness Card") {
+                            setBussinessCardCustomizations({ ...customizations, isAttachAFile: true });
+                        } else if (selectedCategory === "Flex") {
+                            setFlexCustomizations({ ...customizations, isAttachAFile: true });
+                        } else {
+                            setPannerCustomizations({ ...customizations, isAttachAFile: true });
+                        }
+                    }}
+                />
+                <label htmlFor="attach-a-file-radio" className="me-4"
+                    onClick={() => {
+                        if (selectedCategory === "Bussiness Card") {
+                            setBussinessCardCustomizations({ ...customizations, isAttachAFile: true });
+                        } else if (selectedCategory === "Flex") {
+                            setFlexCustomizations({ ...customizations, isAttachAFile: true });
+                        } else {
+                            setPannerCustomizations({ ...customizations, isAttachAFile: true });
+                        }
+                    }}>Yes</label>
+                <input
+                    type="radio"
+                    checked={!customizations.isAttachAFile}
+                    id="not-attach-a-file-radio"
+                    className="radio-input me-2"
+                    name="isAttachAFileRadioGroup"
+                    onChange={() => {
+                        if (selectedCategory === "Bussiness Card") {
+                            setBussinessCardCustomizations({ ...customizations, isAttachAFile: false });
+                        } else if (selectedCategory === "Flex") {
+                            setFlexCustomizations({ ...customizations, isAttachAFile: false });
+                        } else {
+                            setPannerCustomizations({ ...customizations, isAttachAFile: false });
+                        }
+                    }}
+                />
+                <label htmlFor="not-attach-a-file-radio"
+                    onChange={() => {
+                        if (selectedCategory === "Bussiness Card") {
+                            setBussinessCardCustomizations({ ...customizations, isAttachAFile: false });
+                        } else if (selectedCategory === "Flex") {
+                            setFlexCustomizations({ ...customizations, isAttachAFile: false });
+                        } else {
+                            setPannerCustomizations({ ...customizations, isAttachAFile: false });
+                        }
+                    }}
+                >No</label>
+            </div>
+            <div className="is-display-stock mb-4">
+                <h6 className="fw-bold mb-3">Is Display Stock ?</h6>
+                <input
+                    type="radio"
+                    checked={customizations.isDisplayStock}
+                    id="display-stock-radio"
+                    className="radio-input me-2"
+                    name="isDisplayStockRadioGroup"
+                    onChange={() => {
+                        if (selectedCategory === "Bussiness Card") {
+                            setBussinessCardCustomizations({ ...customizations, isDisplayStock: true });
+                        } else if (selectedCategory === "Flex") {
+                            setFlexCustomizations({ ...customizations, isAttachAFile: true });
+                        } else {
+                            setPannerCustomizations({ ...customizations, isAttachAFile: true });
+                        }
+                    }} />
+                <label htmlFor="display-stock-radio" className="me-4"
+                    onChange={() => {
+                        if (selectedCategory === "Bussiness Card") {
+                            setBussinessCardCustomizations({ ...customizations, isDisplayStock: true });
+                        } else if (selectedCategory === "Flex") {
+                            setFlexCustomizations({ ...customizations, isAttachAFile: true });
+                        } else {
+                            setPannerCustomizations({ ...customizations, isAttachAFile: true });
+                        }
+                    }}
+                >Yes</label>
+                <input
+                    type="radio"
+                    checked={!customizations.isDisplayStock}
+                    id="not-display-stock-radio"
+                    className="radio-input me-2"
+                    name="isDisplayStockRadioGroup"
+                    onChange={() => {
+                        if (selectedCategory === "Bussiness Card") {
+                            setBussinessCardCustomizations({ ...customizations, isDisplayStock: false });
+                        } else if (selectedCategory === "Flex") {
+                            setFlexCustomizations({ ...customizations, isAttachAFile: false });
+                        } else {
+                            setPannerCustomizations({ ...customizations, isAttachAFile: false });
+                        }
+                    }}
+                />
+                <label htmlFor="not-display-stock-radio"
+                    onChange={() => {
+                        if (selectedCategory === "Bussiness Card") {
+                            setBussinessCardCustomizations({ ...customizations, isDisplayStock: false });
+                        } else if (selectedCategory === "Flex") {
+                            setFlexCustomizations({ ...customizations, isAttachAFile: false });
+                        } else {
+                            setPannerCustomizations({ ...customizations, isAttachAFile: false });
+                        }
+                    }}
+                >No</label>
+            </div>
+        </>
     }
 
     return (
@@ -460,24 +577,26 @@ export default function AddNewProduct() {
                                     <div className="row align-items-center">
                                         {bussinessCardCustomizations.quantities.map((quantityDetails, quantityIndex) => <>
                                             <div className="col-md-5">
-                                            <input
-                                                type="number"
-                                                className="form-control p-2 border-2 type-content-field"
-                                                placeholder="Please Enter Quantity"
-                                                onChange={(e) => setProductData({ ...productData, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" })}
-                                            />
-                                        </div>
-                                        <div className="col-md-6">
-                                            <input
-                                                type="number"
-                                                className="form-control p-2 border-2 type-content-field"
-                                                placeholder="Please Enter Price"
-                                                onChange={(e) => setProductData({ ...productData, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" })}
-                                            />
-                                        </div>
-                                        <div className="col-md-1">
-                                            <FaRegPlusSquare className="add-icon" />
-                                        </div>
+                                                <input
+                                                    type="number"
+                                                    className="form-control p-2 border-2 type-content-field"
+                                                    placeholder="Please Enter Quantity"
+                                                    onChange={(e) => setProductData({ ...productData, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" })}
+                                                    value={quantityDetails.quantity}
+                                                />
+                                            </div>
+                                            <div className="col-md-6">
+                                                <input
+                                                    type="number"
+                                                    className="form-control p-2 border-2 type-content-field"
+                                                    placeholder="Please Enter Price"
+                                                    onChange={(e) => setProductData({ ...productData, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" })}
+                                                    value={quantityDetails.price}
+                                                />
+                                            </div>
+                                            <div className="col-md-1">
+                                                <FaRegPlusSquare className="add-icon" />
+                                            </div>
                                         </>)}
                                     </div>
                                 </div>
@@ -559,48 +678,7 @@ export default function AddNewProduct() {
                                     <label htmlFor="not-exist-design-radio" onClick={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isExistLogo: false })}>No</label>
                                 </div>
                             </>}
-                            <div className="is-attach-a-file mb-4">
-                                <h6 className="fw-bold mb-3">Is Attash A File ?</h6>
-                                <input
-                                    type="radio"
-                                    checked={bussinessCardCustomizations.isAttachAFile}
-                                    id="attach-a-file-radio"
-                                    className="radio-input me-2"
-                                    name="isAttachAFileRadioGroup"
-                                    onChange={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isAttachAFile: true })}
-                                />
-                                <label htmlFor="attach-a-file-radio" className="me-4" onClick={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isAttachAFile: true })}>Yes</label>
-                                <input
-                                    type="radio"
-                                    checked={!bussinessCardCustomizations.isAttachAFile}
-                                    id="not-attach-a-file-radio"
-                                    className="radio-input me-2"
-                                    name="isAttachAFileRadioGroup"
-                                    onChange={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isAttachAFile: false })}
-                                />
-                                <label htmlFor="not-attach-a-file-radio" onClick={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isAttachAFile: false })}>No</label>
-                            </div>
-                            <div className="is-display-stock mb-4">
-                                <h6 className="fw-bold mb-3">Is Display Stock ?</h6>
-                                <input
-                                    type="radio"
-                                    checked={bussinessCardCustomizations.isDisplayStock}
-                                    id="display-stock-radio"
-                                    className="radio-input me-2"
-                                    name="isDisplayStockRadioGroup"
-                                    onChange={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isDisplayStock: true })}
-                                />
-                                <label htmlFor="display-stock-radio" className="me-4" onClick={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isDisplayStock: true })}>Yes</label>
-                                <input
-                                    type="radio"
-                                    checked={!bussinessCardCustomizations.isDisplayStock}
-                                    id="not-display-stock-radio"
-                                    className="radio-input me-2"
-                                    name="isDisplayStockRadioGroup"
-                                    onChange={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isDisplayStock: false })}
-                                />
-                                <label htmlFor="not-display-stock-radio" onClick={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isDisplayStock: false })}>No</label>
-                            </div>
+                            {getMoreCustomizations(getSuitableCustomization(selectedCategory))}
                         </section>}
                         <section className="discount mb-4">
                             <input
