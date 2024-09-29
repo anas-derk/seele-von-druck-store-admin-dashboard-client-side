@@ -11,7 +11,7 @@ import { useRouter } from "next/router";
 import { HiOutlineBellAlert } from "react-icons/hi2";
 import { countries } from "countries-list";
 import NotFoundError from "@/components/NotFoundError";
-import { FaRegPlusSquare } from "react-icons/fa";
+import { FaRegPlusSquare, FaRegMinusSquare } from "react-icons/fa";
 
 export default function AddNewProduct() {
 
@@ -56,7 +56,7 @@ export default function AddNewProduct() {
         types: [
             { content: "", price: 0 }
         ],
-        dimationsDetails: [
+        dimentionsDetails: [
             { width: 0, height: 0, price: 0 }
         ],
         isAttachAFile: false,
@@ -67,7 +67,7 @@ export default function AddNewProduct() {
         types: [
             { content: "", price: 0 }
         ],
-        dimationsDetails: [
+        dimentionsDetails: [
             { width: 0, height: 0, price: 0 }
         ],
         isAttachAFile: false,
@@ -297,7 +297,7 @@ export default function AddNewProduct() {
     }
 
     const getTypes = (customizations) => {
-        return customizations.types.map((type, typeIndex) => <div className="row align-items-center">
+        return customizations.types.map((type, typeIndex) => <div className="row align-items-center mb-4">
             <div className="col-md-5">
                 <input
                     type="text"
@@ -338,7 +338,34 @@ export default function AddNewProduct() {
                 />
             </div>
             <div className="col-md-1">
-                <FaRegPlusSquare className="add-icon" />
+                <FaRegPlusSquare className="add-icon"
+                    onClick={() => {
+                        let tempTypes = customizations.types.map((type) => type);
+                        tempTypes.push(
+                            { content: "", price: 1 }
+                        );
+                        if (selectedCategory === "Bussiness Card") {
+                            setBussinessCardCustomizations({ ...bussinessCardCustomizations, types: tempTypes });
+                        }
+                        else if (selectedCategory === "Flex") {
+                            setFlexCustomizations({ ...flexCustomizations, types: tempTypes });
+                        } else {
+                            setPannerCustomizations({ ...pannerCustomizations, types: tempTypes });
+                        }
+                    }}
+                />
+                {customizations.types.length > 1 && <FaRegMinusSquare className="remove-icon"
+                    onClick={() => {
+                        if (selectedCategory === "Bussiness Card") {
+                            setBussinessCardCustomizations({ ...bussinessCardCustomizations, types: bussinessCardCustomizations.types.filter((type, index) => index !== typeIndex) });
+                        }
+                        else if (selectedCategory === "Flex") {
+                            setFlexCustomizations({ ...flexCustomizations, types: flexCustomizations.types.filter((type, index) => index !== typeIndex) });
+                        } else {
+                            setPannerCustomizations({ ...flexCustomizations, types: flexCustomizations.types.filter((type, index) => index !== typeIndex) });
+                        }
+                    }}
+                />}
             </div>
         </div>)
     }
@@ -351,12 +378,12 @@ export default function AddNewProduct() {
                     className="form-control p-2 border-2 width-field"
                     placeholder="Please Enter Width"
                     onChange={(e) => {
-                        let tempTypes = customizations.dimationsDetails;
-                        tempTypes[typeIndex].width = e.target.valueAsNumber ? e.target.valueAsNumber : "";
+                        let tempDimentionsDeta = customizations.dimentionsDetails;
+                        tempDimentionsDeta[typeIndex].width = e.target.valueAsNumber ? e.target.valueAsNumber : "";
                         if (selectedCategory === "Flex") {
-                            setFlexCustomizations({ ...customizations, types: tempTypes });
+                            setFlexCustomizations({ ...customizations, dimentionsDetails: tempDimentionsDeta });
                         } else {
-                            setPannerCustomizations({ ...customizations, types: tempTypes });
+                            setPannerCustomizations({ ...customizations, dimentionsDetails: tempDimentionsDeta });
                         }
                     }}
                     value={dimentionDetailsIndex.width}
@@ -368,12 +395,12 @@ export default function AddNewProduct() {
                     className="form-control p-2 border-2 height-field"
                     placeholder="Please Enter Height"
                     onChange={(e) => {
-                        let tempTypes = customizations.dimationsDetails;
-                        tempTypes[typeIndex].height = e.target.valueAsNumber ? e.target.valueAsNumber : "";
+                        let tempDimentionsDeta = customizations.dimentionsDetails;
+                        tempDimentionsDeta[typeIndex].height = e.target.valueAsNumber ? e.target.valueAsNumber : "";
                         if (selectedCategory === "Flex") {
-                            setFlexCustomizations({ ...customizations, types: tempTypes });
+                            setFlexCustomizations({ ...customizations, dimentionsDetails: tempDimentionsDeta });
                         } else {
-                            setPannerCustomizations({ ...customizations, types: tempTypes });
+                            setPannerCustomizations({ ...customizations, dimentionsDetails: tempDimentionsDeta });
                         }
                     }}
                     value={dimentionDetailsIndex.height}
@@ -385,19 +412,40 @@ export default function AddNewProduct() {
                     className="form-control p-2 border-2 price-field"
                     placeholder="Please Enter Height"
                     onChange={(e) => {
-                        let tempTypes = customizations.dimationsDetails;
-                        tempTypes[typeIndex].price = e.target.valueAsNumber ? e.target.valueAsNumber : "";
+                        let tempDimentionsDeta = customizations.dimentionsDetails;
+                        tempDimentionsDeta[typeIndex].price = e.target.valueAsNumber ? e.target.valueAsNumber : "";
                         if (selectedCategory === "Flex") {
-                            setFlexCustomizations({ ...customizations, types: tempTypes });
+                            setFlexCustomizations({ ...customizations, dimentionsDetails: tempDimentionsDeta });
                         } else {
-                            setPannerCustomizations({ ...customizations, types: tempTypes });
+                            setPannerCustomizations({ ...customizations, dimentionsDetails: tempDimentionsDeta });
                         }
                     }}
                     value={dimentionDetailsIndex.price}
                 />
             </div>
             <div className="col-md-1">
-                <FaRegPlusSquare className="add-icon" />
+                <FaRegPlusSquare className="add-icon"
+                    onClick={() => {
+                        let tempDimentionsDeta = customizations.dimentionsDetails.map((type) => type);
+                        tempDimentionsDeta.push(
+                            { content: "", price: 1 }
+                        );
+                        if (selectedCategory === "Flex") {
+                            setFlexCustomizations({ ...customizations, dimentionsDetails: tempDimentionsDeta });
+                        } else {
+                            setPannerCustomizations({ ...customizations, dimentionsDetails: tempDimentionsDeta });
+                        }
+                    }}
+                />
+                {customizations.dimentionsDetails.length > 1 && <FaRegMinusSquare className="remove-icon"
+                    onClick={() => {
+                        if (selectedCategory === "Flex") {
+                            setFlexCustomizations({ ...flexCustomizations, dimentionsDetails: flexCustomizations.dimentionsDetails.filter((dimentionDetails, index) => index !== dimentionIndex) });
+                        } else {
+                            setPannerCustomizations({ ...flexCustomizations, dimentionsDetails: flexCustomizations.dimentionsDetails.filter((dimentionDetails, index) => index !== dimentionIndex) });
+                        }
+                    }}
+                />}
             </div>
         </div>);
     }
@@ -603,7 +651,7 @@ export default function AddNewProduct() {
                             {selectedCategory === "Bussiness Card" && <>
                                 <div className="quantity-and-price-details mb-3">
                                     <h6 className="fw-bold">Quantities</h6>
-                                    {bussinessCardCustomizations.quantities.map((quantityDetails, quantityIndex) => <div className="row align-items-center" key={quantityIndex}>
+                                    {bussinessCardCustomizations.quantities.map((quantityDetails, quantityIndex) => <div className="row align-items-center mb-4" key={quantityIndex}>
                                         <div className="col-md-5">
                                             <input
                                                 type="number"
@@ -631,7 +679,21 @@ export default function AddNewProduct() {
                                             />
                                         </div>
                                         <div className="col-md-1">
-                                            <FaRegPlusSquare className="add-icon" />
+                                            <FaRegPlusSquare className="add-icon mb-4"
+                                                onClick={() => {
+                                                    let tempQuantitiesDeta = bussinessCardCustomizations.quantities.map((quantity) => quantity);
+                                                    tempQuantitiesDeta.push({
+                                                        quantity: 1,
+                                                        price: 1
+                                                    });
+                                                    setBussinessCardCustomizations({ ...bussinessCardCustomizations, quantities: tempQuantitiesDeta });
+                                                }}
+                                            />
+                                            {bussinessCardCustomizations.quantities.length > 1 && <FaRegMinusSquare className="remove-icon"
+                                                onClick={() => {
+                                                    setBussinessCardCustomizations({ ...bussinessCardCustomizations, quantities: bussinessCardCustomizations.quantities.filter((quantity, index) => index !== quantityIndex) });
+                                                }}
+                                            />}
                                         </div>
                                     </div>)}
                                 </div>

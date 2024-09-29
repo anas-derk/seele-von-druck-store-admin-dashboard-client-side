@@ -484,7 +484,7 @@ input:focus, textarea:focus, select:focus, checkbox:focus {
   }
 }
 
-.add-icon {
+.add-icon, .remove-icon {
   cursor: pointer;
   font-size: 22px;
 }
