@@ -573,7 +573,7 @@ export default function AddNewProduct() {
                             </div>}
                             {selectedCategory === "Bussiness Card" && <>
                                 <div className="quantity-and-price-details mb-3">
-                                    <h6 className="fw-bold">Quantity</h6>
+                                    <h6 className="fw-bold">Quantities</h6>
                                     <div className="row align-items-center">
                                         {bussinessCardCustomizations.quantities.map((quantityDetails, quantityIndex) => <>
                                             <div className="col-md-5">
@@ -600,17 +600,17 @@ export default function AddNewProduct() {
                                         </>)}
                                     </div>
                                 </div>
-                                <div className="corners-type mb-4">
-                                    <h6 className="fw-bold mb-3">Corners Type</h6>
+                                <div className="corner-type mb-4">
+                                    <h6 className="fw-bold mb-3">Corner Type</h6>
                                     <div className="corner-details mb-3">
                                         <input
                                             type="radio"
                                             id="rounded-corners-radio"
                                             className="radio-input me-2"
                                             name="cornersTypeGroup"
-                                            onChange={() => setPaymentGateway("tap")}
+                                            onChange={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, corner: "rounded" })}
                                         />
-                                        <label htmlFor="rounded-corners-radio" className="me-4" onClick={() => setPaymentGateway("tap")}>Rounded</label>
+                                        <label htmlFor="rounded-corners-radio" className="me-4" onClick={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, corner: "rounded" })}>Rounded</label>
                                         <input
                                             type="number"
                                             className="form-control p-2 border-2 additional-price-field mt-2"
@@ -624,9 +624,9 @@ export default function AddNewProduct() {
                                             id="sharp-corners-radio"
                                             className="radio-input me-2"
                                             name="cornersTypeGroup"
-                                            onChange={() => setPaymentGateway("tap")}
+                                            onChange={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, corner: "sharp" })}
                                         />
-                                        <label htmlFor="sharp-corners-radio" onClick={() => setPaymentGateway("tap")}>Sharp</label>
+                                        <label htmlFor="sharp-corners-radio" onClick={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, corner: "sharp" })}>Sharp</label>
                                         <input
                                             type="number"
                                             className="form-control p-2 border-2 additional-price-field mt-2"
