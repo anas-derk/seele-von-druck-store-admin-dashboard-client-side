@@ -231,6 +231,8 @@ export default function AddNewProduct() {
                 formData.append("quantity", productData.quantity);
                 formData.append("country", productData.country);
                 formData.append("productImage", productData.image);
+                console.log(bussinessCardCustomizations)
+                formData.append("customizations", bussinessCardCustomizations);
                 for (let galleryImage of productData.galleryImages) {
                     formData.append("galleryImages", galleryImage);
                 }
@@ -607,7 +609,11 @@ export default function AddNewProduct() {
                                                 type="number"
                                                 className="form-control p-2 border-2 type-content-field"
                                                 placeholder="Please Enter Quantity"
-                                                onChange={(e) => setProductData({ ...productData, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" })}
+                                                onChange={(e) => {
+                                                    let tempQuantities = bussinessCardCustomizations.quantities;
+                                                    tempQuantities[quantityIndex].quantity = e.target.value;
+                                                    setBussinessCardCustomizations({ ...bussinessCardCustomizations, quantities: tempQuantities });
+                                                }}
                                                 value={quantityDetails.quantity}
                                             />
                                         </div>
@@ -616,7 +622,11 @@ export default function AddNewProduct() {
                                                 type="number"
                                                 className="form-control p-2 border-2 type-content-field"
                                                 placeholder="Please Enter Price"
-                                                onChange={(e) => setProductData({ ...productData, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" })}
+                                                onChange={(e) => {
+                                                    let tempQuantities = bussinessCardCustomizations.quantities;
+                                                    tempQuantities[quantityIndex].price = e.target.value;
+                                                    setBussinessCardCustomizations({ ...bussinessCardCustomizations, quantities: tempQuantities });
+                                                }}
                                                 value={quantityDetails.price}
                                             />
                                         </div>
@@ -641,7 +651,7 @@ export default function AddNewProduct() {
                                             type="number"
                                             className="form-control p-2 border-2 additional-price-field mt-2"
                                             placeholder="Please Enter Price"
-                                            onChange={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, corner: { ...bussinessCardCustomizations.corner, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" } })}
+                                            onChange={(e) => setBussinessCardCustomizations({ ...bussinessCardCustomizations, corner: { ...bussinessCardCustomizations.corner, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" } })}
                                         />
                                     </div>
                                     <div className="corner-details">
@@ -658,7 +668,7 @@ export default function AddNewProduct() {
                                             type="number"
                                             className="form-control p-2 border-2 additional-price-field mt-2"
                                             placeholder="Please Enter Price"
-                                            onChange={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, corners: { ...bussinessCardCustomizations.corner, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" } })}
+                                            onChange={(e) => setBussinessCardCustomizations({ ...bussinessCardCustomizations, corner: { ...bussinessCardCustomizations.corner, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" } })}
                                         />
                                     </div>
                                 </div>
