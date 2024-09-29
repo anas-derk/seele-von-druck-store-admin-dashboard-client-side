@@ -36,7 +36,7 @@ export default function AddNewProduct() {
     });
 
     const [bussinessCardCustomizations, setBussinessCardCustomizations] = useState({
-        type: [
+        types: [
             { content: "", price: 0 }
         ],
         quantities: [
@@ -45,6 +45,28 @@ export default function AddNewProduct() {
         corners: "",
         isExistDesign: false,
         isExistLogo: false,
+        isAttachAFile: false,
+        isDisplayStock: false,
+    });
+
+    const [flexCustomizations, setFlexCustomizations] = useState({
+        types: [
+            { content: "", price: 0 }
+        ],
+        dimationsDetails: [
+            { width: 0, height: 0, price: 0 }
+        ],
+        isAttachAFile: false,
+        isDisplayStock: false,
+    });
+
+    const [pannerCustomizations, setPannerCustomizations] = useState({
+        types: [
+            { content: "", price: 0 }
+        ],
+        dimationsDetails: [
+            { width: 0, height: 0, price: 0 }
+        ],
         isAttachAFile: false,
         isDisplayStock: false,
     });
@@ -261,6 +283,61 @@ export default function AddNewProduct() {
         }
     }
 
+    const getSuitableCustomization = (selectedCategory) => {
+        switch(selectedCategory) {
+            case "Bussiness Card": return bussinessCardCustomizations;
+            case "Flex" : return flexCustomizations;
+            case "Panner" : return pannerCustomizations;
+        }
+    }
+
+    const getTypes = (customizations) => {
+        return customizations.types.map((type, typeIndex) => <>
+            <div className="col-md-5">
+                <input
+                    type="text"
+                    className="form-control p-2 border-2 type-content-field"
+                    placeholder="Please Enter Content"
+                    onChange={(e) => {
+                        let tempTypes = customizations.types;
+                        tempTypes[typeIndex].content = e.target.value;
+                        if (selectedCategory === "Bussiness Card") {
+                            setBussinessCardCustomizations({ ...bussinessCardCustomizations, types: tempTypes });
+                        } else if (selectedCategory === "Flex") {
+                            setFlexCustomizations({ ...flexCustomizations, types: tempTypes });
+                        } else {
+                            setPannerCustomizations({ ...pannerCustomizations, types: tempTypes });
+                        }
+                    }}
+                    value={type.content}
+                />
+            </div>
+            <div className="col-md-6">
+                <input
+                    type="number"
+                    className="form-control p-2 border-2 type-content-field"
+                    placeholder="Please Enter Price"
+                    onChange={(e) => {
+                        let tempTypes = customizations.types;
+                        tempTypes[typeIndex].price = e.target.valueAsNumber ? e.target.valueAsNumber : "";
+                        if (selectedCategory === "Bussiness Card") {
+                            setBussinessCardCustomizations({ ...bussinessCardCustomizations, types: tempTypes });
+                        }
+                        else if (selectedCategory === "Flex") {
+                            setFlexCustomizations({ ...flexCustomizations, types: tempTypes });
+                        } else {
+                            setPannerCustomizations({ ...pannerCustomizations, types: tempTypes });
+                        }
+                    }}
+                    value={type.price}
+                />
+            </div>
+            <div className="col-md-1">
+                <FaRegPlusSquare className="add-icon" />
+            </div>
+        </>)
+    }
+
     return (
         <div className="add-new-product admin-dashboard">
             <Head>
@@ -335,66 +412,54 @@ export default function AddNewProduct() {
                         {["Bussiness Card", "Panner", "Flex"].includes(selectedCategory) && <section className="customizations mb-4 border border-3 border-dark p-4">
                             <h6 className="fw-bold border-bottom border-2 border-dark pb-2 mb-3">Customizations</h6>
                             <div className="type-details mb-3">
-                                <h6 className="fw-bold">Type</h6>
+                                <h6 className="fw-bold">Types</h6>
                                 <div className="row align-items-center">
-                                    <div className="col-md-5">
-                                        <input
-                                            type="text"
-                                            className="form-control p-2 border-2 type-content-field"
-                                            placeholder="Please Enter Content"
-                                            // onChange={(e) => setBussinessCardCustomizations({ ...bussinessCardCustomizations, type: })}
-                                        />
-                                    </div>
-                                    <div className="col-md-6">
-                                        <input
-                                            type="number"
-                                            className="form-control p-2 border-2 type-content-field"
-                                            placeholder="Please Enter Price"
-                                            onChange={(e) => setProductData({ ...productData, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" })}
-                                        />
-                                    </div>
-                                    <div className="col-md-1">
-                                        <FaRegPlusSquare className="add-icon" />
-                                    </div>
+                                    {getTypes(getSuitableCustomization(selectedCategory))}
                                 </div>
                             </div>
                             {(selectedCategory === "Flex" || selectedCategory === "Panner") && <div className="quantity-and-price-details mb-3">
                                 <h6 className="fw-bold">Width, Height And Price</h6>
                                 <div className="row align-items-center">
-                                    <div className="col-md-4">
-                                        <input
-                                            type="number"
-                                            className="form-control p-2 border-2 type-content-field"
-                                            placeholder="Please Enter Width"
-                                            onChange={(e) => setProductData({ ...productData, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" })}
-                                        />
-                                    </div>
-                                    <div className="col-md-4">
-                                        <input
-                                            type="number"
-                                            className="form-control p-2 border-2 type-content-field"
-                                            placeholder="Please Enter Price"
-                                            onChange={(e) => setProductData({ ...productData, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" })}
-                                        />
-                                    </div>
-                                    <div className="col-md-3">
-                                        <input
-                                            type="number"
-                                            className="form-control p-2 border-2 type-content-field"
-                                            placeholder="Please Enter Height"
-                                            onChange={(e) => setProductData({ ...productData, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" })}
-                                        />
-                                    </div>
-                                    <div className="col-md-1">
-                                        <FaRegPlusSquare className="add-icon" />
-                                    </div>
+                                    {bussinessCardCustomizations.types.map((dimationAndPrice) => <>
+                                        <div className="col-md-4">
+                                            <input
+                                                type="number"
+                                                className="form-control p-2 border-2 type-content-field"
+                                                placeholder="Please Enter Width"
+                                                onChange={(e) => {
+                                                    let tempTypes = bussinessCardCustomizations.types;
+                                                    tempTypes[typeIndex].price = e.target.valueAsNumber ? e.target.valueAsNumber : "";
+                                                    setBussinessCardCustomizations({ ...bussinessCardCustomizations, types: tempTypes });
+                                                }} />
+                                        </div>
+                                        <div className="col-md-4">
+                                            <input
+                                                type="number"
+                                                className="form-control p-2 border-2 type-content-field"
+                                                placeholder="Please Enter Price"
+                                                onChange={(e) => setProductData({ ...productData, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" })}
+                                            />
+                                        </div>
+                                        <div className="col-md-3">
+                                            <input
+                                                type="number"
+                                                className="form-control p-2 border-2 type-content-field"
+                                                placeholder="Please Enter Height"
+                                                onChange={(e) => setProductData({ ...productData, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" })}
+                                            />
+                                        </div>
+                                        <div className="col-md-1">
+                                            <FaRegPlusSquare className="add-icon" />
+                                        </div>
+                                    </>)}
                                 </div>
                             </div>}
                             {selectedCategory === "Bussiness Card" && <>
                                 <div className="quantity-and-price-details mb-3">
                                     <h6 className="fw-bold">Quantity</h6>
                                     <div className="row align-items-center">
-                                        <div className="col-md-5">
+                                        {bussinessCardCustomizations.quantities.map((quantityDetails, quantityIndex) => <>
+                                            <div className="col-md-5">
                                             <input
                                                 type="number"
                                                 className="form-control p-2 border-2 type-content-field"
@@ -413,6 +478,7 @@ export default function AddNewProduct() {
                                         <div className="col-md-1">
                                             <FaRegPlusSquare className="add-icon" />
                                         </div>
+                                        </>)}
                                     </div>
                                 </div>
                                 <div className="corners-type mb-4">
@@ -459,7 +525,7 @@ export default function AddNewProduct() {
                                         className="radio-input me-2"
                                         name="isExistDesignRadioGroup"
                                         onChange={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isExistDesign: true })}
-                                        />
+                                    />
                                     <label htmlFor="exist-design-radio" className="me-4" onClick={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isExistDesign: true })}>Yes</label>
                                     <input
                                         type="radio"
@@ -480,7 +546,7 @@ export default function AddNewProduct() {
                                         className="radio-input me-2"
                                         name="isExistLogoRadioGroup"
                                         onChange={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isExistLogo: true })}
-                                        />
+                                    />
                                     <label htmlFor="exist-logo-radio" className="me-4" onClick={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isExistLogo: true })}>Yes</label>
                                     <input
                                         type="radio"
