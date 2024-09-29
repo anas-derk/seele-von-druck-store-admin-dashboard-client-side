@@ -338,7 +338,7 @@ export default function AddNewProduct() {
                 />
             </div>
             <div className="col-md-1">
-                <FaRegPlusSquare className="add-icon"
+                <FaRegPlusSquare className={`add-icon ${customizations.types.length > 1 && "mb-4"}`}
                     onClick={() => {
                         let tempTypes = customizations.types.map((type) => type);
                         tempTypes.push(
@@ -371,7 +371,7 @@ export default function AddNewProduct() {
     }
 
     const getDimentionsDetailsForFlexAndPanner = (customizations) => {
-        return customizations.types.map((dimentionDetailsIndex, dimentionIndex) => <div className="row align-items-center" key={dimentionIndex}>
+        return customizations.dimentionsDetails.map((dimentionDetailsIndex, dimentionIndex) => <div className="row align-items-center mb-4" key={dimentionIndex}>
             <div className="col-md-4">
                 <input
                     type="number"
@@ -424,7 +424,7 @@ export default function AddNewProduct() {
                 />
             </div>
             <div className="col-md-1">
-                <FaRegPlusSquare className="add-icon"
+                <FaRegPlusSquare className={`add-icon ${customizations.dimentionsDetails.length > 1 && "mb-4"}`}
                     onClick={() => {
                         let tempDimentionsDeta = customizations.dimentionsDetails.map((type) => type);
                         tempDimentionsDeta.push(
@@ -679,7 +679,7 @@ export default function AddNewProduct() {
                                             />
                                         </div>
                                         <div className="col-md-1">
-                                            <FaRegPlusSquare className="add-icon mb-4"
+                                            <FaRegPlusSquare className={`add-icon ${bussinessCardCustomizations.quantities.length > 1 && "mb-4"}`}
                                                 onClick={() => {
                                                     let tempQuantitiesDeta = bussinessCardCustomizations.quantities.map((quantity) => quantity);
                                                     tempQuantitiesDeta.push({
