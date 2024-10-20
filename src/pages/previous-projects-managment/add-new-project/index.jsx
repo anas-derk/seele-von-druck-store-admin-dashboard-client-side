@@ -137,14 +137,14 @@ export default function AddNewProject() {
     return (
         <div className="add-new-project admin-dashboard">
             <Head>
-                <title>{process.env.storeName} Admin Dashboard - Add New Brand</title>
+                <title>{process.env.storeName} Admin Dashboard - Add New Project</title>
             </Head>
             {!isLoadingPage && !errorMsgOnLoadingThePage && <>
                 <AdminPanelHeader isSuperAdmin={adminInfo.isSuperAdmin} />
                 <div className="page-content d-flex justify-content-center align-items-center flex-column p-4">
                     <h1 className="fw-bold w-fit pb-2 mb-3">
                         <PiHandWavingThin className="me-2" />
-                        Hi, Mr { adminInfo.firstName + " " + adminInfo.lastName } In Your Add New Brand Page
+                        Hi, Mr { adminInfo.firstName + " " + adminInfo.lastName } In Your Add New Project Page
                     </h1>
                     <form className="add-new-project-form admin-dashbboard-form" onSubmit={addNewProject}>
                         <h6 className="mb-3 fw-bold">Please Select Project Image</h6>
