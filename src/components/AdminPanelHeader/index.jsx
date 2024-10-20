@@ -45,13 +45,6 @@ export default function AdminPanelHeader({ isSuperAdmin = false }) {
                             </>}
                             {isSuperAdmin && <>
                                 <Nav.Link href="/users-managment" as={Link}>Users</Nav.Link>
-                                <NavDropdown title="Global" id="global-nav-dropdown">
-                                    <NavDropdown.Item href="/global-managment/show-and-hide-sections-managment" as={Link}>Show / Hide Sections</NavDropdown.Item>
-                                    <NavDropdown.Divider />
-                                    <NavDropdown.Item href="/global-managment/change-bussiness-email-password" as={Link}>
-                                        Change Bussiness Email Password
-                                    </NavDropdown.Item>
-                                </NavDropdown>
                                 <NavDropdown title="Admins" id="admins-nav-dropdown">
                                     <NavDropdown.Item href="/admins-managment/add-new-admin" as={Link}>Add New</NavDropdown.Item>
                                     <NavDropdown.Divider />
