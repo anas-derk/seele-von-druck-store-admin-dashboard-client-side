@@ -18,7 +18,6 @@ import {
     getAllCategories
 } from "../../../../public/global_functions/popular";
 import Link from "next/link";
-import { countries } from "countries-list";
 import NotFoundError from "@/components/NotFoundError";
 import TableLoader from "@/components/TableLoader";
 
@@ -67,8 +66,6 @@ export default function UpdateAndDeleteProducts() {
     const router = useRouter();
 
     const pageSize = 10;
-
-    const countryList = Object.keys(countries);
 
     useEffect(() => {
         const adminToken = localStorage.getItem(process.env.adminTokenNameInLocalStorage);
@@ -388,7 +385,6 @@ export default function UpdateAndDeleteProducts() {
                     name: allProductsInsideThePage[productIndex].name,
                     price: allProductsInsideThePage[productIndex].price,
                     quantity: allProductsInsideThePage[productIndex].quantity,
-                    country: allProductsInsideThePage[productIndex].country,
                     description: allProductsInsideThePage[productIndex].description,
                     categoryId: allProductsInsideThePage[productIndex].categoryId,
                     discount: allProductsInsideThePage[productIndex].discount,
@@ -540,7 +536,6 @@ export default function UpdateAndDeleteProducts() {
                                     <th>Name</th>
                                     <th>Price</th>
                                     <th>Quantity</th>
-                                    <th>Country</th>
                                     <th>Description</th>
                                     <th>Category</th>
                                     <th>Discount</th>
@@ -595,25 +590,6 @@ export default function UpdateAndDeleteProducts() {
                                                 {formValidationErrors["quantity"] && productIndex === selectedProductIndex && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
                                                     <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                                     <span>{formValidationErrors["quantity"]}</span>
-                                                </p>}
-                                            </section>
-                                        </td>
-                                        <td className="product-country-cell">
-                                            <section className="product-country mb-4">
-                                                <h6 className="bg-info p-2 fw-bold">{countries[product.country].name}</h6>
-                                                <hr />
-                                                <select
-                                                    className={`country-select form-select p-2 border-2 product-country-field ${formValidationErrors["country"] ? "border-danger mb-3" : "mb-4"}`}
-                                                    onChange={(e) => changeProductData(productIndex, "country", e.target.value)}
-                                                >
-                                                    <option defaultValue="" hidden>Please Select Country</option>
-                                                    {countryList.map((countryCode) => (
-                                                        <option value={countryCode} key={countryCode}>{countries[countryCode].name}</option>
-                                                    ))}
-                                                </select>
-                                                {formValidationErrors["country"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
-                                                    <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                                    <span>{formValidationErrors["country"]}</span>
                                                 </p>}
                                             </section>
                                         </td>

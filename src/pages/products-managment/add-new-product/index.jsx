@@ -30,7 +30,6 @@ export default function AddNewProduct() {
         categoryId: "",
         discount: "",
         quantity: "",
-        country: "",
         image: null,
         galleryImages: [],
     });
@@ -187,15 +186,6 @@ export default function AddNewProduct() {
                     },
                 },
                 {
-                    name: "country",
-                    value: productData.country,
-                    rules: {
-                        isRequired: {
-                            msg: "Sorry, This Field Can't Be Empty !!",
-                        },
-                    },
-                },
-                {
                     name: "image",
                     value: productData.image,
                     rules: {
@@ -229,7 +219,6 @@ export default function AddNewProduct() {
                 formData.append("categoryId", productData.categoryId);
                 formData.append("discount", productData.discount);
                 formData.append("quantity", productData.quantity);
-                formData.append("country", productData.country);
                 formData.append("productImage", productData.image);
                 console.log(bussinessCardCustomizations)
                 formData.append("customizations", bussinessCardCustomizations);
@@ -803,21 +792,6 @@ export default function AddNewProduct() {
                             {formValidationErrors["quantity"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
                                 <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                 <span>{formValidationErrors["quantity"]}</span>
-                            </p>}
-                        </section>
-                        <section className="country mb-4">
-                            <select
-                                className={`country-select form-select p-2 border-2 country-field ${formValidationErrors["country"] ? "border-danger mb-3" : "mb-4"}`}
-                                onChange={(e) => setProductData({ ...productData, country: e.target.value })}
-                            >
-                                <option defaultValue="" hidden>Please Select Country</option>
-                                {countryList.map((countryCode) => (
-                                    <option value={countryCode} key={countryCode}>{countries[countryCode].name}</option>
-                                ))}
-                            </select>
-                            {formValidationErrors["country"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
-                                <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                <span>{formValidationErrors["country"]}</span>
                             </p>}
                         </section>
                         <h6 className="mb-3 fw-bold">Please Select Product Image</h6>
