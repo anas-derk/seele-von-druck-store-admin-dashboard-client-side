@@ -261,6 +261,7 @@ export default function UpdateAndDeletePreviousProjects() {
                     }
                 })).data;
                 setWaitMsg("");
+                console.log(result.msg)
                 if (!result.error) {
                     setSuccessMsg("Updating Successfull !!");
                     let successTimeout = setTimeout(() => {
