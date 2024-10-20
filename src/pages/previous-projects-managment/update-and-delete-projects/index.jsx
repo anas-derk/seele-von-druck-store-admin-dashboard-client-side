@@ -86,7 +86,7 @@ export default function UpdateAndDeletePreviousProjects() {
 
     const getPreviousProjectsCount = async (filters) => {
         try {
-            return (await axios.get(`${process.env.BASE_API_URL}/previous-projects/previous-projects-count?${filters ? filters : ""}`)).data;
+            return (await axios.get(`${process.env.BASE_API_URL}/previous-projects/previous-projects-count?language=${process.env.adminDashboardlanguageFieldNameInLocalStorage}&${filters ? filters : ""}`)).data;
         }
         catch (err) {
             throw err;
@@ -95,7 +95,7 @@ export default function UpdateAndDeletePreviousProjects() {
 
     const getAllPreviousProjectsInsideThePage = async (pageNumber, pageSize, filters) => {
         try {
-            return (await axios.get(`${process.env.BASE_API_URL}/previous-projects/all-previous-projects-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`)).data;
+            return (await axios.get(`${process.env.BASE_API_URL}/previous-projects/all-previous-projects-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&language=${process.env.adminDashboardlanguageFieldNameInLocalStorage}&${filters ? filters : ""}`)).data;
         }
         catch (err) {
             throw err;
@@ -192,7 +192,7 @@ export default function UpdateAndDeletePreviousProjects() {
                 setWaitChangePreviousProjectsImageMsg("Please Wait To Change Image ...");
                 let formData = new FormData();
                 formData.append("projectImage", allPreviousProjectsInsideThePage[projectIndex].image);
-                const result = (await axios.put(`${process.env.BASE_API_URL}/previous-projects/change-project-image/${allPreviousProjectsInsideThePage[projectIndex]._id}`, formData, {
+                const result = (await axios.put(`${process.env.BASE_API_URL}/previous-projects/change-project-image/${allPreviousProjectsInsideThePage[projectIndex]._id}?language=${process.env.adminDashboardlanguageFieldNameInLocalStorage}`, formData, {
                     headers: {
                         Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
                     }

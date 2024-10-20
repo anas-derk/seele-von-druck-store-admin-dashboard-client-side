@@ -93,7 +93,7 @@ export default function AddNewProject() {
                 let formData = new FormData();
                 formData.append("projectImg", projectImage);
                 formData.append("description", projectDescription);
-                const result = (await axios.post(`${process.env.BASE_API_URL}/previous-projects/add-new-project`, formData, {
+                const result = (await axios.post(`${process.env.BASE_API_URL}/previous-projects/add-new-project?language=${process.env.adminDashboardlanguageFieldNameInLocalStorage}`, formData, {
                     headers: {
                         Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
                     }
@@ -148,7 +148,7 @@ export default function AddNewProject() {
                     </h1>
                     <form className="add-new-project-form admin-dashbboard-form" onSubmit={addNewProject}>
                         <h6 className="mb-3 fw-bold">Please Select Project Image</h6>
-                        <section className="brand-image mb-4">
+                        <section className="previous-project-image mb-4">
                             <input
                                 type="file"
                                 className={`form-control p-2 border-2 project-image-field ${formValidationErrors["projectImage"] ? "border-danger mb-3" : "mb-4"}`}
