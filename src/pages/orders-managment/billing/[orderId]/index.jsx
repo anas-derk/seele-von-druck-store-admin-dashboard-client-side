@@ -77,7 +77,7 @@ export default function ShowBilling({ orderIdAsProperty }) {
 
     const getOrderDetails = async () => {
         try {
-            return (await axios.get(`${process.env.BASE_API_URL}/orders/order-details/${orderIdAsProperty}`)).data;
+            return (await axios.get(`${process.env.BASE_API_URL}/orders/order-details/${orderIdAsProperty}?language=${process.env.defaultLanguage}`)).data;
         }
         catch (err) {
             throw Error(err);

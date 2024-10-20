@@ -11,7 +11,8 @@ const nextConfig = {
         adminTokenNameInLocalStorage: "s-v-d-s-a-t",
         currencyName: "EUR",
         storeName: "Seele Von Druck Store",
-        adminDashboardlanguageFieldNameInLocalStorage: "seele-von-druck-store-admin-dashboard-language"
+        adminDashboardlanguageFieldNameInLocalStorage: "seele-von-druck-store-admin-dashboard-language",
+        defaultLanguage: "en"
     },
     async headers() {
         return [

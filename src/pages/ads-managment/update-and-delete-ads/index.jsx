@@ -71,7 +71,7 @@ export default function UpdateAndDeleteAds() {
 
     const getAllAds = async () => {
         try{
-            return (await axios.get(`${process.env.BASE_API_URL}/ads/all-ads`)).data;
+            return (await axios.get(`${process.env.BASE_API_URL}/ads/all-ads?language=${process.env.defaultLanguage}`)).data;
         }
         catch(err){
             throw err;
@@ -125,7 +125,7 @@ export default function UpdateAndDeleteAds() {
                 setWaitMsg("Please Wait To Updating ...");
                 let result;
                 if (advertisementType === "text") {
-                    result = (await axios.put(`${process.env.BASE_API_URL}/ads/update-ad-content/${allTextAds[adIndex]._id}`, {
+                    result = (await axios.put(`${process.env.BASE_API_URL}/ads/update-ad-content/${allTextAds[adIndex]._id}?language=${process.env.defaultLanguage}`, {
                         content: allTextAds[adIndex].content,
                     }, {
                         headers: {
@@ -136,7 +136,7 @@ export default function UpdateAndDeleteAds() {
                 else {
                     let formData = new FormData();
                     formData.append("adImage", newAdImageFiles[adIndex]);
-                    result = (await axios.put(`${process.env.BASE_API_URL}/ads/update-ad-image/${allImageAds[adIndex]._id}`, formData, {
+                    result = (await axios.put(`${process.env.BASE_API_URL}/ads/update-ad-image/${allImageAds[adIndex]._id}?language=${process.env.defaultLanguage}`, formData, {
                         headers: {
                             Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
                         }
@@ -184,7 +184,7 @@ export default function UpdateAndDeleteAds() {
         try {
             setWaitMsg("Please Wait To Deleting ...");
             setSelectedAdIndex(adIndex);
-            const result = (await axios.delete(`${process.env.BASE_API_URL}/ads/${advertisementType === "text" ? allTextAds[adIndex]._id : allImageAds[adIndex]._id}`, {
+            const result = (await axios.delete(`${process.env.BASE_API_URL}/ads/${advertisementType === "text" ? allTextAds[adIndex]._id : allImageAds[adIndex]._id}?language=${process.env.defaultLanguage}`, {
                 headers: {
                     Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
                 }

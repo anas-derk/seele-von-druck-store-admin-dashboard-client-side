@@ -124,7 +124,7 @@ export default function AddNewAdmin() {
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
                 setWaitMsg("Please Waiting To Add New Product ...");
-                const result = (await axios.post(`${process.env.BASE_API_URL}/admins/add-new-admin`, newAdminData, {
+                const result = (await axios.post(`${process.env.BASE_API_URL}/admins/add-new-admin?language=${process.env.defaultLanguage}`, newAdminData, {
                     headers: {
                         Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
                     }

@@ -99,7 +99,7 @@ export default function UsersManagment() {
 
     const getUsersCount = async (filters) => {
         try {
-            return (await axios.get(`${process.env.BASE_API_URL}/users/users-count?${filters ? filters : ""}`, {
+            return (await axios.get(`${process.env.BASE_API_URL}/users/users-count?language=${process.env.defaultLanguage}&${filters ? filters : ""}`, {
                 headers: {
                     Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
                 }
@@ -112,7 +112,7 @@ export default function UsersManagment() {
 
     const getAllUsersInsideThePage = async (pageNumber, pageSize, filters) => {
         try {
-            return (await axios.get(`${process.env.BASE_API_URL}/users/all-users-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&${filters ? filters : ""}`, {
+            return (await axios.get(`${process.env.BASE_API_URL}/users/all-users-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&language=${process.env.defaultLanguage}&${filters ? filters : ""}`, {
                 headers: {
                     Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
                 }
@@ -218,7 +218,7 @@ export default function UsersManagment() {
         try {
             setWaitMsg("Please Waiting Deleting ...");
             setSelectedUserIndex(userIndex);
-            const result = (await axios.delete(`${process.env.BASE_API_URL}/users/${allUsersInsideThePage[userIndex]._id}`, {
+            const result = (await axios.delete(`${process.env.BASE_API_URL}/users/${allUsersInsideThePage[userIndex]._id}?language=${process.env.defaultLanguage}`, {
                 headers: {
                     Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
                 }

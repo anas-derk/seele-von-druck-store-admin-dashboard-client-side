@@ -260,7 +260,7 @@ export default function UpdateAndDeleteProducts() {
                 setWaitChangeProductImageMsg("Please Waiting Change Image ...");
                 let formData = new FormData();
                 formData.append("productImage", allProductsInsideThePage[productIndex].image);
-                const result = (await axios.put(`${process.env.BASE_API_URL}/products/update-product-image/${allProductsInsideThePage[productIndex]._id}`, formData, {
+                const result = (await axios.put(`${process.env.BASE_API_URL}/products/update-product-image/${allProductsInsideThePage[productIndex]._id}?language=${process.env.defaultLanguage}`, formData, {
                     headers: {
                         Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
                     }
@@ -384,7 +384,7 @@ export default function UpdateAndDeleteProducts() {
             setSelectedProductIndex(productIndex);
             if (Object.keys(errorsObject).length == 0) {
                 setWaitMsg("Please Waiting Updating ...");
-                const result = (await axios.put(`${process.env.BASE_API_URL}/products/${allProductsInsideThePage[productIndex]._id}`, {
+                const result = (await axios.put(`${process.env.BASE_API_URL}/products/${allProductsInsideThePage[productIndex]._id}?language=${process.env.defaultLanguage}`, {
                     name: allProductsInsideThePage[productIndex].name,
                     price: allProductsInsideThePage[productIndex].price,
                     quantity: allProductsInsideThePage[productIndex].quantity,
@@ -440,7 +440,7 @@ export default function UpdateAndDeleteProducts() {
         try {
             setWaitMsg("Please Wait To Deleting ...");
             setSelectedProductIndex(productIndex);
-            const result = (await axios.delete(`${process.env.BASE_API_URL}/products/${allProductsInsideThePage[productIndex]._id}`, {
+            const result = (await axios.delete(`${process.env.BASE_API_URL}/products/${allProductsInsideThePage[productIndex]._id}?language=${process.env.defaultLanguage}`, {
                 headers: {
                     Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
                 }

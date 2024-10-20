@@ -74,7 +74,7 @@ export default function AddNewCategory() {
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
                 setWaitMsg("Please Waiting To Add New Category ...");
-                const result = (await axios.post(`${process.env.BASE_API_URL}/categories/add-new-category`, {
+                const result = (await axios.post(`${process.env.BASE_API_URL}/categories/add-new-category?language=${process.env.defaultLanguage}`, {
                     categoryName,
                 }, {
                     headers: {

@@ -93,7 +93,7 @@ export default function AddNewProject() {
                 let formData = new FormData();
                 formData.append("projectImg", projectImage);
                 formData.append("description", projectDescription);
-                const result = (await axios.post(`${process.env.BASE_API_URL}/previous-projects/add-new-project?language=${process.env.adminDashboardlanguageFieldNameInLocalStorage}`, formData, {
+                const result = (await axios.post(`${process.env.BASE_API_URL}/previous-projects/add-new-project?language=${process.env.defaultLanguage}`, formData, {
                     headers: {
                         Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
                     }
