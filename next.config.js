@@ -6,8 +6,8 @@ const nextConfig = {
         removeConsole: process.env.NODE_ENV === "production",
     },
     env: {
-        BASE_API_URL: process.env.NODE_ENV === "development" ? "http://localhost:5600" : "https://api.str-intlco.com",
-        WEBSITE_URL: process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://str-intlco.com",
+        BASE_API_URL: process.env.NODE_ENV === "development" ? "http://localhost:5600" : "https://api.olamet-vip.com",
+        WEBSITE_URL: process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://olamet-vip.com",
         adminTokenNameInLocalStorage: "s-v-d-s-a-t",
         currencyName: "EUR",
         storeName: "Seele Von Druck Store",
@@ -16,12 +16,12 @@ const nextConfig = {
     async headers() {
         return [
             {
-                source: process.env.NODE_ENV === "development" ? "//localhost:5600/(.*)" : "//api.str-intlco.com/(.*)",
+                source: process.env.NODE_ENV === "development" ? "//localhost:5600/(.*)" : "//api.olamet-vip.com/(.*)",
                 headers: [
                     { key: "Access-Control-Allow-Credentials", value: "true" },
                     {
                         key: "Access-Control-Allow-Origin",
-                        value: process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://str-intlco.com",
+                        value: process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://olamet-vip.com",
                     },
                     {
                         key: "Access-Control-Allow-Methods",
