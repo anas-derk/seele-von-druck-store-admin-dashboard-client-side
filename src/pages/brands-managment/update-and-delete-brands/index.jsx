@@ -63,7 +63,7 @@ export default function UpdateAndDeleteBrands() {
                         await router.replace("/login");
                     } else {
                         setAdminInfo(result.data);
-                        result = (await getAllBrandsInsideThePage(1, pageSize, getFilteringString(filters))).data;
+                        result = (await getAllBrandsInsideThePage(1, pageSize)).data;
                         setAllBrandsInsideThePage(result.brands);
                         setTotalPagesCount(Math.ceil(result.brandsCount / pageSize));
                         setIsLoadingPage(false);
@@ -96,7 +96,7 @@ export default function UpdateAndDeleteBrands() {
             setIsGetBrands(true);
             setErrorMsgOnGetBrandsData("");
             const newCurrentPage = currentPage - 1;
-            setAllBrandsInsideThePage((await getAllBrandsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data.brands);
+            setAllBrandsInsideThePage((await getAllBrandsInsideThePage(newCurrentPage, pageSize)).data.brands);
             setCurrentPage(newCurrentPage);
             setIsGetBrands(false);
         }
@@ -116,7 +116,7 @@ export default function UpdateAndDeleteBrands() {
             setIsGetBrands(true);
             setErrorMsgOnGetBrandsData("");
             const newCurrentPage = currentPage + 1;
-            setAllBrandsInsideThePage((await getAllBrandsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data.brands);
+            setAllBrandsInsideThePage((await getAllBrandsInsideThePage(newCurrentPage, pageSize)).data.brands);
             setCurrentPage(newCurrentPage);
             setIsGetBrands(false);
         }
@@ -135,7 +135,7 @@ export default function UpdateAndDeleteBrands() {
         try {
             setIsGetBrands(true);
             setErrorMsgOnGetBrandsData("");
-            setAllBrandsInsideThePage((await getAllBrandsInsideThePage(pageNumber, pageSize, getFilteringString(filters))).data.brands);
+            setAllBrandsInsideThePage((await getAllBrandsInsideThePage(pageNumber, pageSize)).data.brands);
             setCurrentPage(pageNumber);
             setIsGetBrands(false);
         }

@@ -58,7 +58,7 @@ export default function UsersManagment() {
                         await router.replace("/login");
                     } else {
                         const adminDetails = result.data;
-                        if (adminDetails.isMainAdmin) {
+                        if (adminDetails.isSuperAdmin) {
                             setAdminInfo(adminDetails);
                             result = (await getAllUsersInsideThePage(1, pageSize, getFiltersAsQuery(filters))).data;
                             setAllUsersInsideThePage(result.users);
@@ -92,19 +92,6 @@ export default function UsersManagment() {
         if (filters.lastName) filteringString += `lastName=${filters.lastName}&`;
         if (filteringString) filteringString = filteringString.substring(0, filteringString.length - 1);
         return filteringString;
-    }
-
-    const getUsersCount = async (filters) => {
-        try {
-            return (await axios.get(`${process.env.BASE_API_URL}/users/users-count?language=${process.env.defaultLanguage}&${filters ? filters : ""}`, {
-                headers: {
-                    Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
-                }
-            })).data;
-        }
-        catch (err) {
-            throw Error(err);
-        }
     }
 
     const getAllUsersInsideThePage = async (pageNumber, pageSize, filters) => {
