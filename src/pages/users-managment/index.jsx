@@ -60,12 +60,9 @@ export default function UsersManagment() {
                         const adminDetails = result.data;
                         if (adminDetails.isMainAdmin) {
                             setAdminInfo(adminDetails);
-                            const filtersAsQuery = getFiltersAsQuery(filters);
-                            result = await getUsersCount(filtersAsQuery);
-                            if (result.data > 0) {
-                                setAllUsersInsideThePage((await getAllUsersInsideThePage(1, pageSize, filtersAsQuery)).data);
-                                setTotalPagesCount(Math.ceil(result.data / pageSize));
-                            }
+                            result = (await getAllUsersInsideThePage(1, pageSize, getFiltersAsQuery(filters))).data;
+                            setAllUsersInsideThePage(result.users);
+                            setTotalPagesCount(Math.ceil(result.usersCount / pageSize));
                             setIsLoadingPage(false);
                         }
                         else {
@@ -128,7 +125,7 @@ export default function UsersManagment() {
             setIsGetUsers(true);
             setErrorMsgOnGetUsersData("");
             const newCurrentPage = currentPage - 1;
-            setAllUsersInsideThePage((await getAllUsersInsideThePage(newCurrentPage, pageSize)).data);
+            setAllUsersInsideThePage((await getAllUsersInsideThePage(newCurrentPage, pageSize, getFiltersAsQuery(filters))).data.users);
             setCurrentPage(newCurrentPage);
             setIsGetUsers(false);
         }
@@ -148,7 +145,7 @@ export default function UsersManagment() {
             setIsGetUsers(true);
             setErrorMsgOnGetUsersData("");
             const newCurrentPage = currentPage + 1;
-            setAllUsersInsideThePage((await getAllUsersInsideThePage(newCurrentPage, pageSize)).data);
+            setAllUsersInsideThePage((await getAllUsersInsideThePage(newCurrentPage, pageSize, getFiltersAsQuery(filters))).data.users);
             setCurrentPage(newCurrentPage);
             setIsGetUsers(false);
         }
@@ -167,7 +164,7 @@ export default function UsersManagment() {
         try {
             setIsGetUsers(true);
             setErrorMsgOnGetUsersData("");
-            setAllUsersInsideThePage((await getAllUsersInsideThePage(pageNumber, pageSize)).data);
+            setAllUsersInsideThePage((await getAllUsersInsideThePage(pageNumber, pageSize, getFiltersAsQuery(filters))).data.users);
             setCurrentPage(pageNumber);
             setIsGetUsers(false);
         }
@@ -186,17 +183,10 @@ export default function UsersManagment() {
         try {
             setIsGetUsers(true);
             setCurrentPage(1);
-            const filteringString = getFiltersAsQuery(filters);
-            const result = await getUsersCount(filteringString);
-            if (result.data > 0) {
-                setAllUsersInsideThePage((await getAllUsersInsideThePage(1, pageSize, filteringString)).data);
-                setTotalPagesCount(Math.ceil(result.data / pageSize));
-                setIsGetUsers(false);
-            } else {
-                setAllUsersInsideThePage([]);
-                setTotalPagesCount(0);
-                setIsGetUsers(false);
-            }
+            const result = (await getAllUsersInsideThePage(1, pageSize, getFiltersAsQuery(filters))).data;
+            setAllUsersInsideThePage(result.users);
+            setTotalPagesCount(Math.ceil(result.usersCount / pageSize));
+            setIsGetUsers(false);
         }
         catch (err) {
             if (err?.response?.status === 401) {

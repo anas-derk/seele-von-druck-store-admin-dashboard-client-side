@@ -78,11 +78,9 @@ export default function UpdateAndDeleteProducts() {
                     } else {
                         setAdminInfo(result.data);
                         setAllCategories((await getAllCategories()).data);
-                        result = await getProductsCount();
-                        if (result.data > 0) {
-                            setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize)).data.products);
-                            setTotalPagesCount(Math.ceil(result.data / pageSize));
-                        }
+                        result = (await getAllProductsInsideThePage(1, pageSize)).data;
+                        setAllProductsInsideThePage(result.products);
+                        setTotalPagesCount(Math.ceil(result.productsCount / pageSize));
                         setIsLoadingPage(false);
                     }
                 })
@@ -104,13 +102,7 @@ export default function UpdateAndDeleteProducts() {
             setIsGetProducts(true);
             setErrorMsgOnGetProductsData("");
             const newCurrentPage = currentPage - 1;
-            const tempAllProductsInsideThePage = (await getAllProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data.products
-            tempAllProductsInsideThePage.forEach((product) => {
-                const filteredCountryListForProduct = allCountries.filter((country) => !product.countries.includes(country));
-                product.filteredCountryList = filteredCountryListForProduct;
-                product.allCountriesWithoutOriginalCountries = filteredCountryListForProduct;
-            });
-            setAllProductsInsideThePage(tempAllProductsInsideThePage);
+            setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data.products);
             setCurrentPage(newCurrentPage);
             setIsGetProducts(false);
         }
@@ -130,13 +122,7 @@ export default function UpdateAndDeleteProducts() {
             setIsGetProducts(true);
             setErrorMsgOnGetProductsData("");
             const newCurrentPage = currentPage + 1;
-            const tempAllProductsInsideThePage = (await getAllProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data.products
-            tempAllProductsInsideThePage.forEach((product) => {
-                const filteredCountryListForProduct = allCountries.filter((country) => !product.countries.includes(country));
-                product.filteredCountryList = filteredCountryListForProduct;
-                product.allCountriesWithoutOriginalCountries = filteredCountryListForProduct;
-            });
-            setAllProductsInsideThePage(tempAllProductsInsideThePage);
+            setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data.products);
             setCurrentPage(newCurrentPage);
             setIsGetProducts(false);
         }
@@ -155,13 +141,7 @@ export default function UpdateAndDeleteProducts() {
         try {
             setIsGetProducts(true);
             setErrorMsgOnGetProductsData("");
-            const tempAllProductsInsideThePage = (await getAllProductsInsideThePage(pageNumber, pageSize, getFilteringString(filters))).data.products
-            tempAllProductsInsideThePage.forEach((product) => {
-                const filteredCountryListForProduct = allCountries.filter((country) => !product.countries.includes(country));
-                product.filteredCountryList = filteredCountryListForProduct;
-                product.allCountriesWithoutOriginalCountries = filteredCountryListForProduct;
-            });
-            setAllProductsInsideThePage(tempAllProductsInsideThePage);
+            setAllProductsInsideThePage((await getAllProductsInsideThePage(pageNumber, pageSize, getFilteringString(filters))).data.products);
             setCurrentPage(pageNumber);
             setIsGetProducts(false);
         }
@@ -187,17 +167,10 @@ export default function UpdateAndDeleteProducts() {
         try {
             setIsGetProducts(true);
             setCurrentPage(1);
-            let filteringString = getFilteringString(filters);
-            const result = await getProductsCount(filteringString);
-            if (result.data > 0) {
-                setAllProductsInsideThePage((await getAllProductsInsideThePage(1, pageSize, filteringString)).data.products);
-                setTotalPagesCount(Math.ceil(result.data / pageSize));
-                setIsGetProducts(false);
-            } else {
-                setAllProductsInsideThePage([]);
-                setTotalPagesCount(0);
-                setIsGetProducts(false);
-            }
+            const result = (await getAllProductsInsideThePage(1, pageSize, getFilteringString(filters))).data;
+            setAllProductsInsideThePage(result.products);
+            setTotalPagesCount(Math.ceil(result.productsCount / pageSize));
+            setIsGetProducts(false);
         }
         catch (err) {
             if (err?.response?.status === 401) {
@@ -448,15 +421,9 @@ export default function UpdateAndDeleteProducts() {
                     setSuccessMsg("");
                     setSelectedProductIndex(-1);
                     setIsGetProducts(true);
-                    const filteringString = getFilteringString(filters);
-                    const result = await getProductsCount(filteringString);
-                    if (result.data > 0) {
-                        setAllProductsInsideThePage((await getAllProductsInsideThePage(currentPage, pageSize, filteringString)).data.products);
-                        setTotalPagesCount(Math.ceil(result.data / pageSize));
-                    } else {
-                        setAllProductsInsideThePage([]);
-                        setTotalPagesCount(0);
-                    }
+                    const result = (await getAllProductsInsideThePage(currentPage, pageSize, getFilteringString(filters))).data;
+                    setAllProductsInsideThePage(result.products);
+                    setTotalPagesCount(Math.ceil(result.productsCount / pageSize));
                     setIsGetProducts(false);
                     clearTimeout(successTimeout);
                 }, 1500);

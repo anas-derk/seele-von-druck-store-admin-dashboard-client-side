@@ -63,11 +63,9 @@ export default function UpdateAndDeletePreviousProjects() {
                         await router.replace("/login");
                     } else {
                         setAdminInfo(result.data);
-                        result = await getPreviousProjectsCount();
-                        if (result.data > 0) {
-                            setAllPreviousProjectsInsideThePage((await getAllPreviousProjectsInsideThePage(1, pageSize)).data);
-                            setTotalPagesCount(Math.ceil(result.data / pageSize));
-                        }
+                        result = (await getAllPreviousProjectsInsideThePage(1, pageSize)).data;
+                        setAllPreviousProjectsInsideThePage(result.previousProducts);
+                        setTotalPagesCount(Math.ceil(result.previousProjectsCount / pageSize));
                         setIsLoadingPage(false);
                     }
                 })
@@ -84,15 +82,6 @@ export default function UpdateAndDeletePreviousProjects() {
         } else router.replace("/login");
     }, []);
 
-    const getPreviousProjectsCount = async (filters) => {
-        try {
-            return (await axios.get(`${process.env.BASE_API_URL}/previous-projects/previous-projects-count?language=${process.env.defaultLanguage}&${filters ? filters : ""}`)).data;
-        }
-        catch (err) {
-            throw err;
-        }
-    }
-
     const getAllPreviousProjectsInsideThePage = async (pageNumber, pageSize, filters) => {
         try {
             return (await axios.get(`${process.env.BASE_API_URL}/previous-projects/all-previous-projects-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&language=${process.env.defaultLanguage}&${filters ? filters : ""}`)).data;
@@ -107,7 +96,7 @@ export default function UpdateAndDeletePreviousProjects() {
             setIsGetPreviousProjects(true);
             setErrorMsgOnGetProviousProjectsData("");
             const newCurrentPage = currentPage - 1;
-            setAllPreviousProjectsInsideThePage((await getAllPreviousProjectsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
+            setAllPreviousProjectsInsideThePage((await getAllPreviousProjectsInsideThePage(newCurrentPage, pageSize)).data.previousProducts);
             setCurrentPage(newCurrentPage);
             setIsGetPreviousProjects(false);
         }
@@ -127,7 +116,7 @@ export default function UpdateAndDeletePreviousProjects() {
             setIsGetPreviousProjects(true);
             setErrorMsgOnGetProviousProjectsData("");
             const newCurrentPage = currentPage + 1;
-            setAllPreviousProjectsInsideThePage((await getAllPreviousProjectsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
+            setAllPreviousProjectsInsideThePage((await getAllPreviousProjectsInsideThePage(newCurrentPage, pageSize).previousProducts).data);
             setCurrentPage(newCurrentPage);
             setIsGetPreviousProjects(false);
         }
@@ -146,7 +135,7 @@ export default function UpdateAndDeletePreviousProjects() {
         try {
             setIsGetPreviousProjects(true);
             setErrorMsgOnGetProviousProjectsData("");
-            setAllPreviousProjectsInsideThePage((await getAllPreviousProjectsInsideThePage(pageNumber, pageSize, getFilteringString(filters))).data);
+            setAllPreviousProjectsInsideThePage((await getAllPreviousProjectsInsideThePage(pageNumber, pageSize)).data.previousProducts);
             setCurrentPage(pageNumber);
             setIsGetPreviousProjects(false);
         }

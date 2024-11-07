@@ -66,11 +66,9 @@ export default function OrdersManagment() {
                         await router.replace("/login");
                     } else {
                         setAdminInfo(result.data);
-                        result = await getOrdersCount(getFilteringString(filters));
-                        if (result.data > 0) {
-                            setAllOrdersInsideThePage((await getAllOrdersInsideThePage(1, pageSize, getFilteringString(filters))).data);
-                            setTotalPagesCount(Math.ceil(result.data / pageSize));
-                        }
+                        result = (await getAllOrdersInsideThePage(1, pageSize, getFilteringString(filters))).data;
+                        setAllOrdersInsideThePage(result.orders);
+                        setTotalPagesCount(Math.ceil(result.ordersCount / pageSize));
                         setIsLoadingPage(false);
                     }
                 })
@@ -100,19 +98,6 @@ export default function OrdersManagment() {
         return filteringString;
     }
 
-    const getOrdersCount = async (filters) => {
-        try {
-            return (await axios.get(`${process.env.BASE_API_URL}/orders/orders-count?language=${process.env.defaultLanguage}&${filters ? filters : ""}`, {
-                headers: {
-                    Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage)
-                }
-            })).data;
-        }
-        catch (err) {
-            throw err;
-        }
-    }
-
     const getAllOrdersInsideThePage = async (pageNumber, pageSize, filters) => {
         try {
             return (await axios.get(`${process.env.BASE_API_URL}/orders/all-orders-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&language=${process.env.defaultLanguage}&${filters ? filters : ""}`, {
@@ -131,7 +116,7 @@ export default function OrdersManagment() {
             setIsGetOrders(true);
             setErrorMsgOnGetOrdersData("");
             const newCurrentPage = currentPage - 1;
-            setAllOrdersInsideThePage((await getAllOrdersInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
+            setAllOrdersInsideThePage((await getAllOrdersInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data.orders);
             setCurrentPage(newCurrentPage);
             setIsGetOrders(false);
         }
@@ -151,7 +136,7 @@ export default function OrdersManagment() {
             setIsGetOrders(true);
             setErrorMsgOnGetOrdersData("");
             const newCurrentPage = currentPage + 1;
-            setAllOrdersInsideThePage((await getAllOrdersInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data);
+            setAllOrdersInsideThePage((await getAllOrdersInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data.orders);
             setCurrentPage(newCurrentPage);
             setIsGetOrders(false);
         }
@@ -170,7 +155,7 @@ export default function OrdersManagment() {
         try {
             setIsGetOrders(true);
             setErrorMsgOnGetOrdersData("");
-            setAllOrdersInsideThePage((await getAllOrdersInsideThePage(pageNumber, pageSize, getFilteringString(filters))).data);
+            setAllOrdersInsideThePage((await getAllOrdersInsideThePage(pageNumber, pageSize, getFilteringString(filters))).data.orders);
             setCurrentPage(pageNumber);
             setIsGetOrders(false);
         }
@@ -204,17 +189,10 @@ export default function OrdersManagment() {
             if (Object.keys(errorsObject).length == 0) {
                 setIsGetOrders(true);
                 setCurrentPage(1);
-                let filteringString = getFilteringString(filters);
-                const result = await getOrdersCount(filteringString);
-                if (result.data > 0) {
-                    setAllOrdersInsideThePage((await getAllOrdersInsideThePage(1, pageSize, filteringString)).data);
-                    setTotalPagesCount(Math.ceil(result.data / pageSize));
-                    setIsGetOrders(false);
-                } else {
-                    setAllOrdersInsideThePage([]);
-                    setTotalPagesCount(0);
-                    setIsGetOrders(false);
-                }
+                const result = (await getAllOrdersInsideThePage(1, pageSize, getFilteringString(getFilteringString(filters)))).data;
+                setAllOrdersInsideThePage(result.orders);
+                setTotalPagesCount(Math.ceil(result.ordersCount / pageSize));
+                setIsGetOrders(false);
             }
         }
         catch (err) {
@@ -322,17 +300,9 @@ export default function OrdersManagment() {
                 let successTimeout = setTimeout(async () => {
                     setSuccessMsg("");
                     setSelectedOrderIndex(-1);
-                    const filteringString = getFilteringString(filters);
-                    const result = await getOrdersCount(filteringString);
-                    if (result.data > 0) {
-                        setAllOrdersInsideThePage((await getAllOrdersInsideThePage(currentPage, pageSize, filteringString)).data);
-                        setTotalPagesCount(Math.ceil(result.data / pageSize));
-                        setIsGetOrders(false);
-                    } else {
-                        setAllOrdersInsideThePage([]);
-                        setTotalPagesCount(0);
-                        setIsGetOrders(false);
-                    }
+                    const result = (await getAllOrdersInsideThePage(currentPage, pageSize, getFilteringString(filters))).data;
+                    setAllOrdersInsideThePage(result.orders);
+                    setTotalPagesCount(Math.ceil(result.ordersCount / pageSize));
                     clearTimeout(successTimeout);
                 }, 3000);
             }
