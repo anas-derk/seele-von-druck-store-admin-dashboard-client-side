@@ -82,9 +82,9 @@ export default function UpdateAndDeletePreviousProjects() {
         } else router.replace("/login");
     }, []);
 
-    const getAllPreviousProjectsInsideThePage = async (pageNumber, pageSize, filters) => {
+    const getAllPreviousProjectsInsideThePage = async (pageNumber, pageSize) => {
         try {
-            return (await axios.get(`${process.env.BASE_API_URL}/previous-projects/all-previous-projects-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&language=${process.env.defaultLanguage}&${filters ? filters : ""}`)).data;
+            return (await axios.get(`${process.env.BASE_API_URL}/previous-projects/all-previous-projects-inside-the-page?pageNumber=${pageNumber}&pageSize=${pageSize}&language=${process.env.defaultLanguage}`)).data;
         }
         catch (err) {
             throw err;

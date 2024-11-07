@@ -86,7 +86,7 @@ export default function UpdateAndDeleteAdmins() {
         } else router.replace("/login");
     }, []);
 
-    const getFilteringString = (filters) => {
+    const getFiltersAsString = (filters) => {
         let filteringString = "";
         if (filters.adminId) filteringString += `_id=${filters.adminId}&`;
         if (filters.firstName) filteringString += `firstName=${filters.firstName}&`;
@@ -114,7 +114,7 @@ export default function UpdateAndDeleteAdmins() {
             setIsGetAdmins(true);
             setErrorMsgOnGetAdminsData("");
             const newCurrentPage = currentPage - 1;
-            setAllAdminsInsideThePage((await getAllAdminsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data.admins);
+            setAllAdminsInsideThePage((await getAllAdminsInsideThePage(newCurrentPage, pageSize, getFiltersAsString(filters))).data.admins);
             setCurrentPage(newCurrentPage);
             setIsGetAdmins(false);
         }
@@ -134,7 +134,7 @@ export default function UpdateAndDeleteAdmins() {
             setIsGetAdmins(true);
             setErrorMsgOnGetAdminsData("");
             const newCurrentPage = currentPage + 1;
-            setAllAdminsInsideThePage((await getAllAdminsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data.admins);
+            setAllAdminsInsideThePage((await getAllAdminsInsideThePage(newCurrentPage, pageSize, getFiltersAsString(filters))).data.admins);
             setCurrentPage(newCurrentPage);
             setIsGetAdmins(false);
         }
@@ -153,7 +153,7 @@ export default function UpdateAndDeleteAdmins() {
         try {
             setIsGetAdmins(true);
             setErrorMsgOnGetAdminsData("");
-            setAllAdminsInsideThePage((await getAllAdminsInsideThePage(pageNumber, pageSize, getFilteringString(filters))).data.admins);
+            setAllAdminsInsideThePage((await getAllAdminsInsideThePage(pageNumber, pageSize, getFiltersAsString(filters))).data.admins);
             setCurrentPage(pageNumber);
             setIsGetAdmins(false);
         }
@@ -172,7 +172,7 @@ export default function UpdateAndDeleteAdmins() {
         try {
             setIsGetAdmins(true);
             setCurrentPage(1);
-            const result = (await getAllAdminsInsideThePage(1, pageSize, getFilteringString(filters))).data;
+            const result = (await getAllAdminsInsideThePage(1, pageSize, getFiltersAsString(filters))).data;
             setAllAdminsInsideThePage(result.admins);
             setTotalPagesCount(Math.ceil(result.adminsCount / pageSize));
             setIsGetAdmins(false);
@@ -303,7 +303,7 @@ export default function UpdateAndDeleteAdmins() {
                     setSuccessMsg("");
                     setSelectedAdminIndex(-1);
                     setIsGetAdmins(true);
-                    const result = (await getAllAdminsInsideThePage(currentPage, pageSize, getFilteringString(filters))).data;
+                    const result = (await getAllAdminsInsideThePage(currentPage, pageSize, getFiltersAsString(filters))).data;
                     setAllAdminsInsideThePage(result.admins);
                     setTotalPagesCount(Math.ceil(result.adminsCount / pageSize));
                     setIsGetAdmins(false);
