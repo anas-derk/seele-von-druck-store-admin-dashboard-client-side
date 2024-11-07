@@ -97,12 +97,19 @@ export default function UpdateAndDeleteProducts() {
         } else router.replace("/login");
     }, []);
 
+    const getFiltersAsString = (filters) => {
+        let filteringString = "";
+        if (filters.categoryId) filteringString += `categoryId=${filters.categoryId}&`;
+        if (filteringString) filteringString = filteringString.substring(0, filteringString.length - 1);
+        return filteringString;
+    }
+
     const getPreviousPage = async () => {
         try {
             setIsGetProducts(true);
             setErrorMsgOnGetProductsData("");
             const newCurrentPage = currentPage - 1;
-            setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data.products);
+            setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize, getFiltersAsString(filters))).data.products);
             setCurrentPage(newCurrentPage);
             setIsGetProducts(false);
         }
@@ -122,7 +129,7 @@ export default function UpdateAndDeleteProducts() {
             setIsGetProducts(true);
             setErrorMsgOnGetProductsData("");
             const newCurrentPage = currentPage + 1;
-            setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize, getFilteringString(filters))).data.products);
+            setAllProductsInsideThePage((await getAllProductsInsideThePage(newCurrentPage, pageSize, getFiltersAsString(filters))).data.products);
             setCurrentPage(newCurrentPage);
             setIsGetProducts(false);
         }
@@ -141,7 +148,7 @@ export default function UpdateAndDeleteProducts() {
         try {
             setIsGetProducts(true);
             setErrorMsgOnGetProductsData("");
-            setAllProductsInsideThePage((await getAllProductsInsideThePage(pageNumber, pageSize, getFilteringString(filters))).data.products);
+            setAllProductsInsideThePage((await getAllProductsInsideThePage(pageNumber, pageSize, getFiltersAsString(filters))).data.products);
             setCurrentPage(pageNumber);
             setIsGetProducts(false);
         }
@@ -156,18 +163,11 @@ export default function UpdateAndDeleteProducts() {
         }
     }
 
-    const getFilteringString = (filters) => {
-        let filteringString = "";
-        if (filters.categoryId) filteringString += `categoryId=${filters.categoryId}&`;
-        if (filteringString) filteringString = filteringString.substring(0, filteringString.length - 1);
-        return filteringString;
-    }
-
     const filterProductsByCategory = async () => {
         try {
             setIsGetProducts(true);
             setCurrentPage(1);
-            const result = (await getAllProductsInsideThePage(1, pageSize, getFilteringString(filters))).data;
+            const result = (await getAllProductsInsideThePage(1, pageSize, getFiltersAsString(filters))).data;
             setAllProductsInsideThePage(result.products);
             setTotalPagesCount(Math.ceil(result.productsCount / pageSize));
             setIsGetProducts(false);
@@ -240,7 +240,7 @@ export default function UpdateAndDeleteProducts() {
                     setSuccessChangeProductImageMsg("Change Image Successfull !!");
                     let successTimeout = setTimeout(async () => {
                         setSuccessChangeProductImageMsg("");
-                        setAllProductsInsideThePage((await getAllProductsInsideThePage(currentPage, pageSize, getFilteringString(filters))).data.products);
+                        setAllProductsInsideThePage((await getAllProductsInsideThePage(currentPage, pageSize, getFiltersAsString(filters))).data.products);
                         setSelectedProducImageIndex(-1);
                         clearTimeout(successTimeout);
                     }, 1500);
@@ -421,7 +421,7 @@ export default function UpdateAndDeleteProducts() {
                     setSuccessMsg("");
                     setSelectedProductIndex(-1);
                     setIsGetProducts(true);
-                    const result = (await getAllProductsInsideThePage(currentPage, pageSize, getFilteringString(filters))).data;
+                    const result = (await getAllProductsInsideThePage(currentPage, pageSize, getFiltersAsString(filters))).data;
                     setAllProductsInsideThePage(result.products);
                     setTotalPagesCount(Math.ceil(result.productsCount / pageSize));
                     setIsGetProducts(false);
