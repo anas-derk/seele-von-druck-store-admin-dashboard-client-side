@@ -32,7 +32,7 @@ export default function AddNewCategory() {
 
     const router = useRouter();
 
-    const templates = ["Flex", "Panner", "Bussiness Card"];
+    const [allTemplates, setAllTemplates] = useState([]);
 
     useEffect(() => {
         const adminToken = localStorage.getItem(process.env.adminTokenNameInLocalStorage);
@@ -44,6 +44,7 @@ export default function AddNewCategory() {
                         await router.replace("/login");
                     } else {
                         setAdminInfo(result.data);
+                        setAllTemplates(await getAllTemplates());
                         setIsLoadingPage(false);
                     }
                 })
@@ -59,6 +60,19 @@ export default function AddNewCategory() {
                 });
         } else router.replace("/login");
     }, []);
+
+    const getAllTemplates = async () => {
+        try{
+            return (await axios.get(`${process.env.BASE_API_URL}/templates/all-templates`, {
+                headers: {
+                    Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage)
+                }
+            })).data;
+        }
+        catch(err) {
+            throw err;
+        }
+    }
 
     const addNewCategory = async (e, categoryName) => {
         try {
@@ -152,9 +166,10 @@ export default function AddNewCategory() {
                                 onChange={(e) => setTemplate(e.target.value)}
                             >
                                 <option defaultValue="" hidden>Please Select Your Template</option>
-                                {templates.map((template) => (
+                                {allTemplates.length > 0 && allTemplates.map((template) => (
                                     <option value={template} key={template}>{template}</option>
                                 ))}
+                                <option value="">No Template</option>
                             </select>
                             {formValidationErrors["template"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
                                 <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
