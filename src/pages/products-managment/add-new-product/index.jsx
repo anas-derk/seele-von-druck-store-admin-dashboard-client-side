@@ -32,7 +32,7 @@ export default function AddNewProduct() {
         image: null,
         galleryImages: [],
     });
-    
+
     const [waitMsg, setWaitMsg] = useState("");
 
     const [errorMsg, setErrorMsg] = useState("");
@@ -46,6 +46,8 @@ export default function AddNewProduct() {
     const productGalleryImagesFilesElementRef = useRef();
 
     const router = useRouter();
+
+    const templates = ["Flex", "Panner", "Bussiness Card"];
 
     useEffect(() => {
         const adminToken = localStorage.getItem(process.env.adminTokenNameInLocalStorage);
@@ -298,21 +300,21 @@ export default function AddNewProduct() {
                                 <span>{formValidationErrors["category"]}</span>
                             </p>}
                         </section>
-                        {/* <section className="template mb-4">
+                        <section className="template mb-4">
                             <select
                                 className={`template-select form-select p-2 border-2 category-field ${formValidationErrors["template"] ? "border-danger mb-3" : "mb-4"}`}
-                                onChange={(e) => setSelectedCategory(categoryNameAndCategoryId[0])}
+                                onChange={(e) => setProductData({ ...productData, template: e.target.value })}
                             >
-                                <option defaultValue="" hidden>Please Select Your Category</option>
-                                {allCategories.map((category) => (
-                                    <option value={`${category.name}-id:${category._id}`} key={category._id}>{category.name}</option>
+                                <option defaultValue="" hidden>Please Select Your Template</option>
+                                {templates.map((template) => (
+                                    <option value={template} key={template}>{template}</option>
                                 ))}
                             </select>
-                            {formValidationErrors["category"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                            {formValidationErrors["template"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
                                 <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                <span>{formValidationErrors["category"]}</span>
+                                <span>{formValidationErrors["template"]}</span>
                             </p>}
-                        </section> */}
+                        </section>
                         <section className="discount mb-4">
                             <input
                                 type="number"
