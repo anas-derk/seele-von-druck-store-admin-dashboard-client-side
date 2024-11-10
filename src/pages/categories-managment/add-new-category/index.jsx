@@ -20,6 +20,8 @@ export default function AddNewCategory() {
 
     const [categoryName, setCategoryName] = useState("");
 
+    const [template, setTemplate] = useState("");
+
     const [waitMsg, setWaitMsg] = useState("");
 
     const [errorMsg, setErrorMsg] = useState("");
@@ -29,6 +31,8 @@ export default function AddNewCategory() {
     const [formValidationErrors, setFormValidationErrors] = useState({});
 
     const router = useRouter();
+
+    const templates = ["Flex", "Panner", "Bussiness Card"];
 
     useEffect(() => {
         const adminToken = localStorage.getItem(process.env.adminTokenNameInLocalStorage);
@@ -76,6 +80,7 @@ export default function AddNewCategory() {
                 setWaitMsg("Please Waiting To Add New Category ...");
                 const result = (await axios.post(`${process.env.BASE_API_URL}/categories/add-new-category?language=${process.env.defaultLanguage}`, {
                     categoryName,
+                    template,
                 }, {
                     headers: {
                         Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
@@ -139,6 +144,21 @@ export default function AddNewCategory() {
                             {formValidationErrors["categoryName"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
                                 <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                 <span>{formValidationErrors["categoryName"]}</span>
+                            </p>}
+                        </section>
+                        <section className="template mb-4">
+                            <select
+                                className={`template-select form-select p-2 border-2 category-field ${formValidationErrors["template"] ? "border-danger mb-3" : "mb-4"}`}
+                                onChange={(e) => setTemplate(e.target.value)}
+                            >
+                                <option defaultValue="" hidden>Please Select Your Template</option>
+                                {templates.map((template) => (
+                                    <option value={template} key={template}>{template}</option>
+                                ))}
+                            </select>
+                            {formValidationErrors["template"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                                <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
+                                <span>{formValidationErrors["template"]}</span>
                             </p>}
                         </section>
                         {!waitMsg && !successMsg && !errorMsg && <button

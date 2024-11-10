@@ -10,7 +10,6 @@ import { getAdminInfo, getAllCategories } from "../../../../public/global_functi
 import { useRouter } from "next/router";
 import { HiOutlineBellAlert } from "react-icons/hi2";
 import NotFoundError from "@/components/NotFoundError";
-import { FaRegPlusSquare, FaRegMinusSquare } from "react-icons/fa";
 
 export default function AddNewProduct() {
 
@@ -46,8 +45,6 @@ export default function AddNewProduct() {
     const productGalleryImagesFilesElementRef = useRef();
 
     const router = useRouter();
-
-    const templates = ["Flex", "Panner", "Bussiness Card"];
 
     useEffect(() => {
         const adminToken = localStorage.getItem(process.env.adminTokenNameInLocalStorage);
@@ -298,21 +295,6 @@ export default function AddNewProduct() {
                             {formValidationErrors["category"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
                                 <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                 <span>{formValidationErrors["category"]}</span>
-                            </p>}
-                        </section>
-                        <section className="template mb-4">
-                            <select
-                                className={`template-select form-select p-2 border-2 category-field ${formValidationErrors["template"] ? "border-danger mb-3" : "mb-4"}`}
-                                onChange={(e) => setProductData({ ...productData, template: e.target.value })}
-                            >
-                                <option defaultValue="" hidden>Please Select Your Template</option>
-                                {templates.map((template) => (
-                                    <option value={template} key={template}>{template}</option>
-                                ))}
-                            </select>
-                            {formValidationErrors["template"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
-                                <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                <span>{formValidationErrors["template"]}</span>
                             </p>}
                         </section>
                         <section className="discount mb-4">

@@ -5,6 +5,7 @@ import AdminPanelHeader from "@/components/AdminPanelHeader";
 import { PiHandWavingThin } from "react-icons/pi";
 import LoaderPage from "@/components/LoaderPage";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
+import { FaRegPlusSquare, FaRegMinusSquare } from "react-icons/fa";
 
 export default function TemplatesManagment() {
 
