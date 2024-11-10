@@ -9,7 +9,6 @@ import { inputValuesValidation } from "../../../../public/global_functions/valid
 import { getAdminInfo, getAllCategories } from "../../../../public/global_functions/popular";
 import { useRouter } from "next/router";
 import { HiOutlineBellAlert } from "react-icons/hi2";
-import { countries } from "countries-list";
 import NotFoundError from "@/components/NotFoundError";
 import { FaRegPlusSquare, FaRegMinusSquare } from "react-icons/fa";
 
@@ -33,48 +32,7 @@ export default function AddNewProduct() {
         image: null,
         galleryImages: [],
     });
-
-    const [bussinessCardCustomizations, setBussinessCardCustomizations] = useState({
-        types: [
-            { content: "", price: 1 }
-        ],
-        quantities: [
-            { quantity: 1, price: 1 }
-        ],
-        corner: {
-            type: "",
-            price: 0
-        },
-        isExistDesign: false,
-        isExistLogo: false,
-        isAttachAFile: false,
-        isDisplayStock: false,
-    });
-
-    const [flexCustomizations, setFlexCustomizations] = useState({
-        types: [
-            { content: "", price: 0 }
-        ],
-        dimentionsDetails: [
-            { width: 0, height: 0, price: 0 }
-        ],
-        isAttachAFile: false,
-        isDisplayStock: false,
-    });
-
-    const [pannerCustomizations, setPannerCustomizations] = useState({
-        types: [
-            { content: "", price: 0 }
-        ],
-        dimentionsDetails: [
-            { width: 0, height: 0, price: 0 }
-        ],
-        isAttachAFile: false,
-        isDisplayStock: false,
-    });
-
-    const [selectedCategory, setSelectedCategory] = useState(-1);
-
+    
     const [waitMsg, setWaitMsg] = useState("");
 
     const [errorMsg, setErrorMsg] = useState("");
@@ -86,8 +44,6 @@ export default function AddNewProduct() {
     const productImageFileElementRef = useRef();
 
     const productGalleryImagesFilesElementRef = useRef();
-
-    const countryList = Object.keys(countries);
 
     const router = useRouter();
 
@@ -220,11 +176,6 @@ export default function AddNewProduct() {
                 formData.append("discount", productData.discount);
                 formData.append("quantity", productData.quantity);
                 formData.append("productImage", productData.image);
-                console.log(bussinessCardCustomizations)
-                formData.append("customizations", bussinessCardCustomizations);
-                for (let galleryImage of productData.galleryImages) {
-                    formData.append("galleryImages", galleryImage);
-                }
                 setWaitMsg("Please Wait To Add New Product ...");
                 const result = (await axios.post(`${process.env.BASE_API_URL}/products/add-new-product?language=${process.env.defaultLanguage}`, formData, {
                     headers: {
@@ -275,285 +226,6 @@ export default function AddNewProduct() {
                 }, 1500);
             }
         }
-    }
-
-    const getSuitableCustomization = (selectedCategory) => {
-        switch (selectedCategory) {
-            case "Bussiness Card": return bussinessCardCustomizations;
-            case "Flex": return flexCustomizations;
-            case "Panner": return pannerCustomizations;
-        }
-    }
-
-    const getTypes = (customizations) => {
-        return customizations.types.map((type, typeIndex) => <div className="row align-items-center mb-4">
-            <div className="col-md-5">
-                <input
-                    type="text"
-                    className="form-control p-2 border-2 type-content-field"
-                    placeholder="Please Enter Content"
-                    onChange={(e) => {
-                        let tempTypes = customizations.types;
-                        tempTypes[typeIndex].content = e.target.value;
-                        if (selectedCategory === "Bussiness Card") {
-                            setBussinessCardCustomizations({ ...bussinessCardCustomizations, types: tempTypes });
-                        } else if (selectedCategory === "Flex") {
-                            setFlexCustomizations({ ...flexCustomizations, types: tempTypes });
-                        } else {
-                            setPannerCustomizations({ ...pannerCustomizations, types: tempTypes });
-                        }
-                    }}
-                    value={type.content}
-                />
-            </div>
-            <div className="col-md-6">
-                <input
-                    type="number"
-                    className="form-control p-2 border-2 type-content-field"
-                    placeholder="Please Enter Price"
-                    onChange={(e) => {
-                        let tempTypes = customizations.types;
-                        tempTypes[typeIndex].price = e.target.valueAsNumber ? e.target.valueAsNumber : "";
-                        if (selectedCategory === "Bussiness Card") {
-                            setBussinessCardCustomizations({ ...bussinessCardCustomizations, types: tempTypes });
-                        }
-                        else if (selectedCategory === "Flex") {
-                            setFlexCustomizations({ ...flexCustomizations, types: tempTypes });
-                        } else {
-                            setPannerCustomizations({ ...pannerCustomizations, types: tempTypes });
-                        }
-                    }}
-                    value={type.price}
-                />
-            </div>
-            <div className="col-md-1">
-                <FaRegPlusSquare className={`add-icon ${customizations.types.length > 1 && "mb-4"}`}
-                    onClick={() => {
-                        let tempTypes = customizations.types.map((type) => type);
-                        tempTypes.push(
-                            { content: "", price: 1 }
-                        );
-                        if (selectedCategory === "Bussiness Card") {
-                            setBussinessCardCustomizations({ ...bussinessCardCustomizations, types: tempTypes });
-                        }
-                        else if (selectedCategory === "Flex") {
-                            setFlexCustomizations({ ...flexCustomizations, types: tempTypes });
-                        } else {
-                            setPannerCustomizations({ ...pannerCustomizations, types: tempTypes });
-                        }
-                    }}
-                />
-                {customizations.types.length > 1 && <FaRegMinusSquare className="remove-icon"
-                    onClick={() => {
-                        if (selectedCategory === "Bussiness Card") {
-                            setBussinessCardCustomizations({ ...bussinessCardCustomizations, types: bussinessCardCustomizations.types.filter((type, index) => index !== typeIndex) });
-                        }
-                        else if (selectedCategory === "Flex") {
-                            setFlexCustomizations({ ...flexCustomizations, types: flexCustomizations.types.filter((type, index) => index !== typeIndex) });
-                        } else {
-                            setPannerCustomizations({ ...flexCustomizations, types: flexCustomizations.types.filter((type, index) => index !== typeIndex) });
-                        }
-                    }}
-                />}
-            </div>
-        </div>)
-    }
-
-    const getDimentionsDetailsForFlexAndPanner = (customizations) => {
-        return customizations.dimentionsDetails.map((dimentionDetailsIndex, dimentionIndex) => <div className="row align-items-center mb-4" key={dimentionIndex}>
-            <div className="col-md-4">
-                <input
-                    type="number"
-                    className="form-control p-2 border-2 width-field"
-                    placeholder="Please Enter Width"
-                    onChange={(e) => {
-                        let tempDimentionsDeta = customizations.dimentionsDetails;
-                        tempDimentionsDeta[typeIndex].width = e.target.valueAsNumber ? e.target.valueAsNumber : "";
-                        if (selectedCategory === "Flex") {
-                            setFlexCustomizations({ ...customizations, dimentionsDetails: tempDimentionsDeta });
-                        } else {
-                            setPannerCustomizations({ ...customizations, dimentionsDetails: tempDimentionsDeta });
-                        }
-                    }}
-                    value={dimentionDetailsIndex.width}
-                />
-            </div>
-            <div className="col-md-4">
-                <input
-                    type="number"
-                    className="form-control p-2 border-2 height-field"
-                    placeholder="Please Enter Height"
-                    onChange={(e) => {
-                        let tempDimentionsDeta = customizations.dimentionsDetails;
-                        tempDimentionsDeta[typeIndex].height = e.target.valueAsNumber ? e.target.valueAsNumber : "";
-                        if (selectedCategory === "Flex") {
-                            setFlexCustomizations({ ...customizations, dimentionsDetails: tempDimentionsDeta });
-                        } else {
-                            setPannerCustomizations({ ...customizations, dimentionsDetails: tempDimentionsDeta });
-                        }
-                    }}
-                    value={dimentionDetailsIndex.height}
-                />
-            </div>
-            <div className="col-md-3">
-                <input
-                    type="number"
-                    className="form-control p-2 border-2 price-field"
-                    placeholder="Please Enter Height"
-                    onChange={(e) => {
-                        let tempDimentionsDeta = customizations.dimentionsDetails;
-                        tempDimentionsDeta[typeIndex].price = e.target.valueAsNumber ? e.target.valueAsNumber : "";
-                        if (selectedCategory === "Flex") {
-                            setFlexCustomizations({ ...customizations, dimentionsDetails: tempDimentionsDeta });
-                        } else {
-                            setPannerCustomizations({ ...customizations, dimentionsDetails: tempDimentionsDeta });
-                        }
-                    }}
-                    value={dimentionDetailsIndex.price}
-                />
-            </div>
-            <div className="col-md-1">
-                <FaRegPlusSquare className={`add-icon ${customizations.dimentionsDetails.length > 1 && "mb-4"}`}
-                    onClick={() => {
-                        let tempDimentionsDeta = customizations.dimentionsDetails.map((type) => type);
-                        tempDimentionsDeta.push(
-                            { content: "", price: 1 }
-                        );
-                        if (selectedCategory === "Flex") {
-                            setFlexCustomizations({ ...customizations, dimentionsDetails: tempDimentionsDeta });
-                        } else {
-                            setPannerCustomizations({ ...customizations, dimentionsDetails: tempDimentionsDeta });
-                        }
-                    }}
-                />
-                {customizations.dimentionsDetails.length > 1 && <FaRegMinusSquare className="remove-icon"
-                    onClick={() => {
-                        if (selectedCategory === "Flex") {
-                            setFlexCustomizations({ ...flexCustomizations, dimentionsDetails: flexCustomizations.dimentionsDetails.filter((dimentionDetails, index) => index !== dimentionIndex) });
-                        } else {
-                            setPannerCustomizations({ ...flexCustomizations, dimentionsDetails: flexCustomizations.dimentionsDetails.filter((dimentionDetails, index) => index !== dimentionIndex) });
-                        }
-                    }}
-                />}
-            </div>
-        </div>);
-    }
-
-    const getMoreCustomizations = (customizations) => {
-        return <>
-            <div className="is-attach-a-file mb-4">
-                <h6 className="fw-bold mb-3">Is Attash A File ?</h6>
-                <input
-                    type="radio"
-                    checked={customizations.isAttachAFile}
-                    id="attach-a-file-radio"
-                    className="radio-input me-2"
-                    name="isAttachAFileRadioGroup"
-                    onChange={() => {
-                        if (selectedCategory === "Bussiness Card") {
-                            setBussinessCardCustomizations({ ...customizations, isAttachAFile: true });
-                        } else if (selectedCategory === "Flex") {
-                            setFlexCustomizations({ ...customizations, isAttachAFile: true });
-                        } else {
-                            setPannerCustomizations({ ...customizations, isAttachAFile: true });
-                        }
-                    }}
-                />
-                <label htmlFor="attach-a-file-radio" className="me-4"
-                    onClick={() => {
-                        if (selectedCategory === "Bussiness Card") {
-                            setBussinessCardCustomizations({ ...customizations, isAttachAFile: true });
-                        } else if (selectedCategory === "Flex") {
-                            setFlexCustomizations({ ...customizations, isAttachAFile: true });
-                        } else {
-                            setPannerCustomizations({ ...customizations, isAttachAFile: true });
-                        }
-                    }}>Yes</label>
-                <input
-                    type="radio"
-                    checked={!customizations.isAttachAFile}
-                    id="not-attach-a-file-radio"
-                    className="radio-input me-2"
-                    name="isAttachAFileRadioGroup"
-                    onChange={() => {
-                        if (selectedCategory === "Bussiness Card") {
-                            setBussinessCardCustomizations({ ...customizations, isAttachAFile: false });
-                        } else if (selectedCategory === "Flex") {
-                            setFlexCustomizations({ ...customizations, isAttachAFile: false });
-                        } else {
-                            setPannerCustomizations({ ...customizations, isAttachAFile: false });
-                        }
-                    }}
-                />
-                <label htmlFor="not-attach-a-file-radio"
-                    onChange={() => {
-                        if (selectedCategory === "Bussiness Card") {
-                            setBussinessCardCustomizations({ ...customizations, isAttachAFile: false });
-                        } else if (selectedCategory === "Flex") {
-                            setFlexCustomizations({ ...customizations, isAttachAFile: false });
-                        } else {
-                            setPannerCustomizations({ ...customizations, isAttachAFile: false });
-                        }
-                    }}
-                >No</label>
-            </div>
-            <div className="is-display-stock mb-4">
-                <h6 className="fw-bold mb-3">Is Display Stock ?</h6>
-                <input
-                    type="radio"
-                    checked={customizations.isDisplayStock}
-                    id="display-stock-radio"
-                    className="radio-input me-2"
-                    name="isDisplayStockRadioGroup"
-                    onChange={() => {
-                        if (selectedCategory === "Bussiness Card") {
-                            setBussinessCardCustomizations({ ...customizations, isDisplayStock: true });
-                        } else if (selectedCategory === "Flex") {
-                            setFlexCustomizations({ ...customizations, isAttachAFile: true });
-                        } else {
-                            setPannerCustomizations({ ...customizations, isAttachAFile: true });
-                        }
-                    }} />
-                <label htmlFor="display-stock-radio" className="me-4"
-                    onChange={() => {
-                        if (selectedCategory === "Bussiness Card") {
-                            setBussinessCardCustomizations({ ...customizations, isDisplayStock: true });
-                        } else if (selectedCategory === "Flex") {
-                            setFlexCustomizations({ ...customizations, isAttachAFile: true });
-                        } else {
-                            setPannerCustomizations({ ...customizations, isAttachAFile: true });
-                        }
-                    }}
-                >Yes</label>
-                <input
-                    type="radio"
-                    checked={!customizations.isDisplayStock}
-                    id="not-display-stock-radio"
-                    className="radio-input me-2"
-                    name="isDisplayStockRadioGroup"
-                    onChange={() => {
-                        if (selectedCategory === "Bussiness Card") {
-                            setBussinessCardCustomizations({ ...customizations, isDisplayStock: false });
-                        } else if (selectedCategory === "Flex") {
-                            setFlexCustomizations({ ...customizations, isAttachAFile: false });
-                        } else {
-                            setPannerCustomizations({ ...customizations, isAttachAFile: false });
-                        }
-                    }}
-                />
-                <label htmlFor="not-display-stock-radio"
-                    onChange={() => {
-                        if (selectedCategory === "Bussiness Card") {
-                            setBussinessCardCustomizations({ ...customizations, isDisplayStock: false });
-                        } else if (selectedCategory === "Flex") {
-                            setFlexCustomizations({ ...customizations, isAttachAFile: false });
-                        } else {
-                            setPannerCustomizations({ ...customizations, isAttachAFile: false });
-                        }
-                    }}
-                >No</label>
-            </div>
-        </>
     }
 
     return (
@@ -613,8 +285,7 @@ export default function AddNewProduct() {
                                 className={`category-select form-select p-2 border-2 category-field ${formValidationErrors["category"] ? "border-danger mb-3" : "mb-4"}`}
                                 onChange={(e) => {
                                     const categoryNameAndCategoryId = e.target.value.split("-id:");
-                                    setProductData({ ...productData, category: categoryNameAndCategoryId[0], categoryId: categoryNameAndCategoryId[1] })
-                                    setSelectedCategory(categoryNameAndCategoryId[0]);
+                                    setProductData({ ...productData, category: categoryNameAndCategoryId[1] })
                                 }}
                             >
                                 <option defaultValue="" hidden>Please Select Your Category</option>
@@ -627,147 +298,21 @@ export default function AddNewProduct() {
                                 <span>{formValidationErrors["category"]}</span>
                             </p>}
                         </section>
-                        {["Bussiness Card", "Panner", "Flex"].includes(selectedCategory) && <section className="customizations mb-4 border border-3 border-dark p-4">
-                            <h6 className="fw-bold border-bottom border-2 border-dark pb-2 mb-3">Customizations</h6>
-                            <div className="type-details mb-3">
-                                <h6 className="fw-bold">Types</h6>
-                                {getTypes(getSuitableCustomization(selectedCategory))}
-                            </div>
-                            {(selectedCategory === "Flex" || selectedCategory === "Panner") && <div className="quantity-and-price-details mb-3">
-                                <h6 className="fw-bold">Width, Height And Price</h6>
-                                {getDimentionsDetailsForFlexAndPanner(getSuitableCustomization(selectedCategory))}
-                            </div>}
-                            {selectedCategory === "Bussiness Card" && <>
-                                <div className="quantity-and-price-details mb-3">
-                                    <h6 className="fw-bold">Quantities</h6>
-                                    {bussinessCardCustomizations.quantities.map((quantityDetails, quantityIndex) => <div className="row align-items-center mb-4" key={quantityIndex}>
-                                        <div className="col-md-5">
-                                            <input
-                                                type="number"
-                                                className="form-control p-2 border-2 type-content-field"
-                                                placeholder="Please Enter Quantity"
-                                                onChange={(e) => {
-                                                    let tempQuantities = bussinessCardCustomizations.quantities;
-                                                    tempQuantities[quantityIndex].quantity = e.target.value;
-                                                    setBussinessCardCustomizations({ ...bussinessCardCustomizations, quantities: tempQuantities });
-                                                }}
-                                                value={quantityDetails.quantity}
-                                            />
-                                        </div>
-                                        <div className="col-md-6">
-                                            <input
-                                                type="number"
-                                                className="form-control p-2 border-2 type-content-field"
-                                                placeholder="Please Enter Price"
-                                                onChange={(e) => {
-                                                    let tempQuantities = bussinessCardCustomizations.quantities;
-                                                    tempQuantities[quantityIndex].price = e.target.value;
-                                                    setBussinessCardCustomizations({ ...bussinessCardCustomizations, quantities: tempQuantities });
-                                                }}
-                                                value={quantityDetails.price}
-                                            />
-                                        </div>
-                                        <div className="col-md-1">
-                                            <FaRegPlusSquare className={`add-icon ${bussinessCardCustomizations.quantities.length > 1 && "mb-4"}`}
-                                                onClick={() => {
-                                                    let tempQuantitiesDeta = bussinessCardCustomizations.quantities.map((quantity) => quantity);
-                                                    tempQuantitiesDeta.push({
-                                                        quantity: 1,
-                                                        price: 1
-                                                    });
-                                                    setBussinessCardCustomizations({ ...bussinessCardCustomizations, quantities: tempQuantitiesDeta });
-                                                }}
-                                            />
-                                            {bussinessCardCustomizations.quantities.length > 1 && <FaRegMinusSquare className="remove-icon"
-                                                onClick={() => {
-                                                    setBussinessCardCustomizations({ ...bussinessCardCustomizations, quantities: bussinessCardCustomizations.quantities.filter((quantity, index) => index !== quantityIndex) });
-                                                }}
-                                            />}
-                                        </div>
-                                    </div>)}
-                                </div>
-                                <div className="corner-type mb-4">
-                                    <h6 className="fw-bold mb-3">Corner Type</h6>
-                                    <div className="corner-details mb-3">
-                                        <input
-                                            type="radio"
-                                            id="rounded-corners-radio"
-                                            checked={bussinessCardCustomizations.corner.type === "rounded"}
-                                            className="radio-input me-2"
-                                            name="cornersTypeGroup"
-                                            onChange={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, corner: { ...bussinessCardCustomizations.corner, type: "rounded" } })}
-                                        />
-                                        <label htmlFor="rounded-corners-radio" className="me-4" onClick={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, corner: { ...bussinessCardCustomizations.corner, type: "rounded" } })}>Rounded</label>
-                                        <input
-                                            type="number"
-                                            className="form-control p-2 border-2 additional-price-field mt-2"
-                                            placeholder="Please Enter Price"
-                                            onChange={(e) => setBussinessCardCustomizations({ ...bussinessCardCustomizations, corner: { ...bussinessCardCustomizations.corner, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" } })}
-                                        />
-                                    </div>
-                                    <div className="corner-details">
-                                        <input
-                                            type="radio"
-                                            id="sharp-corners-radio"
-                                            checked={bussinessCardCustomizations.corner.type === "sharp"}
-                                            className="radio-input me-2"
-                                            name="cornersTypeGroup"
-                                            onChange={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, corner: { ...bussinessCardCustomizations.corner, type: "sharp" } })}
-                                        />
-                                        <label htmlFor="sharp-corners-radio" onClick={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, corner: { ...bussinessCardCustomizations.corner, type: "sharp" } })}>Sharp</label>
-                                        <input
-                                            type="number"
-                                            className="form-control p-2 border-2 additional-price-field mt-2"
-                                            placeholder="Please Enter Price"
-                                            onChange={(e) => setBussinessCardCustomizations({ ...bussinessCardCustomizations, corner: { ...bussinessCardCustomizations.corner, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" } })}
-                                        />
-                                    </div>
-                                </div>
-                                <div className="is-exist-design mb-4">
-                                    <h6 className="fw-bold mb-3">Is Exist Design ?</h6>
-                                    <input
-                                        type="radio"
-                                        checked={bussinessCardCustomizations.isExistDesign}
-                                        id="exist-design-radio"
-                                        className="radio-input me-2"
-                                        name="isExistDesignRadioGroup"
-                                        onChange={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isExistDesign: true })}
-                                    />
-                                    <label htmlFor="exist-design-radio" className="me-4" onClick={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isExistDesign: true })}>Yes</label>
-                                    <input
-                                        type="radio"
-                                        checked={!bussinessCardCustomizations.isExistDesign}
-                                        id="not-exist-design-radio"
-                                        className="radio-input me-2"
-                                        name="isExistDesignRadioGroup"
-                                        onChange={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isExistDesign: false })}
-                                    />
-                                    <label htmlFor="not-exist-design-radio" onClick={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isExistDesign: false })}>No</label>
-                                </div>
-                                <div className="is-exist-logo mb-4">
-                                    <h6 className="fw-bold mb-3">Is Exist Logo ?</h6>
-                                    <input
-                                        type="radio"
-                                        checked={bussinessCardCustomizations.isExistLogo}
-                                        id="exist-logo-radio"
-                                        className="radio-input me-2"
-                                        name="isExistLogoRadioGroup"
-                                        onChange={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isExistLogo: true })}
-                                    />
-                                    <label htmlFor="exist-logo-radio" className="me-4" onClick={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isExistLogo: true })}>Yes</label>
-                                    <input
-                                        type="radio"
-                                        checked={!bussinessCardCustomizations.isExistLogo}
-                                        id="not-exist-logo-radio"
-                                        className="radio-input me-2"
-                                        name="isExistLogoRadioGroup"
-                                        onChange={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isExistLogo: false })}
-                                    />
-                                    <label htmlFor="not-exist-design-radio" onClick={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isExistLogo: false })}>No</label>
-                                </div>
-                            </>}
-                            {getMoreCustomizations(getSuitableCustomization(selectedCategory))}
-                        </section>}
+                        {/* <section className="template mb-4">
+                            <select
+                                className={`template-select form-select p-2 border-2 category-field ${formValidationErrors["template"] ? "border-danger mb-3" : "mb-4"}`}
+                                onChange={(e) => setSelectedCategory(categoryNameAndCategoryId[0])}
+                            >
+                                <option defaultValue="" hidden>Please Select Your Category</option>
+                                {allCategories.map((category) => (
+                                    <option value={`${category.name}-id:${category._id}`} key={category._id}>{category.name}</option>
+                                ))}
+                            </select>
+                            {formValidationErrors["category"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                                <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
+                                <span>{formValidationErrors["category"]}</span>
+                            </p>}
+                        </section> */}
                         <section className="discount mb-4">
                             <input
                                 type="number"
