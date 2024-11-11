@@ -64,7 +64,7 @@ export default function TemplatesManagment() {
 
     const getTypes = (customizations) => {
         return customizations.types.map((type, typeIndex) => <div className="row align-items-center mb-4">
-            <div className="col-md-5">
+            <div className="col-md-11">
                 <input
                     type="text"
                     className="form-control p-2 border-2 type-content-field"
@@ -72,35 +72,19 @@ export default function TemplatesManagment() {
                     onChange={(e) => {
                         let tempTypes = customizations.types;
                         tempTypes[typeIndex].content = e.target.value;
+                        let tempTemplates = allTemplates.map((template) => template);
                         if (selectedTemplate === "Bussiness Card") {
-                            setBussinessCardCustomizations({ ...bussinessCardCustomizations, types: tempTypes });
+                            tempTemplates[0].components.types = tempTypes;
+                            setAllTemplates(tempTemplates);
                         } else if (selectedTemplate === "Flex") {
-                            setFlexCustomizations({ ...flexCustomizations, types: tempTypes });
+                            tempTemplates[1].components.types = tempTypes;
+                            setAllTemplates(tempTemplates);
                         } else {
-                            setPannerCustomizations({ ...pannerCustomizations, types: tempTypes });
+                            tempTemplates[2].components.types = tempTypes;
+                            setAllTemplates(tempTemplates);
                         }
                     }}
                     value={type.content}
-                />
-            </div>
-            <div className="col-md-6">
-                <input
-                    type="number"
-                    className="form-control p-2 border-2 type-content-field"
-                    placeholder="Please Enter Price"
-                    onChange={(e) => {
-                        let tempTypes = customizations.types;
-                        tempTypes[typeIndex].price = e.target.valueAsNumber ? e.target.valueAsNumber : "";
-                        if (selectedTemplate === "Bussiness Card") {
-                            setBussinessCardCustomizations({ ...bussinessCardCustomizations, types: tempTypes });
-                        }
-                        else if (selectedTemplate === "Flex") {
-                            setFlexCustomizations({ ...flexCustomizations, types: tempTypes });
-                        } else {
-                            setPannerCustomizations({ ...pannerCustomizations, types: tempTypes });
-                        }
-                    }}
-                    value={type.price}
                 />
             </div>
             <div className="col-md-1">
@@ -108,27 +92,33 @@ export default function TemplatesManagment() {
                     onClick={() => {
                         let tempTypes = customizations.types.map((type) => type);
                         tempTypes.push(
-                            { content: "", price: 1 }
+                            { content: "" }
                         );
+                        let tempTemplates = allTemplates.map((template) => template);
                         if (selectedTemplate === "Bussiness Card") {
-                            setBussinessCardCustomizations({ ...bussinessCardCustomizations, types: tempTypes });
-                        }
-                        else if (selectedTemplate === "Flex") {
-                            setFlexCustomizations({ ...flexCustomizations, types: tempTypes });
+                            tempTemplates[0].components.types = tempTypes;
+                            setAllTemplates(tempTemplates);
+                        } else if (selectedTemplate === "Flex") {
+                            tempTemplates[1].components.types = tempTypes;
+                            setAllTemplates(tempTemplates);
                         } else {
-                            setPannerCustomizations({ ...pannerCustomizations, types: tempTypes });
+                            tempTemplates[2].components.types = tempTypes;
+                            setAllTemplates(tempTemplates);
                         }
                     }}
                 />
                 {customizations.types.length > 1 && <FaRegMinusSquare className="remove-icon"
                     onClick={() => {
+                        let tempTemplates = allTemplates.map((template) => template);
                         if (selectedTemplate === "Bussiness Card") {
-                            setBussinessCardCustomizations({ ...bussinessCardCustomizations, types: bussinessCardCustomizations.types.filter((type, index) => index !== typeIndex) });
-                        }
-                        else if (selectedTemplate === "Flex") {
-                            setFlexCustomizations({ ...flexCustomizations, types: flexCustomizations.types.filter((type, index) => index !== typeIndex) });
+                            tempTemplates[0].components.types = tempTemplates[0].components.types.filter((type, index) => index !== typeIndex);
+                            setAllTemplates(tempTemplates);
+                        } else if (selectedTemplate === "Flex") {
+                            tempTemplates[1].components.types = tempTemplates[1].components.types.filter((type, index) => index !== typeIndex);
+                            setAllTemplates(tempTemplates);
                         } else {
-                            setPannerCustomizations({ ...flexCustomizations, types: flexCustomizations.types.filter((type, index) => index !== typeIndex) });
+                            tempTemplates[2].components.types = tempTemplates[2].components.types.filter((type, index) => index !== typeIndex);
+                            setAllTemplates(tempTemplates);
                         }
                     }}
                 />}
@@ -146,10 +136,16 @@ export default function TemplatesManagment() {
                     onChange={(e) => {
                         let tempDimentionsDeta = customizations.dimentionsDetails;
                         tempDimentionsDeta[typeIndex].width = e.target.valueAsNumber ? e.target.valueAsNumber : "";
-                        if (selectedTemplate === "Flex") {
-                            setFlexCustomizations({ ...customizations, dimentionsDetails: tempDimentionsDeta });
+                        let tempTemplates = allTemplates.map((template) => template);
+                        if (selectedTemplate === "Bussiness Card") {
+                            tempTemplates[0].components.dimentionsDetails = tempDimentionsDeta;
+                            setAllTemplates(tempTemplates);
+                        } else if (selectedTemplate === "Flex") {
+                            tempTemplates[1].components.dimentionsDetails = tempDimentionsDeta;
+                            setAllTemplates(tempTemplates);
                         } else {
-                            setPannerCustomizations({ ...customizations, dimentionsDetails: tempDimentionsDeta });
+                            tempTemplates[2].components.dimentionsDetails = tempDimentionsDeta;
+                            setAllTemplates(tempTemplates);
                         }
                     }}
                     value={dimentionDetailsIndex.width}
@@ -163,10 +159,16 @@ export default function TemplatesManagment() {
                     onChange={(e) => {
                         let tempDimentionsDeta = customizations.dimentionsDetails;
                         tempDimentionsDeta[typeIndex].height = e.target.valueAsNumber ? e.target.valueAsNumber : "";
-                        if (selectedTemplate === "Flex") {
-                            setFlexCustomizations({ ...customizations, dimentionsDetails: tempDimentionsDeta });
+                        let tempTemplates = allTemplates.map((template) => template);
+                        if (selectedTemplate === "Bussiness Card") {
+                            tempTemplates[0].components.dimentionsDetails = tempDimentionsDeta;
+                            setAllTemplates(tempTemplates);
+                        } else if (selectedTemplate === "Flex") {
+                            tempTemplates[1].components.dimentionsDetails = tempDimentionsDeta;
+                            setAllTemplates(tempTemplates);
                         } else {
-                            setPannerCustomizations({ ...customizations, dimentionsDetails: tempDimentionsDeta });
+                            tempTemplates[2].components.dimentionsDetails = tempDimentionsDeta;
+                            setAllTemplates(tempTemplates);
                         }
                     }}
                     value={dimentionDetailsIndex.height}
@@ -180,10 +182,16 @@ export default function TemplatesManagment() {
                     onChange={(e) => {
                         let tempDimentionsDeta = customizations.dimentionsDetails;
                         tempDimentionsDeta[typeIndex].price = e.target.valueAsNumber ? e.target.valueAsNumber : "";
-                        if (selectedTemplate === "Flex") {
-                            setFlexCustomizations({ ...customizations, dimentionsDetails: tempDimentionsDeta });
+                        let tempTemplates = allTemplates.map((template) => template);
+                        if (selectedTemplate === "Bussiness Card") {
+                            tempTemplates[0].components.dimentionsDetails = tempDimentionsDeta;
+                            setAllTemplates(tempTemplates);
+                        } else if (selectedTemplate === "Flex") {
+                            tempTemplates[1].components.dimentionsDetails = tempDimentionsDeta;
+                            setAllTemplates(tempTemplates);
                         } else {
-                            setPannerCustomizations({ ...customizations, dimentionsDetails: tempDimentionsDeta });
+                            tempTemplates[2].components.dimentionsDetails = tempDimentionsDeta;
+                            setAllTemplates(tempTemplates);
                         }
                     }}
                     value={dimentionDetailsIndex.price}
@@ -196,19 +204,25 @@ export default function TemplatesManagment() {
                         tempDimentionsDeta.push(
                             { content: "", price: 1 }
                         );
+                        let tempTemplates = allTemplates.map((template) => template);
                         if (selectedTemplate === "Flex") {
-                            setFlexCustomizations({ ...customizations, dimentionsDetails: tempDimentionsDeta });
+                            tempTemplates[1].components.dimentionsDetails = tempDimentionsDeta;
+                            setAllTemplates(tempTemplates);
                         } else {
-                            setPannerCustomizations({ ...customizations, dimentionsDetails: tempDimentionsDeta });
+                            tempTemplates[2].components.dimentionsDetails = tempDimentionsDeta;
+                            setAllTemplates(tempTemplates);
                         }
                     }}
                 />
                 {customizations.dimentionsDetails.length > 1 && <FaRegMinusSquare className="remove-icon"
                     onClick={() => {
+                        let tempTemplates = allTemplates.map((template) => template);
                         if (selectedTemplate === "Flex") {
-                            setFlexCustomizations({ ...flexCustomizations, dimentionsDetails: flexCustomizations.dimentionsDetails.filter((dimentionDetails, index) => index !== dimentionIndex) });
+                            tempTemplates[1].components.dimentionsDetails = tempTemplates[1].components.dimentionsDetails.filter((dimentionDetails, index) => index !== dimentionIndex);
+                            setAllTemplates(tempTemplates);
                         } else {
-                            setPannerCustomizations({ ...flexCustomizations, dimentionsDetails: flexCustomizations.dimentionsDetails.filter((dimentionDetails, index) => index !== dimentionIndex) });
+                            tempTemplates[2].components.dimentionsDetails = tempTemplates[2].components.dimentionsDetails.filter((dimentionDetails, index) => index !== dimentionIndex);
+                            setAllTemplates(tempTemplates);
                         }
                     }}
                 />}
@@ -227,23 +241,31 @@ export default function TemplatesManagment() {
                     className="radio-input me-2"
                     name="isAttachAFileRadioGroup"
                     onChange={() => {
+                        let tempTemplates = allTemplates.map((template) => template);
                         if (selectedTemplate === "Bussiness Card") {
-                            setBussinessCardCustomizations({ ...customizations, isAttachAFile: true });
+                            tempTemplates[0].components.isAttachAFile = true;
+                            setAllTemplates(tempTemplates);
                         } else if (selectedTemplate === "Flex") {
-                            setFlexCustomizations({ ...customizations, isAttachAFile: true });
+                            tempTemplates[1].components.isAttachAFile = true;
+                            setAllTemplates(tempTemplates);
                         } else {
-                            setPannerCustomizations({ ...customizations, isAttachAFile: true });
+                            tempTemplates[2].components.isAttachAFile = true;
+                            setAllTemplates(tempTemplates);
                         }
                     }}
                 />
                 <label htmlFor="attach-a-file-radio" className="me-4"
                     onClick={() => {
+                        let tempTemplates = allTemplates.map((template) => template);
                         if (selectedTemplate === "Bussiness Card") {
-                            setBussinessCardCustomizations({ ...customizations, isAttachAFile: true });
+                            tempTemplates[0].components.isAttachAFile = true;
+                            setAllTemplates(tempTemplates);
                         } else if (selectedTemplate === "Flex") {
-                            setFlexCustomizations({ ...customizations, isAttachAFile: true });
+                            tempTemplates[1].components.isAttachAFile = true;
+                            setAllTemplates(tempTemplates);
                         } else {
-                            setPannerCustomizations({ ...customizations, isAttachAFile: true });
+                            tempTemplates[2].components.isAttachAFile = true;
+                            setAllTemplates(tempTemplates);
                         }
                     }}>Yes</label>
                 <input
@@ -253,23 +275,31 @@ export default function TemplatesManagment() {
                     className="radio-input me-2"
                     name="isAttachAFileRadioGroup"
                     onChange={() => {
+                        let tempTemplates = allTemplates.map((template) => template);
                         if (selectedTemplate === "Bussiness Card") {
-                            setBussinessCardCustomizations({ ...customizations, isAttachAFile: false });
+                            tempTemplates[0].components.isAttachAFile = false;
+                            setAllTemplates(tempTemplates);
                         } else if (selectedTemplate === "Flex") {
-                            setFlexCustomizations({ ...customizations, isAttachAFile: false });
+                            tempTemplates[1].components.isAttachAFile = false;
+                            setAllTemplates(tempTemplates);
                         } else {
-                            setPannerCustomizations({ ...customizations, isAttachAFile: false });
+                            tempTemplates[2].components.isAttachAFile = false;
+                            setAllTemplates(tempTemplates);
                         }
                     }}
                 />
                 <label htmlFor="not-attach-a-file-radio"
                     onChange={() => {
+                        let tempTemplates = allTemplates.map((template) => template);
                         if (selectedTemplate === "Bussiness Card") {
-                            setBussinessCardCustomizations({ ...customizations, isAttachAFile: false });
+                            tempTemplates[0].components.isAttachAFile = false;
+                            setAllTemplates(tempTemplates);
                         } else if (selectedTemplate === "Flex") {
-                            setFlexCustomizations({ ...customizations, isAttachAFile: false });
+                            tempTemplates[1].components.isAttachAFile = false;
+                            setAllTemplates(tempTemplates);
                         } else {
-                            setPannerCustomizations({ ...customizations, isAttachAFile: false });
+                            tempTemplates[2].components.isAttachAFile = false;
+                            setAllTemplates(tempTemplates);
                         }
                     }}
                 >No</label>
@@ -283,22 +313,30 @@ export default function TemplatesManagment() {
                     className="radio-input me-2"
                     name="isDisplayStockRadioGroup"
                     onChange={() => {
+                        let tempTemplates = allTemplates.map((template) => template);
                         if (selectedTemplate === "Bussiness Card") {
-                            setBussinessCardCustomizations({ ...customizations, isDisplayStock: true });
+                            tempTemplates[0].components.isDisplayStock = true;
+                            setAllTemplates(tempTemplates);
                         } else if (selectedTemplate === "Flex") {
-                            setFlexCustomizations({ ...customizations, isAttachAFile: true });
+                            tempTemplates[1].components.isDisplayStock = true;
+                            setAllTemplates(tempTemplates);
                         } else {
-                            setPannerCustomizations({ ...customizations, isAttachAFile: true });
+                            tempTemplates[2].components.isDisplayStock = true;
+                            setAllTemplates(tempTemplates);
                         }
                     }} />
                 <label htmlFor="display-stock-radio" className="me-4"
                     onChange={() => {
+                        let tempTemplates = allTemplates.map((template) => template);
                         if (selectedTemplate === "Bussiness Card") {
-                            setBussinessCardCustomizations({ ...customizations, isDisplayStock: true });
+                            tempTemplates[0].components.isDisplayStock = true;
+                            setAllTemplates(tempTemplates);
                         } else if (selectedTemplate === "Flex") {
-                            setFlexCustomizations({ ...customizations, isAttachAFile: true });
+                            tempTemplates[1].components.isDisplayStock = true;
+                            setAllTemplates(tempTemplates);
                         } else {
-                            setPannerCustomizations({ ...customizations, isAttachAFile: true });
+                            tempTemplates[2].components.isDisplayStock = true;
+                            setAllTemplates(tempTemplates);
                         }
                     }}
                 >Yes</label>
@@ -309,23 +347,31 @@ export default function TemplatesManagment() {
                     className="radio-input me-2"
                     name="isDisplayStockRadioGroup"
                     onChange={() => {
+                        let tempTemplates = allTemplates.map((template) => template);
                         if (selectedTemplate === "Bussiness Card") {
-                            setBussinessCardCustomizations({ ...customizations, isDisplayStock: false });
+                            tempTemplates[0].components.isDisplayStock = false;
+                            setAllTemplates(tempTemplates);
                         } else if (selectedTemplate === "Flex") {
-                            setFlexCustomizations({ ...customizations, isAttachAFile: false });
+                            tempTemplates[1].components.isDisplayStock = false;
+                            setAllTemplates(tempTemplates);
                         } else {
-                            setPannerCustomizations({ ...customizations, isAttachAFile: false });
+                            tempTemplates[2].components.isDisplayStock = false;
+                            setAllTemplates(tempTemplates);
                         }
                     }}
                 />
                 <label htmlFor="not-display-stock-radio"
                     onChange={() => {
+                        let tempTemplates = allTemplates.map((template) => template);
                         if (selectedTemplate === "Bussiness Card") {
-                            setBussinessCardCustomizations({ ...customizations, isDisplayStock: false });
+                            tempTemplates[0].components.isDisplayStock = false;
+                            setAllTemplates(tempTemplates);
                         } else if (selectedTemplate === "Flex") {
-                            setFlexCustomizations({ ...customizations, isAttachAFile: false });
+                            tempTemplates[1].components.isDisplayStock = false;
+                            setAllTemplates(tempTemplates);
                         } else {
-                            setPannerCustomizations({ ...customizations, isAttachAFile: false });
+                            tempTemplates[2].components.isDisplayStock = false;
+                            setAllTemplates(tempTemplates);
                         }
                     }}
                 >No</label>
