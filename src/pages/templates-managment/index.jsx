@@ -430,7 +430,9 @@ export default function TemplatesManagment() {
                                                 onChange={(e) => {
                                                     let tempQuantities = allTemplates[0].components.quantities;
                                                     tempQuantities[quantityIndex].quantity = e.target.value;
-                                                    setBussinessCardCustomizations({ ...allTemplates[0].components, quantities: tempQuantities });
+                                                    let tempTemplates = allTemplates.map((template) => template);
+                                                    tempTemplates[0].components.quantities = tempQuantities;
+                                                    setAllTemplates(tempTemplates);
                                                 }}
                                                 value={quantityDetails.quantity}
                                             />
@@ -443,7 +445,9 @@ export default function TemplatesManagment() {
                                                 onChange={(e) => {
                                                     let tempQuantities = allTemplates[0].components.quantities;
                                                     tempQuantities[quantityIndex].price = e.target.value;
-                                                    setBussinessCardCustomizations({ ...allTemplates[0].components, quantities: tempQuantities });
+                                                    let tempTemplates = allTemplates.map((template) => template);
+                                                    tempTemplates[0].components.quantities = tempQuantities;
+                                                    setAllTemplates(tempTemplates);
                                                 }}
                                                 value={quantityDetails.price}
                                             />
@@ -456,12 +460,16 @@ export default function TemplatesManagment() {
                                                         quantity: 1,
                                                         price: 1
                                                     });
-                                                    setBussinessCardCustomizations({ ...allTemplates[0].components, quantities: tempQuantitiesDeta });
+                                                    let tempTemplates = allTemplates.map((template) => template);
+                                                    tempTemplates[0].components.quantities = tempQuantitiesDeta;
+                                                    setAllTemplates(tempTemplates);
                                                 }}
                                             />
                                             {allTemplates[0].components.quantities.length > 1 && <FaRegMinusSquare className="remove-icon"
                                                 onClick={() => {
-                                                    setBussinessCardCustomizations({ ...allTemplates[0].components, quantities: allTemplates[0].components.quantities.filter((quantity, index) => index !== quantityIndex) });
+                                                    let tempTemplates = allTemplates.map((template) => template);
+                                                    tempTemplates[0].components.quantities = tempTemplates[0].components.quantities.filter((quantity, index) => index !== quantityIndex);
+                                                    setAllTemplates(tempTemplates);
                                                 }}
                                             />}
                                         </div>
@@ -476,14 +484,26 @@ export default function TemplatesManagment() {
                                             checked={allTemplates[0].components.corner.type === "rounded"}
                                             className="radio-input me-2"
                                             name="cornersTypeGroup"
-                                            onChange={() => setBussinessCardCustomizations({ ...allTemplates[0].components, corner: { ...allTemplates[0].components.corner, type: "rounded" } })}
+                                            onChange={() => {
+                                                let tempTemplates = allTemplates.map((template) => template);
+                                                tempTemplates[0].components.corner = { ...tempTemplates[0].components.corner, type: "rounded" };
+                                                setAllTemplates(tempTemplates);
+                                            }}
                                         />
-                                        <label htmlFor="rounded-corners-radio" className="me-4" onClick={() => setBussinessCardCustomizations({ ...allTemplates[0].components, corner: { ...bussinessCardCustomizations.corner, type: "rounded" } })}>Rounded</label>
+                                        <label htmlFor="rounded-corners-radio" className="me-4" onClick={() => {
+                                            let tempTemplates = allTemplates.map((template) => template);
+                                            tempTemplates[0].components.corner = { ...tempTemplates[0].components.corner, type: "rounded" };
+                                            setAllTemplates(tempTemplates);
+                                        }}>Rounded</label>
                                         <input
                                             type="number"
                                             className="form-control p-2 border-2 additional-price-field mt-2"
                                             placeholder="Please Enter Price"
-                                            onChange={(e) => setBussinessCardCustomizations({ ...allTemplates[0].components, corner: { ...allTemplates[0].components.corner, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" } })}
+                                            onChange={() => {
+                                                let tempTemplates = allTemplates.map((template) => template);
+                                                tempTemplates[0].components.corner = { ...tempTemplates[0].components.corner, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" };
+                                                setAllTemplates(tempTemplates);
+                                            }}
                                         />
                                     </div>
                                     <div className="corner-details">
@@ -493,14 +513,26 @@ export default function TemplatesManagment() {
                                             checked={allTemplates[0].components.corner.type === "sharp"}
                                             className="radio-input me-2"
                                             name="cornersTypeGroup"
-                                            onChange={() => setBussinessCardCustomizations({ ...allTemplates[0].components, corner: { ...allTemplates[0].components.corner, type: "sharp" } })}
+                                            onChange={() => {
+                                                let tempTemplates = allTemplates.map((template) => template);
+                                                tempTemplates[0].components.corner = { ...tempTemplates[0].components.corner, type: "sharp" };
+                                                setAllTemplates(tempTemplates);
+                                            }}
                                         />
-                                        <label htmlFor="sharp-corners-radio" onClick={() => setBussinessCardCustomizations({ ...allTemplates[0].components, corner: { ...allTemplates[0].components.corner, type: "sharp" } })}>Sharp</label>
+                                        <label htmlFor="sharp-corners-radio" onClick={() => {
+                                            let tempTemplates = allTemplates.map((template) => template);
+                                            tempTemplates[0].components.corner = { ...tempTemplates[0].components.corner, type: "sharp" };
+                                            setAllTemplates(tempTemplates);
+                                        }}>Sharp</label>
                                         <input
                                             type="number"
                                             className="form-control p-2 border-2 additional-price-field mt-2"
                                             placeholder="Please Enter Price"
-                                            onChange={(e) => setBussinessCardCustomizations({ ...allTemplates[0].components, corner: { ...allTemplates[0].components.corner, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" } })}
+                                            onChange={() => {
+                                                let tempTemplates = allTemplates.map((template) => template);
+                                                tempTemplates[0].components.corner = { ...tempTemplates[0].components.corner, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" };
+                                                setAllTemplates(tempTemplates);
+                                            }}
                                         />
                                     </div>
                                 </div>
@@ -512,18 +544,33 @@ export default function TemplatesManagment() {
                                         id="exist-design-radio"
                                         className="radio-input me-2"
                                         name="isExistDesignRadioGroup"
-                                        onChange={() => setBussinessCardCustomizations({ ...allTemplates[0].components, isExistDesign: true })}
+                                        onChange={() => {
+                                            let tempTemplates = allTemplates.map((template) => template);
+                                            tempTemplates[0].components.isExistDesign = true;
+                                            setAllTemplates(tempTemplates);
+                                        }}
                                     />
-                                    <label htmlFor="exist-design-radio" className="me-4" onClick={() => setBussinessCardCustomizations({ ...allTemplates[0].components, isExistDesign: true })}>Yes</label>
+                                    <label htmlFor="exist-design-radio" className="me-4" onClick={() => {
+                                        let tempTemplates = allTemplates.map((template) => template);
+                                        tempTemplates[0].components.isExistDesign = true;
+                                        setAllTemplates(tempTemplates);
+                                    }}>Yes</label>
                                     <input
                                         type="radio"
                                         checked={!allTemplates[0].components.isExistDesign}
                                         id="not-exist-design-radio"
                                         className="radio-input me-2"
                                         name="isExistDesignRadioGroup"
-                                        onChange={() => setBussinessCardCustomizations({ ...allTemplates[0].components, isExistDesign: false })}
-                                    />
-                                    <label htmlFor="not-exist-design-radio" onClick={() => setBussinessCardCustomizations({ ...allTemplates[0].components, isExistDesign: false })}>No</label>
+                                        onChange={() => {
+                                            let tempTemplates = allTemplates.map((template) => template);
+                                            tempTemplates[0].components.isExistDesign = false;
+                                            setAllTemplates(tempTemplates);
+                                        }}                                    />
+                                    <label htmlFor="not-exist-design-radio" onClick={() => {
+                                        let tempTemplates = allTemplates.map((template) => template);
+                                        tempTemplates[0].components.isExistDesign = false;
+                                        setAllTemplates(tempTemplates);
+                                    }}>No</label>
                                 </div>
                                 <div className="is-exist-logo mb-4">
                                     <h6 className="fw-bold mb-3">Is Exist Logo ?</h6>
@@ -533,18 +580,33 @@ export default function TemplatesManagment() {
                                         id="exist-logo-radio"
                                         className="radio-input me-2"
                                         name="isExistLogoRadioGroup"
-                                        onChange={() => setBussinessCardCustomizations({ ...allTemplates[0].components, isExistLogo: true })}
+                                        onChange={() => {
+                                            let tempTemplates = allTemplates.map((template) => template);
+                                            tempTemplates[0].components.isExistLogo = true;
+                                            setAllTemplates(tempTemplates);
+                                        }} 
                                     />
-                                    <label htmlFor="exist-logo-radio" className="me-4" onClick={() => setBussinessCardCustomizations({ ...allTemplates[0].components, isExistLogo: true })}>Yes</label>
+                                    <label htmlFor="exist-logo-radio" className="me-4" onClick={() => {
+                                        let tempTemplates = allTemplates.map((template) => template);
+                                        tempTemplates[0].components.isExistLogo = true;
+                                        setAllTemplates(tempTemplates);
+                                    }}>Yes</label>
                                     <input
                                         type="radio"
                                         checked={!allTemplates[0].components.isExistLogo}
                                         id="not-exist-logo-radio"
                                         className="radio-input me-2"
                                         name="isExistLogoRadioGroup"
-                                        onChange={() => setBussinessCardCustomizations({ ...allTemplates[0].components, isExistLogo: false })}
-                                    />
-                                    <label htmlFor="not-exist-design-radio" onClick={() => setBussinessCardCustomizations({ ...allTemplates[0].components, isExistLogo: false })}>No</label>
+                                        onChange={() => {
+                                            let tempTemplates = allTemplates.map((template) => template);
+                                            tempTemplates[0].components.isExistLogo = false;
+                                            setAllTemplates(tempTemplates);
+                                        }}                                    />
+                                    <label htmlFor="not-exist-design-radio" onClick={() => {
+                                        let tempTemplates = allTemplates.map((template) => template);
+                                        tempTemplates[0].components.isExistLogo = false;
+                                        setAllTemplates(tempTemplates);
+                                    }}>No</label>
                                 </div>
                             </>}
                             {getMoreCustomizations(getSuitableCustomization(selectedTemplate))}
