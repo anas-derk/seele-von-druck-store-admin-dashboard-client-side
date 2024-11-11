@@ -29,6 +29,7 @@ export default function AddNewProduct() {
         discount: "",
         tax: "",
         quantity: "",
+        isDisplayStock: false,
         image: null,
         galleryImages: [],
     });
@@ -177,7 +178,7 @@ export default function AddNewProduct() {
                 formData.append("tax", productData.tax);
                 formData.append("quantity", productData.quantity);
                 formData.append("productImage", productData.image);
-                for(let galleryImage of productData.galleryImages) {
+                for (let galleryImage of productData.galleryImages) {
                     formData.append("galleryImages", galleryImage);
                 }
                 setWaitMsg("Please Wait To Add New Product ...");
@@ -341,6 +342,21 @@ export default function AddNewProduct() {
                                 <span>{formValidationErrors["quantity"]}</span>
                             </p>}
                         </section>
+                        <div className="is-display-stock mb-4">
+                            <h6 className="fw-bold mb-3">Is Display Stock ?</h6>
+                            <div className="form-check border border-2 border-dark p-3 d-flex align-items-center">
+                                <input
+                                    className="form-check-input m-0 me-2"
+                                    type="checkbox"
+                                    id="isDisplayStock"
+                                    onChange={(e) => setProductData({ ...productData, isDisplayStock: e.target.checked })}
+                                    value={productData.isDisplayStock}
+                                />
+                                <label className="form-check-label" htmlFor="isDisplayStock" onClick={(e) => setProductData({ ...productData, isDisplayStock: e.target.checked })}>
+                                    Is Display Stock
+                                </label>
+                            </div>
+                        </div>
                         <h6 className="mb-3 fw-bold">Please Select Product Image</h6>
                         <section className="image mb-4">
                             <input
