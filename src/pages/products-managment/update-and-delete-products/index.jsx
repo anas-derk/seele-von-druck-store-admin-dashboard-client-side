@@ -377,7 +377,7 @@ export default function UpdateAndDeleteProducts() {
                     price: allProductsInsideThePage[productIndex].price,
                     quantity: allProductsInsideThePage[productIndex].quantity,
                     description: allProductsInsideThePage[productIndex].description,
-                    categoryId: allProductsInsideThePage[productIndex].categoryId,
+                    category: allProductsInsideThePage[productIndex].category,
                     discount: allProductsInsideThePage[productIndex].discount,
                     tax: allProductsInsideThePage[productIndex].tax,
                     startDiscountPeriod: allProductsInsideThePage[productIndex].startDiscountPeriod,
