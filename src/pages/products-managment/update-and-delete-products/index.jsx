@@ -372,12 +372,13 @@ export default function UpdateAndDeleteProducts() {
             setSelectedProductIndex(productIndex);
             if (Object.keys(errorsObject).length == 0) {
                 setWaitMsg("Please Waiting Updating ...");
+                const category = allProductsInsideThePage[productIndex].category;
                 const result = (await axios.put(`${process.env.BASE_API_URL}/products/${allProductsInsideThePage[productIndex]._id}?language=${process.env.defaultLanguage}`, {
                     name: allProductsInsideThePage[productIndex].name,
                     price: allProductsInsideThePage[productIndex].price,
                     quantity: allProductsInsideThePage[productIndex].quantity,
                     description: allProductsInsideThePage[productIndex].description,
-                    category: allProductsInsideThePage[productIndex].category,
+                    category: category?._id ? category?._id : category,
                     discount: allProductsInsideThePage[productIndex].discount,
                     tax: allProductsInsideThePage[productIndex].tax,
                     startDiscountPeriod: allProductsInsideThePage[productIndex].startDiscountPeriod,
@@ -603,7 +604,7 @@ export default function UpdateAndDeleteProducts() {
                                             >
                                                 <option defaultValue="" hidden>Please Select Your Category</option>
                                                 {allCategories.map((category) => (
-                                                    <option value={`${category.name}-${category._id}`} key={category._id}>{category.name}</option>
+                                                    <option value={category._id} key={category._id}>{category.name}</option>
                                                 ))}
                                             </select>
                                         </td>
