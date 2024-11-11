@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { useEffect, useState } from "react";
-import { getAdminInfo } from "../../../public/global_functions/popular";
+import { getAdminInfo, getAllTemplates } from "../../../public/global_functions/popular";
 import AdminPanelHeader from "@/components/AdminPanelHeader";
 import { PiHandWavingThin } from "react-icons/pi";
 import LoaderPage from "@/components/LoaderPage";
@@ -14,6 +14,8 @@ export default function TemplatesManagment() {
     const [errorMsgOnLoadingThePage, setErrorMsgOnLoadingThePage] = useState("");
 
     const [adminInfo, setAdminInfo] = useState({});
+
+    const [allTemplates, setAllTemplates] = useState([]);
 
     const [selectedTemplate, setSelectedTemplate] = useState("");
 
@@ -70,6 +72,7 @@ export default function TemplatesManagment() {
                         const adminDetails = result.data;
                         if (adminDetails.isSuperAdmin) {
                             setAdminInfo(adminDetails);
+                            setAllTemplates(await getAllTemplates());
                             setIsLoadingPage(false);
                         }
                         else {
@@ -391,20 +394,12 @@ export default function TemplatesManagment() {
                                         onChange={(e) => setSelectedTemplate(e.target.value)}
                                     >
                                         <option value="" hidden>Pleae Select Template</option>
-                                        <option value="">All</option>
                                         {templates.map((template) => (
                                             <option value={template} key={template}>{template}</option>
                                         ))}
                                     </select>
                                 </div>
                             </div>
-                            <button
-                                className="btn btn-success d-block w-25 mx-auto mt-2 global-button"
-                                // onClick={() => setSelectedTemplate(template)}
-                                disabled={!selectedTemplate}
-                            >
-                                Get Template Data
-                            </button>
                         </section>
                         {templates.includes(selectedTemplate) && <section className="customizations mb-4 border border-3 border-dark p-4">
                             <h6 className="fw-bold border-bottom border-2 border-dark pb-2 mb-3">Customizations</h6>

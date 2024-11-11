@@ -127,6 +127,19 @@ const handleSelectUserLanguage = (userLanguage, changeLanguageFunc) => {
     document.body.lang = userLanguage;
 }
 
+const getAllTemplates = async () => {
+    try{
+        return (await axios.get(`${process.env.BASE_API_URL}/templates/all-templates`, {
+            headers: {
+                Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage)
+            }
+        })).data;
+    }
+    catch(err) {
+        throw err;
+    }
+}
+
 export {
     getProductsCount,
     getAllProductsInsideThePage,
@@ -140,5 +153,6 @@ export {
     getDateInUTCFormat,
     calcTotalOrderPriceAfterDiscount,
     getAdminInfo,
-    handleSelectUserLanguage
+    handleSelectUserLanguage,
+    getAllTemplates
 }

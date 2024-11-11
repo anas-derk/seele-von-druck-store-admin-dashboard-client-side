@@ -8,7 +8,7 @@ import AdminPanelHeader from "@/components/AdminPanelHeader";
 import { HiOutlineBellAlert } from "react-icons/hi2";
 import { useRouter } from "next/router";
 import { inputValuesValidation } from "../../../../public/global_functions/validations";
-import { getAdminInfo } from "../../../../public/global_functions/popular";
+import { getAdminInfo, getAllTemplates } from "../../../../public/global_functions/popular";
 
 export default function AddNewCategory() {
 
@@ -60,19 +60,6 @@ export default function AddNewCategory() {
                 });
         } else router.replace("/login");
     }, []);
-
-    const getAllTemplates = async () => {
-        try{
-            return (await axios.get(`${process.env.BASE_API_URL}/templates/all-templates`, {
-                headers: {
-                    Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage)
-                }
-            })).data;
-        }
-        catch(err) {
-            throw err;
-        }
-    }
 
     const addNewCategory = async (e, categoryName) => {
         try {
