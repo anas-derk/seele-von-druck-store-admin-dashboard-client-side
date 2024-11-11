@@ -525,6 +525,7 @@ export default function UpdateAndDeleteProducts() {
                                     <th>Description</th>
                                     <th>Category</th>
                                     <th>Discount</th>
+                                    <th>Tax</th>
                                     <th>Image</th>
                                     <th>Processes</th>
                                 </tr>
