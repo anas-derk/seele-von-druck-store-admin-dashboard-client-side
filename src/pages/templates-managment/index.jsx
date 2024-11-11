@@ -6,6 +6,7 @@ import { PiHandWavingThin } from "react-icons/pi";
 import LoaderPage from "@/components/LoaderPage";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import { FaRegPlusSquare, FaRegMinusSquare } from "react-icons/fa";
+import axios from "axios";
 
 export default function TemplatesManagment() {
 
@@ -20,6 +21,12 @@ export default function TemplatesManagment() {
     const [selectedTemplate, setSelectedTemplate] = useState("");
 
     const templates = ["Flex", "Panner", "Bussiness Card"];
+
+    const [waitMsg, setWaitMsg] = useState("");
+
+    const [errorMsg, setErrorMsg] = useState("");
+
+    const [successMsg, setSuccessMsg] = useState("");
 
     useEffect(() => {
         const adminToken = localStorage.getItem(process.env.adminTokenNameInLocalStorage);
@@ -129,13 +136,14 @@ export default function TemplatesManagment() {
     const getDimentionsDetailsForFlexAndPanner = (customizations) => {
         return customizations.dimentionsDetails.map((dimentionDetailsIndex, dimentionIndex) => <div className="row align-items-center mb-4" key={dimentionIndex}>
             <div className="col-md-4">
+                <h6 className="fw-bold">Width</h6>
                 <input
                     type="number"
                     className="form-control p-2 border-2 width-field"
                     placeholder="Please Enter Width"
                     onChange={(e) => {
                         let tempDimentionsDeta = customizations.dimentionsDetails;
-                        tempDimentionsDeta[typeIndex].width = e.target.valueAsNumber ? e.target.valueAsNumber : "";
+                        tempDimentionsDeta[dimentionIndex].width = e.target.valueAsNumber ? e.target.valueAsNumber : "";
                         let tempTemplates = allTemplates.map((template) => template);
                         if (selectedTemplate === "Bussiness Card") {
                             tempTemplates[0].components.dimentionsDetails = tempDimentionsDeta;
@@ -152,13 +160,14 @@ export default function TemplatesManagment() {
                 />
             </div>
             <div className="col-md-4">
+                <h6 className="fw-bold">Height</h6>
                 <input
                     type="number"
                     className="form-control p-2 border-2 height-field"
                     placeholder="Please Enter Height"
                     onChange={(e) => {
                         let tempDimentionsDeta = customizations.dimentionsDetails;
-                        tempDimentionsDeta[typeIndex].height = e.target.valueAsNumber ? e.target.valueAsNumber : "";
+                        tempDimentionsDeta[dimentionIndex].height = e.target.valueAsNumber ? e.target.valueAsNumber : "";
                         let tempTemplates = allTemplates.map((template) => template);
                         if (selectedTemplate === "Bussiness Card") {
                             tempTemplates[0].components.dimentionsDetails = tempDimentionsDeta;
@@ -175,13 +184,14 @@ export default function TemplatesManagment() {
                 />
             </div>
             <div className="col-md-3">
+                <h6 className="fw-bold">Price</h6>
                 <input
                     type="number"
                     className="form-control p-2 border-2 price-field"
                     placeholder="Please Enter Height"
                     onChange={(e) => {
                         let tempDimentionsDeta = customizations.dimentionsDetails;
-                        tempDimentionsDeta[typeIndex].price = e.target.valueAsNumber ? e.target.valueAsNumber : "";
+                        tempDimentionsDeta[dimentionIndex].price = e.target.valueAsNumber ? e.target.valueAsNumber : "";
                         let tempTemplates = allTemplates.map((template) => template);
                         if (selectedTemplate === "Bussiness Card") {
                             tempTemplates[0].components.dimentionsDetails = tempDimentionsDeta;
@@ -198,7 +208,7 @@ export default function TemplatesManagment() {
                 />
             </div>
             <div className="col-md-1">
-                <FaRegPlusSquare className={`add-icon ${customizations.dimentionsDetails.length > 1 && "mb-4"}`}
+                <FaRegPlusSquare className={`add-icon ${customizations.dimentionsDetails.length > 1 && "me-4"}`}
                     onClick={() => {
                         let tempDimentionsDeta = customizations.dimentionsDetails.map((type) => type);
                         tempDimentionsDeta.push(
@@ -379,6 +389,55 @@ export default function TemplatesManagment() {
         </>
     }
 
+    const getSuitableTemplate = (selectedTemplate) => {
+        switch (selectedTemplate) {
+            case "Bussiness Card": return allTemplates[0];
+            case "Flex": return allTemplates[1];
+            case "Panner": return allTemplates[2];
+        }
+    }
+
+    const updateTemplate = async (template) => {
+        try {
+            setWaitMsg("Please Waiting To Update Template ...");
+            const result = (await axios.put(`${process.env.BASE_API_URL}/templates/${template._id}?language=${process.env.defaultLanguage}`, {
+                components: template.components
+            }, {
+                headers: {
+                    Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
+                }
+            })).data;
+            setWaitMsg("");
+            if (!result.error) {
+                setSuccessMsg(result.msg);
+                let successTimeout = setTimeout(() => {
+                    setSuccessMsg("");
+                    clearTimeout(successTimeout);
+                }, 1500);
+            } else {
+                setErrorMsg(result.msg);
+                let errorTimeout = setTimeout(() => {
+                    setErrorMsg("");
+                    clearTimeout(errorTimeout);
+                }, 1500);
+            }
+        }
+        catch (err) {
+            if (err?.response?.status === 401) {
+                localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
+                await router.replace("/login");
+            }
+            else {
+                setWaitMsg("");
+                setErrorMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeate The Process !!");
+                let errorTimeout = setTimeout(() => {
+                    setErrorMsg("");
+                    clearTimeout(errorTimeout);
+                }, 1500);
+            }
+        }
+    }
+
     return (
         <div className="templates-managment admin-dashboard">
             <Head>
@@ -414,8 +473,9 @@ export default function TemplatesManagment() {
                                 <h6 className="fw-bold">Types</h6>
                                 {getTypes(getSuitableCustomization(selectedTemplate))}
                             </div>
-                            {(selectedTemplate === "Flex" || selectedTemplate === "Panner") && <div className="quantity-and-price-details mb-3">
-                                <h6 className="fw-bold">Width, Height And Price</h6>
+                            <hr />
+                            {(selectedTemplate === "Flex" || selectedTemplate === "Panner") && <div className="dimentions-and-price-details mb-3">
+                                <h6 className="fw-bold mb-4">Width, Height And Price</h6>
                                 {getDimentionsDetailsForFlexAndPanner(getSuitableCustomization(selectedTemplate))}
                             </div>}
                             {selectedTemplate === "Bussiness Card" && <>
@@ -423,6 +483,7 @@ export default function TemplatesManagment() {
                                     <h6 className="fw-bold">Quantities</h6>
                                     {allTemplates[0].components.quantities.map((quantityDetails, quantityIndex) => <div className="row align-items-center mb-4" key={quantityIndex}>
                                         <div className="col-md-5">
+                                            <h6 className="fw-bold">Quantity</h6>
                                             <input
                                                 type="number"
                                                 className="form-control p-2 border-2 type-content-field"
@@ -438,6 +499,7 @@ export default function TemplatesManagment() {
                                             />
                                         </div>
                                         <div className="col-md-6">
+                                            <h6 className="fw-bold">Price</h6>
                                             <input
                                                 type="number"
                                                 className="form-control p-2 border-2 type-content-field"
@@ -447,13 +509,14 @@ export default function TemplatesManagment() {
                                                     tempQuantities[quantityIndex].price = e.target.value;
                                                     let tempTemplates = allTemplates.map((template) => template);
                                                     tempTemplates[0].components.quantities = tempQuantities;
+                                                    console.log(tempTemplates[0].components)
                                                     setAllTemplates(tempTemplates);
                                                 }}
                                                 value={quantityDetails.price}
                                             />
                                         </div>
                                         <div className="col-md-1">
-                                            <FaRegPlusSquare className={`add-icon ${allTemplates[0].components.quantities.length > 1 && "mb-4"}`}
+                                            <FaRegPlusSquare className={`add-icon ${allTemplates[0].components.quantities.length > 1 && "me-4"}`}
                                                 onClick={() => {
                                                     let tempQuantitiesDeta = allTemplates[0].components.quantities.map((quantity) => quantity);
                                                     tempQuantitiesDeta.push({
@@ -499,7 +562,7 @@ export default function TemplatesManagment() {
                                             type="number"
                                             className="form-control p-2 border-2 additional-price-field mt-2"
                                             placeholder="Please Enter Price"
-                                            onChange={() => {
+                                            onChange={(e) => {
                                                 let tempTemplates = allTemplates.map((template) => template);
                                                 tempTemplates[0].components.corner = { ...tempTemplates[0].components.corner, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" };
                                                 setAllTemplates(tempTemplates);
@@ -528,7 +591,7 @@ export default function TemplatesManagment() {
                                             type="number"
                                             className="form-control p-2 border-2 additional-price-field mt-2"
                                             placeholder="Please Enter Price"
-                                            onChange={() => {
+                                            onChange={(e) => {
                                                 let tempTemplates = allTemplates.map((template) => template);
                                                 tempTemplates[0].components.corner = { ...tempTemplates[0].components.corner, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" };
                                                 setAllTemplates(tempTemplates);
@@ -565,7 +628,7 @@ export default function TemplatesManagment() {
                                             let tempTemplates = allTemplates.map((template) => template);
                                             tempTemplates[0].components.isExistDesign = false;
                                             setAllTemplates(tempTemplates);
-                                        }}                                    />
+                                        }} />
                                     <label htmlFor="not-exist-design-radio" onClick={() => {
                                         let tempTemplates = allTemplates.map((template) => template);
                                         tempTemplates[0].components.isExistDesign = false;
@@ -584,7 +647,7 @@ export default function TemplatesManagment() {
                                             let tempTemplates = allTemplates.map((template) => template);
                                             tempTemplates[0].components.isExistLogo = true;
                                             setAllTemplates(tempTemplates);
-                                        }} 
+                                        }}
                                     />
                                     <label htmlFor="exist-logo-radio" className="me-4" onClick={() => {
                                         let tempTemplates = allTemplates.map((template) => template);
@@ -601,7 +664,7 @@ export default function TemplatesManagment() {
                                             let tempTemplates = allTemplates.map((template) => template);
                                             tempTemplates[0].components.isExistLogo = false;
                                             setAllTemplates(tempTemplates);
-                                        }}                                    />
+                                        }} />
                                     <label htmlFor="not-exist-design-radio" onClick={() => {
                                         let tempTemplates = allTemplates.map((template) => template);
                                         tempTemplates[0].components.isExistLogo = false;
@@ -610,6 +673,34 @@ export default function TemplatesManagment() {
                                 </div>
                             </>}
                             {getMoreCustomizations(getSuitableCustomization(selectedTemplate))}
+                            {!waitMsg && !successMsg && !errorMsg && <button
+                                type="button"
+                                className="btn btn-success w-50 d-block mx-auto p-2 global-button"
+                                onClick={() => updateTemplate(getSuitableTemplate(selectedTemplate))}
+                            >
+                                Update
+                            </button>}
+                            {waitMsg && <button
+                                type="button"
+                                className="btn btn-danger w-50 d-block mx-auto p-2 global-button"
+                                disabled
+                            >
+                                {waitMsg}
+                            </button>}
+                            {errorMsg && <button
+                                type="button"
+                                className="btn btn-danger w-50 d-block mx-auto p-2 global-button"
+                                disabled
+                            >
+                                {errorMsg}
+                            </button>}
+                            {successMsg && <button
+                                type="button"
+                                className="btn btn-success w-75 d-block mx-auto p-2 global-button"
+                                disabled
+                            >
+                                {successMsg}
+                            </button>}
                         </section>}
                     </div>
                 </div>
