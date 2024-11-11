@@ -88,7 +88,7 @@ export default function TemplatesManagment() {
                 />
             </div>
             <div className="col-md-1">
-                <FaRegPlusSquare className={`add-icon ${customizations.types.length > 1 && "mb-4"}`}
+                <FaRegPlusSquare className={`add-icon ${customizations.types.length > 1 && "me-4"}`}
                     onClick={() => {
                         let tempTypes = customizations.types.map((type) => type);
                         tempTypes.push(
