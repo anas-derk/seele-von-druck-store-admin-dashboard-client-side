@@ -79,6 +79,7 @@ export default function UpdateAndDeleteProducts() {
                         setAdminInfo(result.data);
                         setAllCategories((await getAllCategories()).data);
                         result = (await getAllProductsInsideThePage(1, pageSize)).data;
+                        console.log(result.products[0])
                         setAllProductsInsideThePage(result.products);
                         setTotalPagesCount(Math.ceil(result.productsCount / pageSize));
                         setIsLoadingPage(false);
@@ -575,7 +576,7 @@ export default function UpdateAndDeleteProducts() {
                                             </section>
                                         </td>
                                         <td className="product-category-cell">
-                                            <h6 className="bg-info p-2 fw-bold">{product.category}</h6>
+                                            <h6 className="bg-info p-2 fw-bold">{product.category.name}</h6>
                                             <hr />
                                             <select
                                                 className="product-category-select form-select mb-4"

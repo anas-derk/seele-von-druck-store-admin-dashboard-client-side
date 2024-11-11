@@ -25,7 +25,7 @@ export default function AddNewProduct() {
         name: "",
         price: "",
         description: "",
-        categoryId: "",
+        category: "",
         discount: "",
         quantity: "",
         image: null,
@@ -171,10 +171,13 @@ export default function AddNewProduct() {
                 formData.append("name", productData.name);
                 formData.append("price", productData.price);
                 formData.append("description", productData.description);
-                formData.append("categoryId", productData.categoryId);
+                formData.append("category", productData.category);
                 formData.append("discount", productData.discount);
                 formData.append("quantity", productData.quantity);
                 formData.append("productImage", productData.image);
+                for(let galleryImage of productData.galleryImages) {
+                    formData.append("galleryImages", galleryImage);
+                }
                 setWaitMsg("Please Wait To Add New Product ...");
                 const result = (await axios.post(`${process.env.BASE_API_URL}/products/add-new-product?language=${process.env.defaultLanguage}`, formData, {
                     headers: {

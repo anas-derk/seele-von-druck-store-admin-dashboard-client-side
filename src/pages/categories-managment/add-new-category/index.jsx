@@ -44,7 +44,7 @@ export default function AddNewCategory() {
                         await router.replace("/login");
                     } else {
                         setAdminInfo(result.data);
-                        setAllTemplates(await getAllTemplates());
+                        setAllTemplates((await getAllTemplates()).data);
                         setIsLoadingPage(false);
                     }
                 })
@@ -75,13 +75,22 @@ export default function AddNewCategory() {
                         },
                     },
                 },
+                {
+                    name: "template",
+                    value: template,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
             ]);
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
                 setWaitMsg("Please Waiting To Add New Category ...");
                 const result = (await axios.post(`${process.env.BASE_API_URL}/categories/add-new-category?language=${process.env.defaultLanguage}`, {
                     categoryName,
-                    template,
+                    template: template !== "no-template" ? template : null,
                 }, {
                     headers: {
                         Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
@@ -154,9 +163,9 @@ export default function AddNewCategory() {
                             >
                                 <option defaultValue="" hidden>Please Select Your Template</option>
                                 {allTemplates.length > 0 && allTemplates.map((template) => (
-                                    <option value={template} key={template}>{template}</option>
+                                    <option value={template._id} key={template._id}>{template.name}</option>
                                 ))}
-                                <option value="">No Template</option>
+                                <option value="no-template">No Template</option>
                             </select>
                             {formValidationErrors["template"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
                                 <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
