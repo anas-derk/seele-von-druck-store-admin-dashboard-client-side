@@ -27,6 +27,7 @@ export default function AddNewProduct() {
         description: "",
         category: "",
         discount: "",
+        tax: "",
         quantity: "",
         image: null,
         galleryImages: [],
@@ -173,6 +174,7 @@ export default function AddNewProduct() {
                 formData.append("description", productData.description);
                 formData.append("category", productData.category);
                 formData.append("discount", productData.discount);
+                formData.append("tax", productData.tax);
                 formData.append("quantity", productData.quantity);
                 formData.append("productImage", productData.image);
                 for(let galleryImage of productData.galleryImages) {
@@ -311,6 +313,19 @@ export default function AddNewProduct() {
                             {formValidationErrors["discount"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
                                 <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                 <span>{formValidationErrors["discount"]}</span>
+                            </p>}
+                        </section>
+                        <section className="tax mb-4">
+                            <input
+                                type="number"
+                                className={`form-control p-2 border-2 tax-field ${formValidationErrors["tax"] ? "border-danger mb-3" : "mb-4"}`}
+                                placeholder="Please Enter Tax"
+                                onChange={(e) => setProductData({ ...productData, tax: (e.target.valueAsNumber || e.target.valueAsNumber === 0) ? e.target.valueAsNumber : "" })}
+                                value={productData.tax}
+                            />
+                            {formValidationErrors["tax"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                                <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
+                                <span>{formValidationErrors["tax"]}</span>
                             </p>}
                         </section>
                         <section className="quantity mb-4">
