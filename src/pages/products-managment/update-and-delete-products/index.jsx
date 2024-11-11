@@ -334,6 +334,23 @@ export default function UpdateAndDeleteProducts() {
                     },
                 },
                 {
+                    name: "tax",
+                    value: allProductsInsideThePage[productIndex].tax,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                        minNumber: {
+                            value: 0,
+                            msg: "Sorry, Min Number Is: 0 !!",
+                        },
+                        maxNumber: {
+                            value: allProductsInsideThePage[productIndex].price * 0.99,
+                            msg: `Sorry, Max Number Is: ${allProductsInsideThePage[productIndex].price * 0.99} !!`,
+                        },
+                    },
+                },
+                {
                     name: "discountInOfferPeriod",
                     value: allProductsInsideThePage[productIndex].discountInOfferPeriod,
                     rules: {
@@ -362,6 +379,7 @@ export default function UpdateAndDeleteProducts() {
                     description: allProductsInsideThePage[productIndex].description,
                     categoryId: allProductsInsideThePage[productIndex].categoryId,
                     discount: allProductsInsideThePage[productIndex].discount,
+                    tax: allProductsInsideThePage[productIndex].tax,
                     startDiscountPeriod: allProductsInsideThePage[productIndex].startDiscountPeriod,
                     endDiscountPeriod: allProductsInsideThePage[productIndex].endDiscountPeriod,
                     discountInOfferPeriod: allProductsInsideThePage[productIndex].discountInOfferPeriod,
@@ -646,6 +664,23 @@ export default function UpdateAndDeleteProducts() {
                                                     </section>
                                                 </div>
                                             </div>
+                                        </td>
+                                        <td className="product-tax-cell">
+                                            <section className="product-tax mb-4">
+                                                <h6 className="bg-info p-2 fw-bold">{product.tax}</h6>
+                                                <hr />
+                                                <input
+                                                    type="number"
+                                                    placeholder="Enter New Product Tax"
+                                                    defaultValue={product.tax}
+                                                    className={`form-control d-block mx-auto p-2 border-2 product-tax-field ${formValidationErrors["tax"] && productIndex === selectedProductIndex ? "border-danger mb-3" : "mb-4"}`}
+                                                    onChange={(e) => changeProductData(productIndex, "tax", e.target.valueAsNumber)}
+                                                ></input>
+                                                {formValidationErrors["tax"] && productIndex === selectedProductIndex && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                                                    <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
+                                                    <span>{formValidationErrors["tax"]}</span>
+                                                </p>}
+                                            </section>
                                         </td>
                                         <td className="product-image-cell">
                                             <img
