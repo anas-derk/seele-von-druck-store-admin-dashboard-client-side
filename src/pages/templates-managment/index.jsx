@@ -19,45 +19,6 @@ export default function TemplatesManagment() {
 
     const [selectedTemplate, setSelectedTemplate] = useState("");
 
-    const [bussinessCardCustomizations, setBussinessCardCustomizations] = useState({
-        types: [
-            { content: "", price: 1 }
-        ],
-        quantities: [
-            { quantity: 1, price: 1 }
-        ],
-        corner: {
-            type: "",
-            price: 0
-        },
-        isExistDesign: false,
-        isExistLogo: false,
-        isAttachAFile: false,
-        isDisplayStock: false,
-    });
-
-    const [flexCustomizations, setFlexCustomizations] = useState({
-        types: [
-            { content: "", price: 0 }
-        ],
-        dimentionsDetails: [
-            { width: 0, height: 0, price: 0 }
-        ],
-        isAttachAFile: false,
-        isDisplayStock: false,
-    });
-
-    const [pannerCustomizations, setPannerCustomizations] = useState({
-        types: [
-            { content: "", price: 0 }
-        ],
-        dimentionsDetails: [
-            { width: 0, height: 0, price: 0 }
-        ],
-        isAttachAFile: false,
-        isDisplayStock: false,
-    });
-
     const templates = ["Flex", "Panner", "Bussiness Card"];
 
     useEffect(() => {
@@ -72,7 +33,7 @@ export default function TemplatesManagment() {
                         const adminDetails = result.data;
                         if (adminDetails.isSuperAdmin) {
                             setAdminInfo(adminDetails);
-                            setAllTemplates(await getAllTemplates());
+                            setAllTemplates((await getAllTemplates()).data);
                             setIsLoadingPage(false);
                         }
                         else {
@@ -93,11 +54,11 @@ export default function TemplatesManagment() {
         } else router.replace("/login");
     }, []);
 
-    const getSuitableCustomization = (selectedCategory) => {
-        switch (selectedCategory) {
-            case "Bussiness Card": return bussinessCardCustomizations;
-            case "Flex": return flexCustomizations;
-            case "Panner": return pannerCustomizations;
+    const getSuitableCustomization = (selectedTemplate) => {
+        switch (selectedTemplate) {
+            case "Bussiness Card": return allTemplates[0].components;
+            case "Flex": return allTemplates[1].components;
+            case "Panner": return allTemplates[2].components;
         }
     }
 
@@ -111,9 +72,9 @@ export default function TemplatesManagment() {
                     onChange={(e) => {
                         let tempTypes = customizations.types;
                         tempTypes[typeIndex].content = e.target.value;
-                        if (selectedCategory === "Bussiness Card") {
+                        if (selectedTemplate === "Bussiness Card") {
                             setBussinessCardCustomizations({ ...bussinessCardCustomizations, types: tempTypes });
-                        } else if (selectedCategory === "Flex") {
+                        } else if (selectedTemplate === "Flex") {
                             setFlexCustomizations({ ...flexCustomizations, types: tempTypes });
                         } else {
                             setPannerCustomizations({ ...pannerCustomizations, types: tempTypes });
@@ -130,10 +91,10 @@ export default function TemplatesManagment() {
                     onChange={(e) => {
                         let tempTypes = customizations.types;
                         tempTypes[typeIndex].price = e.target.valueAsNumber ? e.target.valueAsNumber : "";
-                        if (selectedCategory === "Bussiness Card") {
+                        if (selectedTemplate === "Bussiness Card") {
                             setBussinessCardCustomizations({ ...bussinessCardCustomizations, types: tempTypes });
                         }
-                        else if (selectedCategory === "Flex") {
+                        else if (selectedTemplate === "Flex") {
                             setFlexCustomizations({ ...flexCustomizations, types: tempTypes });
                         } else {
                             setPannerCustomizations({ ...pannerCustomizations, types: tempTypes });
@@ -149,10 +110,10 @@ export default function TemplatesManagment() {
                         tempTypes.push(
                             { content: "", price: 1 }
                         );
-                        if (selectedCategory === "Bussiness Card") {
+                        if (selectedTemplate === "Bussiness Card") {
                             setBussinessCardCustomizations({ ...bussinessCardCustomizations, types: tempTypes });
                         }
-                        else if (selectedCategory === "Flex") {
+                        else if (selectedTemplate === "Flex") {
                             setFlexCustomizations({ ...flexCustomizations, types: tempTypes });
                         } else {
                             setPannerCustomizations({ ...pannerCustomizations, types: tempTypes });
@@ -161,10 +122,10 @@ export default function TemplatesManagment() {
                 />
                 {customizations.types.length > 1 && <FaRegMinusSquare className="remove-icon"
                     onClick={() => {
-                        if (selectedCategory === "Bussiness Card") {
+                        if (selectedTemplate === "Bussiness Card") {
                             setBussinessCardCustomizations({ ...bussinessCardCustomizations, types: bussinessCardCustomizations.types.filter((type, index) => index !== typeIndex) });
                         }
-                        else if (selectedCategory === "Flex") {
+                        else if (selectedTemplate === "Flex") {
                             setFlexCustomizations({ ...flexCustomizations, types: flexCustomizations.types.filter((type, index) => index !== typeIndex) });
                         } else {
                             setPannerCustomizations({ ...flexCustomizations, types: flexCustomizations.types.filter((type, index) => index !== typeIndex) });
@@ -185,7 +146,7 @@ export default function TemplatesManagment() {
                     onChange={(e) => {
                         let tempDimentionsDeta = customizations.dimentionsDetails;
                         tempDimentionsDeta[typeIndex].width = e.target.valueAsNumber ? e.target.valueAsNumber : "";
-                        if (selectedCategory === "Flex") {
+                        if (selectedTemplate === "Flex") {
                             setFlexCustomizations({ ...customizations, dimentionsDetails: tempDimentionsDeta });
                         } else {
                             setPannerCustomizations({ ...customizations, dimentionsDetails: tempDimentionsDeta });
@@ -202,7 +163,7 @@ export default function TemplatesManagment() {
                     onChange={(e) => {
                         let tempDimentionsDeta = customizations.dimentionsDetails;
                         tempDimentionsDeta[typeIndex].height = e.target.valueAsNumber ? e.target.valueAsNumber : "";
-                        if (selectedCategory === "Flex") {
+                        if (selectedTemplate === "Flex") {
                             setFlexCustomizations({ ...customizations, dimentionsDetails: tempDimentionsDeta });
                         } else {
                             setPannerCustomizations({ ...customizations, dimentionsDetails: tempDimentionsDeta });
@@ -219,7 +180,7 @@ export default function TemplatesManagment() {
                     onChange={(e) => {
                         let tempDimentionsDeta = customizations.dimentionsDetails;
                         tempDimentionsDeta[typeIndex].price = e.target.valueAsNumber ? e.target.valueAsNumber : "";
-                        if (selectedCategory === "Flex") {
+                        if (selectedTemplate === "Flex") {
                             setFlexCustomizations({ ...customizations, dimentionsDetails: tempDimentionsDeta });
                         } else {
                             setPannerCustomizations({ ...customizations, dimentionsDetails: tempDimentionsDeta });
@@ -235,7 +196,7 @@ export default function TemplatesManagment() {
                         tempDimentionsDeta.push(
                             { content: "", price: 1 }
                         );
-                        if (selectedCategory === "Flex") {
+                        if (selectedTemplate === "Flex") {
                             setFlexCustomizations({ ...customizations, dimentionsDetails: tempDimentionsDeta });
                         } else {
                             setPannerCustomizations({ ...customizations, dimentionsDetails: tempDimentionsDeta });
@@ -244,7 +205,7 @@ export default function TemplatesManagment() {
                 />
                 {customizations.dimentionsDetails.length > 1 && <FaRegMinusSquare className="remove-icon"
                     onClick={() => {
-                        if (selectedCategory === "Flex") {
+                        if (selectedTemplate === "Flex") {
                             setFlexCustomizations({ ...flexCustomizations, dimentionsDetails: flexCustomizations.dimentionsDetails.filter((dimentionDetails, index) => index !== dimentionIndex) });
                         } else {
                             setPannerCustomizations({ ...flexCustomizations, dimentionsDetails: flexCustomizations.dimentionsDetails.filter((dimentionDetails, index) => index !== dimentionIndex) });
@@ -266,9 +227,9 @@ export default function TemplatesManagment() {
                     className="radio-input me-2"
                     name="isAttachAFileRadioGroup"
                     onChange={() => {
-                        if (selectedCategory === "Bussiness Card") {
+                        if (selectedTemplate === "Bussiness Card") {
                             setBussinessCardCustomizations({ ...customizations, isAttachAFile: true });
-                        } else if (selectedCategory === "Flex") {
+                        } else if (selectedTemplate === "Flex") {
                             setFlexCustomizations({ ...customizations, isAttachAFile: true });
                         } else {
                             setPannerCustomizations({ ...customizations, isAttachAFile: true });
@@ -277,9 +238,9 @@ export default function TemplatesManagment() {
                 />
                 <label htmlFor="attach-a-file-radio" className="me-4"
                     onClick={() => {
-                        if (selectedCategory === "Bussiness Card") {
+                        if (selectedTemplate === "Bussiness Card") {
                             setBussinessCardCustomizations({ ...customizations, isAttachAFile: true });
-                        } else if (selectedCategory === "Flex") {
+                        } else if (selectedTemplate === "Flex") {
                             setFlexCustomizations({ ...customizations, isAttachAFile: true });
                         } else {
                             setPannerCustomizations({ ...customizations, isAttachAFile: true });
@@ -292,9 +253,9 @@ export default function TemplatesManagment() {
                     className="radio-input me-2"
                     name="isAttachAFileRadioGroup"
                     onChange={() => {
-                        if (selectedCategory === "Bussiness Card") {
+                        if (selectedTemplate === "Bussiness Card") {
                             setBussinessCardCustomizations({ ...customizations, isAttachAFile: false });
-                        } else if (selectedCategory === "Flex") {
+                        } else if (selectedTemplate === "Flex") {
                             setFlexCustomizations({ ...customizations, isAttachAFile: false });
                         } else {
                             setPannerCustomizations({ ...customizations, isAttachAFile: false });
@@ -303,9 +264,9 @@ export default function TemplatesManagment() {
                 />
                 <label htmlFor="not-attach-a-file-radio"
                     onChange={() => {
-                        if (selectedCategory === "Bussiness Card") {
+                        if (selectedTemplate === "Bussiness Card") {
                             setBussinessCardCustomizations({ ...customizations, isAttachAFile: false });
-                        } else if (selectedCategory === "Flex") {
+                        } else if (selectedTemplate === "Flex") {
                             setFlexCustomizations({ ...customizations, isAttachAFile: false });
                         } else {
                             setPannerCustomizations({ ...customizations, isAttachAFile: false });
@@ -322,9 +283,9 @@ export default function TemplatesManagment() {
                     className="radio-input me-2"
                     name="isDisplayStockRadioGroup"
                     onChange={() => {
-                        if (selectedCategory === "Bussiness Card") {
+                        if (selectedTemplate === "Bussiness Card") {
                             setBussinessCardCustomizations({ ...customizations, isDisplayStock: true });
-                        } else if (selectedCategory === "Flex") {
+                        } else if (selectedTemplate === "Flex") {
                             setFlexCustomizations({ ...customizations, isAttachAFile: true });
                         } else {
                             setPannerCustomizations({ ...customizations, isAttachAFile: true });
@@ -332,9 +293,9 @@ export default function TemplatesManagment() {
                     }} />
                 <label htmlFor="display-stock-radio" className="me-4"
                     onChange={() => {
-                        if (selectedCategory === "Bussiness Card") {
+                        if (selectedTemplate === "Bussiness Card") {
                             setBussinessCardCustomizations({ ...customizations, isDisplayStock: true });
-                        } else if (selectedCategory === "Flex") {
+                        } else if (selectedTemplate === "Flex") {
                             setFlexCustomizations({ ...customizations, isAttachAFile: true });
                         } else {
                             setPannerCustomizations({ ...customizations, isAttachAFile: true });
@@ -348,9 +309,9 @@ export default function TemplatesManagment() {
                     className="radio-input me-2"
                     name="isDisplayStockRadioGroup"
                     onChange={() => {
-                        if (selectedCategory === "Bussiness Card") {
+                        if (selectedTemplate === "Bussiness Card") {
                             setBussinessCardCustomizations({ ...customizations, isDisplayStock: false });
-                        } else if (selectedCategory === "Flex") {
+                        } else if (selectedTemplate === "Flex") {
                             setFlexCustomizations({ ...customizations, isAttachAFile: false });
                         } else {
                             setPannerCustomizations({ ...customizations, isAttachAFile: false });
@@ -359,9 +320,9 @@ export default function TemplatesManagment() {
                 />
                 <label htmlFor="not-display-stock-radio"
                     onChange={() => {
-                        if (selectedCategory === "Bussiness Card") {
+                        if (selectedTemplate === "Bussiness Card") {
                             setBussinessCardCustomizations({ ...customizations, isDisplayStock: false });
-                        } else if (selectedCategory === "Flex") {
+                        } else if (selectedTemplate === "Flex") {
                             setFlexCustomizations({ ...customizations, isAttachAFile: false });
                         } else {
                             setPannerCustomizations({ ...customizations, isAttachAFile: false });
@@ -405,25 +366,25 @@ export default function TemplatesManagment() {
                             <h6 className="fw-bold border-bottom border-2 border-dark pb-2 mb-3">Customizations</h6>
                             <div className="type-details mb-3">
                                 <h6 className="fw-bold">Types</h6>
-                                {getTypes(getSuitableCustomization(selectedCategory))}
+                                {getTypes(getSuitableCustomization(selectedTemplate))}
                             </div>
-                            {(selectedCategory === "Flex" || selectedCategory === "Panner") && <div className="quantity-and-price-details mb-3">
+                            {(selectedTemplate === "Flex" || selectedTemplate === "Panner") && <div className="quantity-and-price-details mb-3">
                                 <h6 className="fw-bold">Width, Height And Price</h6>
-                                {getDimentionsDetailsForFlexAndPanner(getSuitableCustomization(selectedCategory))}
+                                {getDimentionsDetailsForFlexAndPanner(getSuitableCustomization(selectedTemplate))}
                             </div>}
-                            {selectedCategory === "Bussiness Card" && <>
+                            {selectedTemplate === "Bussiness Card" && <>
                                 <div className="quantity-and-price-details mb-3">
                                     <h6 className="fw-bold">Quantities</h6>
-                                    {bussinessCardCustomizations.quantities.map((quantityDetails, quantityIndex) => <div className="row align-items-center mb-4" key={quantityIndex}>
+                                    {allTemplates[0].components.quantities.map((quantityDetails, quantityIndex) => <div className="row align-items-center mb-4" key={quantityIndex}>
                                         <div className="col-md-5">
                                             <input
                                                 type="number"
                                                 className="form-control p-2 border-2 type-content-field"
                                                 placeholder="Please Enter Quantity"
                                                 onChange={(e) => {
-                                                    let tempQuantities = bussinessCardCustomizations.quantities;
+                                                    let tempQuantities = allTemplates[0].components.quantities;
                                                     tempQuantities[quantityIndex].quantity = e.target.value;
-                                                    setBussinessCardCustomizations({ ...bussinessCardCustomizations, quantities: tempQuantities });
+                                                    setBussinessCardCustomizations({ ...allTemplates[0].components, quantities: tempQuantities });
                                                 }}
                                                 value={quantityDetails.quantity}
                                             />
@@ -434,27 +395,27 @@ export default function TemplatesManagment() {
                                                 className="form-control p-2 border-2 type-content-field"
                                                 placeholder="Please Enter Price"
                                                 onChange={(e) => {
-                                                    let tempQuantities = bussinessCardCustomizations.quantities;
+                                                    let tempQuantities = allTemplates[0].components.quantities;
                                                     tempQuantities[quantityIndex].price = e.target.value;
-                                                    setBussinessCardCustomizations({ ...bussinessCardCustomizations, quantities: tempQuantities });
+                                                    setBussinessCardCustomizations({ ...allTemplates[0].components, quantities: tempQuantities });
                                                 }}
                                                 value={quantityDetails.price}
                                             />
                                         </div>
                                         <div className="col-md-1">
-                                            <FaRegPlusSquare className={`add-icon ${bussinessCardCustomizations.quantities.length > 1 && "mb-4"}`}
+                                            <FaRegPlusSquare className={`add-icon ${allTemplates[0].components.quantities.length > 1 && "mb-4"}`}
                                                 onClick={() => {
-                                                    let tempQuantitiesDeta = bussinessCardCustomizations.quantities.map((quantity) => quantity);
+                                                    let tempQuantitiesDeta = allTemplates[0].components.quantities.map((quantity) => quantity);
                                                     tempQuantitiesDeta.push({
                                                         quantity: 1,
                                                         price: 1
                                                     });
-                                                    setBussinessCardCustomizations({ ...bussinessCardCustomizations, quantities: tempQuantitiesDeta });
+                                                    setBussinessCardCustomizations({ ...allTemplates[0].components, quantities: tempQuantitiesDeta });
                                                 }}
                                             />
-                                            {bussinessCardCustomizations.quantities.length > 1 && <FaRegMinusSquare className="remove-icon"
+                                            {allTemplates[0].components.quantities.length > 1 && <FaRegMinusSquare className="remove-icon"
                                                 onClick={() => {
-                                                    setBussinessCardCustomizations({ ...bussinessCardCustomizations, quantities: bussinessCardCustomizations.quantities.filter((quantity, index) => index !== quantityIndex) });
+                                                    setBussinessCardCustomizations({ ...allTemplates[0].components, quantities: allTemplates[0].components.quantities.filter((quantity, index) => index !== quantityIndex) });
                                                 }}
                                             />}
                                         </div>
@@ -466,34 +427,34 @@ export default function TemplatesManagment() {
                                         <input
                                             type="radio"
                                             id="rounded-corners-radio"
-                                            checked={bussinessCardCustomizations.corner.type === "rounded"}
+                                            checked={allTemplates[0].components.corner.type === "rounded"}
                                             className="radio-input me-2"
                                             name="cornersTypeGroup"
-                                            onChange={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, corner: { ...bussinessCardCustomizations.corner, type: "rounded" } })}
+                                            onChange={() => setBussinessCardCustomizations({ ...allTemplates[0].components, corner: { ...allTemplates[0].components.corner, type: "rounded" } })}
                                         />
-                                        <label htmlFor="rounded-corners-radio" className="me-4" onClick={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, corner: { ...bussinessCardCustomizations.corner, type: "rounded" } })}>Rounded</label>
+                                        <label htmlFor="rounded-corners-radio" className="me-4" onClick={() => setBussinessCardCustomizations({ ...allTemplates[0].components, corner: { ...bussinessCardCustomizations.corner, type: "rounded" } })}>Rounded</label>
                                         <input
                                             type="number"
                                             className="form-control p-2 border-2 additional-price-field mt-2"
                                             placeholder="Please Enter Price"
-                                            onChange={(e) => setBussinessCardCustomizations({ ...bussinessCardCustomizations, corner: { ...bussinessCardCustomizations.corner, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" } })}
+                                            onChange={(e) => setBussinessCardCustomizations({ ...allTemplates[0].components, corner: { ...allTemplates[0].components.corner, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" } })}
                                         />
                                     </div>
                                     <div className="corner-details">
                                         <input
                                             type="radio"
                                             id="sharp-corners-radio"
-                                            checked={bussinessCardCustomizations.corner.type === "sharp"}
+                                            checked={allTemplates[0].components.corner.type === "sharp"}
                                             className="radio-input me-2"
                                             name="cornersTypeGroup"
-                                            onChange={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, corner: { ...bussinessCardCustomizations.corner, type: "sharp" } })}
+                                            onChange={() => setBussinessCardCustomizations({ ...allTemplates[0].components, corner: { ...allTemplates[0].components.corner, type: "sharp" } })}
                                         />
-                                        <label htmlFor="sharp-corners-radio" onClick={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, corner: { ...bussinessCardCustomizations.corner, type: "sharp" } })}>Sharp</label>
+                                        <label htmlFor="sharp-corners-radio" onClick={() => setBussinessCardCustomizations({ ...allTemplates[0].components, corner: { ...allTemplates[0].components.corner, type: "sharp" } })}>Sharp</label>
                                         <input
                                             type="number"
                                             className="form-control p-2 border-2 additional-price-field mt-2"
                                             placeholder="Please Enter Price"
-                                            onChange={(e) => setBussinessCardCustomizations({ ...bussinessCardCustomizations, corner: { ...bussinessCardCustomizations.corner, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" } })}
+                                            onChange={(e) => setBussinessCardCustomizations({ ...allTemplates[0].components, corner: { ...allTemplates[0].components.corner, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" } })}
                                         />
                                     </div>
                                 </div>
@@ -501,46 +462,46 @@ export default function TemplatesManagment() {
                                     <h6 className="fw-bold mb-3">Is Exist Design ?</h6>
                                     <input
                                         type="radio"
-                                        checked={bussinessCardCustomizations.isExistDesign}
+                                        checked={allTemplates[0].components.isExistDesign}
                                         id="exist-design-radio"
                                         className="radio-input me-2"
                                         name="isExistDesignRadioGroup"
-                                        onChange={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isExistDesign: true })}
+                                        onChange={() => setBussinessCardCustomizations({ ...allTemplates[0].components, isExistDesign: true })}
                                     />
-                                    <label htmlFor="exist-design-radio" className="me-4" onClick={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isExistDesign: true })}>Yes</label>
+                                    <label htmlFor="exist-design-radio" className="me-4" onClick={() => setBussinessCardCustomizations({ ...allTemplates[0].components, isExistDesign: true })}>Yes</label>
                                     <input
                                         type="radio"
-                                        checked={!bussinessCardCustomizations.isExistDesign}
+                                        checked={!allTemplates[0].components.isExistDesign}
                                         id="not-exist-design-radio"
                                         className="radio-input me-2"
                                         name="isExistDesignRadioGroup"
-                                        onChange={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isExistDesign: false })}
+                                        onChange={() => setBussinessCardCustomizations({ ...allTemplates[0].components, isExistDesign: false })}
                                     />
-                                    <label htmlFor="not-exist-design-radio" onClick={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isExistDesign: false })}>No</label>
+                                    <label htmlFor="not-exist-design-radio" onClick={() => setBussinessCardCustomizations({ ...allTemplates[0].components, isExistDesign: false })}>No</label>
                                 </div>
                                 <div className="is-exist-logo mb-4">
                                     <h6 className="fw-bold mb-3">Is Exist Logo ?</h6>
                                     <input
                                         type="radio"
-                                        checked={bussinessCardCustomizations.isExistLogo}
+                                        checked={allTemplates[0].components.isExistLogo}
                                         id="exist-logo-radio"
                                         className="radio-input me-2"
                                         name="isExistLogoRadioGroup"
-                                        onChange={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isExistLogo: true })}
+                                        onChange={() => setBussinessCardCustomizations({ ...allTemplates[0].components, isExistLogo: true })}
                                     />
-                                    <label htmlFor="exist-logo-radio" className="me-4" onClick={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isExistLogo: true })}>Yes</label>
+                                    <label htmlFor="exist-logo-radio" className="me-4" onClick={() => setBussinessCardCustomizations({ ...allTemplates[0].components, isExistLogo: true })}>Yes</label>
                                     <input
                                         type="radio"
-                                        checked={!bussinessCardCustomizations.isExistLogo}
+                                        checked={!allTemplates[0].components.isExistLogo}
                                         id="not-exist-logo-radio"
                                         className="radio-input me-2"
                                         name="isExistLogoRadioGroup"
-                                        onChange={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isExistLogo: false })}
+                                        onChange={() => setBussinessCardCustomizations({ ...allTemplates[0].components, isExistLogo: false })}
                                     />
-                                    <label htmlFor="not-exist-design-radio" onClick={() => setBussinessCardCustomizations({ ...bussinessCardCustomizations, isExistLogo: false })}>No</label>
+                                    <label htmlFor="not-exist-design-radio" onClick={() => setBussinessCardCustomizations({ ...allTemplates[0].components, isExistLogo: false })}>No</label>
                                 </div>
                             </>}
-                            {getMoreCustomizations(getSuitableCustomization(selectedCategory))}
+                            {getMoreCustomizations(getSuitableCustomization(selectedTemplate))}
                         </section>}
                     </div>
                 </div>
