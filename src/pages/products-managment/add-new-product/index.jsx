@@ -19,12 +19,15 @@ export default function AddNewProduct() {
 
     const [adminInfo, setAdminInfo] = useState({});
 
+    const [allTemplates, setAllTemplates] = useState([]);
+
     const [allCategories, setAllCategories] = useState([]);
 
     const [productData, setProductData] = useState({
         name: "",
         price: "",
         description: "",
+        template: "",
         category: "",
         discount: "",
         tax: "",
@@ -289,7 +292,7 @@ export default function AddNewProduct() {
                         <section className="template mb-4">
                             <select
                                 className={`template-select form-select p-2 border-2 category-field ${formValidationErrors["template"] ? "border-danger mb-3" : "mb-4"}`}
-                                onChange={(e) => setTemplate(e.target.value)}
+                                onChange={(e) => setProductData({ ...productData, template: e.target.value })}
                             >
                                 <option defaultValue="" hidden>Please Select Your Template</option>
                                 {allTemplates.length > 0 && allTemplates.map((template) => (
