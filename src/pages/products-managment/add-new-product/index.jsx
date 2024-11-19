@@ -79,6 +79,78 @@ export default function AddNewProduct() {
         } else router.replace("/login");
     }, []);
 
+    const getSuitableCustomization = (selectedTemplate) => {
+        switch (selectedTemplate) {
+            case "Bussiness Card": return allTemplates[0].components;
+            case "Flex": return allTemplates[1].components;
+            case "Panner": return allTemplates[2].components;
+        }
+    }
+
+    const getTypes = (customizations) => {
+        return customizations.types.map((type, typeIndex) => <div className="row align-items-center mb-4">
+            <div className="col-md-11">
+                <input
+                    type="text"
+                    className="form-control p-2 border-2 type-content-field"
+                    placeholder="Please Enter Content"
+                    onChange={(e) => {
+                        let tempTypes = customizations.types;
+                        tempTypes[typeIndex].content = e.target.value;
+                        let tempTemplates = allTemplates.map((template) => template);
+                        if (selectedTemplate === "Bussiness Card") {
+                            tempTemplates[0].components.types = tempTypes;
+                            setAllTemplates(tempTemplates);
+                        } else if (selectedTemplate === "Flex") {
+                            tempTemplates[1].components.types = tempTypes;
+                            setAllTemplates(tempTemplates);
+                        } else {
+                            tempTemplates[2].components.types = tempTypes;
+                            setAllTemplates(tempTemplates);
+                        }
+                    }}
+                    value={type.content}
+                />
+            </div>
+            <div className="col-md-1">
+                <FaRegPlusSquare className={`add-icon ${customizations.types.length > 1 && "me-4"}`}
+                    onClick={() => {
+                        let tempTypes = customizations.types.map((type) => type);
+                        tempTypes.push(
+                            { content: "" }
+                        );
+                        let tempTemplates = allTemplates.map((template) => template);
+                        if (selectedTemplate === "Bussiness Card") {
+                            tempTemplates[0].components.types = tempTypes;
+                            setAllTemplates(tempTemplates);
+                        } else if (selectedTemplate === "Flex") {
+                            tempTemplates[1].components.types = tempTypes;
+                            setAllTemplates(tempTemplates);
+                        } else {
+                            tempTemplates[2].components.types = tempTypes;
+                            setAllTemplates(tempTemplates);
+                        }
+                    }}
+                />
+                {customizations.types.length > 1 && <FaRegMinusSquare className="remove-icon"
+                    onClick={() => {
+                        let tempTemplates = allTemplates.map((template) => template);
+                        if (selectedTemplate === "Bussiness Card") {
+                            tempTemplates[0].components.types = tempTemplates[0].components.types.filter((type, index) => index !== typeIndex);
+                            setAllTemplates(tempTemplates);
+                        } else if (selectedTemplate === "Flex") {
+                            tempTemplates[1].components.types = tempTemplates[1].components.types.filter((type, index) => index !== typeIndex);
+                            setAllTemplates(tempTemplates);
+                        } else {
+                            tempTemplates[2].components.types = tempTemplates[2].components.types.filter((type, index) => index !== typeIndex);
+                            setAllTemplates(tempTemplates);
+                        }
+                    }}
+                />}
+            </div>
+        </div>)
+    }
+
     const addNewProduct = async (e, productData) => {
         try {
             e.preventDefault();
@@ -305,6 +377,75 @@ export default function AddNewProduct() {
                                 <span>{formValidationErrors["template"]}</span>
                             </p>}
                         </section>
+                        {allTemplates.includes(productData?.template) && <section className="customizations mb-4 border border-3 border-dark p-4">
+                            <h6 className="fw-bold border-bottom border-2 border-dark pb-2 mb-3">Customizations</h6>
+                            <div className="type-details mb-3">
+                                <h6 className="fw-bold">Types</h6>
+                                {getTypes(getSuitableCustomization(productData.template))}
+                            </div>
+                            <hr />
+                            {productData.template === "Bussiness Card" && <>
+                                <div className="quantity-and-price-details mb-3">
+                                    <h6 className="fw-bold">Quantities</h6>
+                                    {allTemplates[0].components.quantities.map((quantityDetails, quantityIndex) => <div className="row align-items-center mb-4" key={quantityIndex}>
+                                        <div className="col-md-5">
+                                            <h6 className="fw-bold">Quantity</h6>
+                                            <input
+                                                type="number"
+                                                className="form-control p-2 border-2 type-content-field"
+                                                placeholder="Please Enter Quantity"
+                                                onChange={(e) => {
+                                                    let tempQuantities = allTemplates[0].components.quantities;
+                                                    tempQuantities[quantityIndex].quantity = e.target.value;
+                                                    let tempTemplates = allTemplates.map((template) => template);
+                                                    tempTemplates[0].components.quantities = tempQuantities;
+                                                    setAllTemplates(tempTemplates);
+                                                }}
+                                                value={quantityDetails.quantity}
+                                            />
+                                        </div>
+                                        <div className="col-md-6">
+                                            <h6 className="fw-bold">Price</h6>
+                                            <input
+                                                type="number"
+                                                className="form-control p-2 border-2 type-content-field"
+                                                placeholder="Please Enter Price"
+                                                onChange={(e) => {
+                                                    let tempQuantities = allTemplates[0].components.quantities;
+                                                    tempQuantities[quantityIndex].price = e.target.value;
+                                                    let tempTemplates = allTemplates.map((template) => template);
+                                                    tempTemplates[0].components.quantities = tempQuantities;
+                                                    console.log(tempTemplates[0].components)
+                                                    setAllTemplates(tempTemplates);
+                                                }}
+                                                value={quantityDetails.price}
+                                            />
+                                        </div>
+                                        <div className="col-md-1">
+                                            <FaRegPlusSquare className={`add-icon ${allTemplates[0].components.quantities.length > 1 && "me-4"}`}
+                                                onClick={() => {
+                                                    let tempQuantitiesDeta = allTemplates[0].components.quantities.map((quantity) => quantity);
+                                                    tempQuantitiesDeta.push({
+                                                        quantity: 1,
+                                                        price: 1
+                                                    });
+                                                    let tempTemplates = allTemplates.map((template) => template);
+                                                    tempTemplates[0].components.quantities = tempQuantitiesDeta;
+                                                    setAllTemplates(tempTemplates);
+                                                }}
+                                            />
+                                            {allTemplates[0].components.quantities.length > 1 && <FaRegMinusSquare className="remove-icon"
+                                                onClick={() => {
+                                                    let tempTemplates = allTemplates.map((template) => template);
+                                                    tempTemplates[0].components.quantities = tempTemplates[0].components.quantities.filter((quantity, index) => index !== quantityIndex);
+                                                    setAllTemplates(tempTemplates);
+                                                }}
+                                            />}
+                                        </div>
+                                    </div>)}
+                                </div>
+                            </>}
+                        </section>}
                         <section className="category mb-4">
                             <select
                                 className={`category-select form-select p-2 border-2 category-field ${formValidationErrors["category"] ? "border-danger mb-3" : "mb-4"}`}
