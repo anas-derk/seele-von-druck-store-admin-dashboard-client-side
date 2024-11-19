@@ -8,7 +8,7 @@ import AdminPanelHeader from "@/components/AdminPanelHeader";
 import { HiOutlineBellAlert } from "react-icons/hi2";
 import { useRouter } from "next/router";
 import { inputValuesValidation } from "../../../../public/global_functions/validations";
-import { getAdminInfo, getAllTemplates } from "../../../../public/global_functions/popular";
+import { getAdminInfo } from "../../../../public/global_functions/popular";
 
 export default function AddNewCategory() {
 
@@ -20,8 +20,6 @@ export default function AddNewCategory() {
 
     const [categoryName, setCategoryName] = useState("");
 
-    const [template, setTemplate] = useState("");
-
     const [waitMsg, setWaitMsg] = useState("");
 
     const [errorMsg, setErrorMsg] = useState("");
@@ -31,8 +29,6 @@ export default function AddNewCategory() {
     const [formValidationErrors, setFormValidationErrors] = useState({});
 
     const router = useRouter();
-
-    const [allTemplates, setAllTemplates] = useState([]);
 
     useEffect(() => {
         const adminToken = localStorage.getItem(process.env.adminTokenNameInLocalStorage);
@@ -44,7 +40,6 @@ export default function AddNewCategory() {
                         await router.replace("/login");
                     } else {
                         setAdminInfo(result.data);
-                        setAllTemplates((await getAllTemplates()).data);
                         setIsLoadingPage(false);
                     }
                 })
@@ -75,22 +70,12 @@ export default function AddNewCategory() {
                         },
                     },
                 },
-                {
-                    name: "template",
-                    value: template,
-                    rules: {
-                        isRequired: {
-                            msg: "Sorry, This Field Can't Be Empty !!",
-                        },
-                    },
-                },
             ]);
             setFormValidationErrors(errorsObject);
             if (Object.keys(errorsObject).length == 0) {
                 setWaitMsg("Please Waiting To Add New Category ...");
                 const result = (await axios.post(`${process.env.BASE_API_URL}/categories/add-new-category?language=${process.env.defaultLanguage}`, {
                     categoryName,
-                    template: template !== "no-template" ? template : null,
                 }, {
                     headers: {
                         Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
@@ -154,22 +139,6 @@ export default function AddNewCategory() {
                             {formValidationErrors["categoryName"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
                                 <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                 <span>{formValidationErrors["categoryName"]}</span>
-                            </p>}
-                        </section>
-                        <section className="template mb-4">
-                            <select
-                                className={`template-select form-select p-2 border-2 category-field ${formValidationErrors["template"] ? "border-danger mb-3" : "mb-4"}`}
-                                onChange={(e) => setTemplate(e.target.value)}
-                            >
-                                <option defaultValue="" hidden>Please Select Your Template</option>
-                                {allTemplates.length > 0 && allTemplates.map((template) => (
-                                    <option value={template._id} key={template._id}>{template.name}</option>
-                                ))}
-                                <option value="no-template">No Template</option>
-                            </select>
-                            {formValidationErrors["template"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
-                                <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
-                                <span>{formValidationErrors["template"]}</span>
                             </p>}
                         </section>
                         {!waitMsg && !successMsg && !errorMsg && <button

@@ -6,7 +6,7 @@ import LoaderPage from "@/components/LoaderPage";
 import ErrorOnLoadingThePage from "@/components/ErrorOnLoadingThePage";
 import AdminPanelHeader from "@/components/AdminPanelHeader";
 import { inputValuesValidation } from "../../../../public/global_functions/validations";
-import { getAdminInfo, getAllCategories } from "../../../../public/global_functions/popular";
+import { getAdminInfo, getAllCategories, getAllTemplates } from "../../../../public/global_functions/popular";
 import { useRouter } from "next/router";
 import { HiOutlineBellAlert } from "react-icons/hi2";
 import NotFoundError from "@/components/NotFoundError";
@@ -58,6 +58,7 @@ export default function AddNewProduct() {
                         await router.replace("/login");
                     } else {
                         setAdminInfo(result.data);
+                        setAllTemplates((await getAllTemplates()).data);
                         setAllCategories((await getAllCategories()).data);
                         setIsLoadingPage(false);
                     }
@@ -283,6 +284,22 @@ export default function AddNewProduct() {
                             {formValidationErrors["description"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
                                 <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                 <span>{formValidationErrors["description"]}</span>
+                            </p>}
+                        </section>
+                        <section className="template mb-4">
+                            <select
+                                className={`template-select form-select p-2 border-2 category-field ${formValidationErrors["template"] ? "border-danger mb-3" : "mb-4"}`}
+                                onChange={(e) => setTemplate(e.target.value)}
+                            >
+                                <option defaultValue="" hidden>Please Select Your Template</option>
+                                {allTemplates.length > 0 && allTemplates.map((template) => (
+                                    <option value={template._id} key={template._id}>{template.name}</option>
+                                ))}
+                                <option value="no-template">No Template</option>
+                            </select>
+                            {formValidationErrors["template"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                                <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
+                                <span>{formValidationErrors["template"]}</span>
                             </p>}
                         </section>
                         <section className="category mb-4">
