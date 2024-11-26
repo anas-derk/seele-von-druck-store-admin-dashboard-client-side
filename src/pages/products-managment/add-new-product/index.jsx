@@ -10,6 +10,7 @@ import { getAdminInfo, getAllCategories, getAllTemplates } from "../../../../pub
 import { useRouter } from "next/router";
 import { HiOutlineBellAlert } from "react-icons/hi2";
 import NotFoundError from "@/components/NotFoundError";
+import { FaRegPlusSquare } from "react-icons/fa";
 
 export default function AddNewProduct() {
 
@@ -43,6 +44,8 @@ export default function AddNewProduct() {
 
     const [successMsg, setSuccessMsg] = useState("");
 
+    const [selectedTemplate, setSelectedTemplate] = useState("");
+    
     const [formValidationErrors, setFormValidationErrors] = useState({});
 
     const productImageFileElementRef = useRef();
@@ -78,6 +81,18 @@ export default function AddNewProduct() {
                 });
         } else router.replace("/login");
     }, []);
+
+    const handleSelectTemplate = (e) => {
+        const value = e.target.value;
+        if (value) {
+            const template = value.split("-");
+            setSelectedTemplate(template[1]);
+            setProductData({ ...productData, template: template[0] });
+        } else {
+            setSelectedTemplate("");
+            setProductData({ ...productData, template: "" });
+        }
+    }
 
     const getSuitableCustomization = (selectedTemplate) => {
         switch (selectedTemplate) {
@@ -364,27 +379,27 @@ export default function AddNewProduct() {
                         <section className="template mb-4">
                             <select
                                 className={`template-select form-select p-2 border-2 category-field ${formValidationErrors["template"] ? "border-danger mb-3" : "mb-4"}`}
-                                onChange={(e) => setProductData({ ...productData, template: e.target.value })}
+                                onChange={handleSelectTemplate}
                             >
                                 <option defaultValue="" hidden>Please Select Your Template</option>
                                 {allTemplates.length > 0 && allTemplates.map((template) => (
-                                    <option value={template._id} key={template._id}>{template.name}</option>
+                                    <option value={`${template._id}-${template.name}`} key={template._id}>{template.name}</option>
                                 ))}
-                                <option value="no-template">No Template</option>
+                                <option value="">No Template</option>
                             </select>
                             {formValidationErrors["template"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
                                 <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                 <span>{formValidationErrors["template"]}</span>
                             </p>}
                         </section>
-                        {allTemplates.includes(productData?.template) && <section className="customizations mb-4 border border-3 border-dark p-4">
+                        {selectedTemplate && <section className="customizations mb-4 border border-3 border-dark p-4">
                             <h6 className="fw-bold border-bottom border-2 border-dark pb-2 mb-3">Customizations</h6>
                             <div className="type-details mb-3">
                                 <h6 className="fw-bold">Types</h6>
-                                {getTypes(getSuitableCustomization(productData.template))}
+                                {getTypes(getSuitableCustomization(selectedTemplate))}
                             </div>
                             <hr />
-                            {productData.template === "Bussiness Card" && <>
+                            {selectedTemplate === "Bussiness Card" && <>
                                 <div className="quantity-and-price-details mb-3">
                                     <h6 className="fw-bold">Quantities</h6>
                                     {allTemplates[0].components.quantities.map((quantityDetails, quantityIndex) => <div className="row align-items-center mb-4" key={quantityIndex}>

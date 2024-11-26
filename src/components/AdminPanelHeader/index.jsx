@@ -59,7 +59,7 @@ export default function AdminPanelHeader({ isSuperAdmin = false }) {
                                         Update / Delete
                                     </NavDropdown.Item>
                                 </NavDropdown>
-                                <Nav.Link href="/templates-managment" as={Link}>Templates Managment</Nav.Link>
+                                {/* <Nav.Link href="/templates-managment" as={Link}>Templates Managment</Nav.Link> */}
                             </>}
                             <NavDropdown title="Products" id="products-nav-dropdown">
                                 <NavDropdown.Item href="/products-managment/add-new-product" as={Link}>Add New</NavDropdown.Item>
