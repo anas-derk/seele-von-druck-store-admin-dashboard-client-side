@@ -10,7 +10,7 @@ import { getAdminInfo, getAllCategories, getAllTemplates } from "../../../../pub
 import { useRouter } from "next/router";
 import { HiOutlineBellAlert } from "react-icons/hi2";
 import NotFoundError from "@/components/NotFoundError";
-import { FaRegPlusSquare } from "react-icons/fa";
+import { FaRegMinusSquare, FaRegPlusSquare } from "react-icons/fa";
 
 export default function AddNewProduct() {
 
