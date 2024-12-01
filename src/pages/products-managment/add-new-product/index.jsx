@@ -33,7 +33,7 @@ export default function AddNewProduct() {
         discount: "",
         tax: "",
         quantity: "",
-        isDisplayStock: false,
+        isStockDisplayed: false,
         image: null,
         galleryImages: [],
     });
@@ -102,7 +102,7 @@ export default function AddNewProduct() {
         }
     }
 
-    const getTypes = (customizations) => {
+    const getFlexOrPannerTypes = (customizations) => {
         return customizations.types.map((type, typeIndex) => <div className="row align-items-center mb-4">
             <div className="col-md-11">
                 <input
@@ -113,10 +113,7 @@ export default function AddNewProduct() {
                         let tempTypes = customizations.types;
                         tempTypes[typeIndex].content = e.target.value;
                         let tempTemplates = allTemplates.map((template) => template);
-                        if (selectedTemplate === "Bussiness Card") {
-                            tempTemplates[0].components.types = tempTypes;
-                            setAllTemplates(tempTemplates);
-                        } else if (selectedTemplate === "Flex") {
+                        if (selectedTemplate === "Flex") {
                             tempTemplates[1].components.types = tempTypes;
                             setAllTemplates(tempTemplates);
                         } else {
@@ -128,17 +125,14 @@ export default function AddNewProduct() {
                 />
             </div>
             <div className="col-md-1">
-                <FaRegPlusSquare className={`add-icon ${customizations.types.length > 1 && "me-4"}`}
+                <FaRegPlusSquare className={`add-icon ${customizations.types.length > 1 && "mb-4"}`}
                     onClick={() => {
                         let tempTypes = customizations.types.map((type) => type);
                         tempTypes.push(
                             { content: "" }
                         );
                         let tempTemplates = allTemplates.map((template) => template);
-                        if (selectedTemplate === "Bussiness Card") {
-                            tempTemplates[0].components.types = tempTypes;
-                            setAllTemplates(tempTemplates);
-                        } else if (selectedTemplate === "Flex") {
+                        if (selectedTemplate === "Flex") {
                             tempTemplates[1].components.types = tempTypes;
                             setAllTemplates(tempTemplates);
                         } else {
@@ -150,10 +144,7 @@ export default function AddNewProduct() {
                 {customizations.types.length > 1 && <FaRegMinusSquare className="remove-icon"
                     onClick={() => {
                         let tempTemplates = allTemplates.map((template) => template);
-                        if (selectedTemplate === "Bussiness Card") {
-                            tempTemplates[0].components.types = tempTemplates[0].components.types.filter((type, index) => index !== typeIndex);
-                            setAllTemplates(tempTemplates);
-                        } else if (selectedTemplate === "Flex") {
+                        if (selectedTemplate === "Flex") {
                             tempTemplates[1].components.types = tempTemplates[1].components.types.filter((type, index) => index !== typeIndex);
                             setAllTemplates(tempTemplates);
                         } else {
@@ -170,6 +161,7 @@ export default function AddNewProduct() {
         try {
             e.preventDefault();
             setFormValidationErrors({});
+            console.log(getSuitableCustomization(selectedTemplate))
             const errorsObject = inputValuesValidation([
                 {
                     name: "name",
@@ -192,6 +184,15 @@ export default function AddNewProduct() {
                 {
                     name: "description",
                     value: productData.description,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                    },
+                },
+                {
+                    name: "template",
+                    value: productData.template,
                     rules: {
                         isRequired: {
                             msg: "Sorry, This Field Can't Be Empty !!",
@@ -264,11 +265,14 @@ export default function AddNewProduct() {
                 formData.append("name", productData.name);
                 formData.append("price", productData.price);
                 formData.append("description", productData.description);
+                formData.append("template", productData.template);
                 formData.append("category", productData.category);
                 formData.append("discount", productData.discount);
                 formData.append("tax", productData.tax);
                 formData.append("quantity", productData.quantity);
+                formData.append("isStockDisplayed", productData.isStockDisplayed);
                 formData.append("productImage", productData.image);
+                formData.append("customizations", JSON.stringify(getSuitableCustomization(selectedTemplate)))
                 for (let galleryImage of productData.galleryImages) {
                     formData.append("galleryImages", galleryImage);
                 }
@@ -376,7 +380,7 @@ export default function AddNewProduct() {
                                 <span>{formValidationErrors["description"]}</span>
                             </p>}
                         </section>
-                        {/* <section className="template mb-4">
+                        <section className="template mb-4">
                             <select
                                 className={`template-select form-select p-2 border-2 category-field ${formValidationErrors["template"] ? "border-danger mb-3" : "mb-4"}`}
                                 onChange={handleSelectTemplate}
@@ -391,12 +395,12 @@ export default function AddNewProduct() {
                                 <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                 <span>{formValidationErrors["template"]}</span>
                             </p>}
-                        </section> */}
-                        {/* {selectedTemplate && <section className="customizations mb-4 border border-3 border-dark p-4">
+                        </section>
+                        {selectedTemplate && <section className="customizations mb-4 border border-3 border-dark p-4">
                             <h6 className="fw-bold border-bottom border-2 border-dark pb-2 mb-3">Customizations</h6>
                             <div className="type-details mb-3">
                                 <h6 className="fw-bold">Types</h6>
-                                {getTypes(getSuitableCustomization(selectedTemplate))}
+                                {selectedTemplate !== "Bussiness Card" && getFlexOrPannerTypes(getSuitableCustomization(selectedTemplate))}
                             </div>
                             <hr />
                             {selectedTemplate === "Bussiness Card" && <>
@@ -430,7 +434,6 @@ export default function AddNewProduct() {
                                                     tempQuantities[quantityIndex].price = e.target.value;
                                                     let tempTemplates = allTemplates.map((template) => template);
                                                     tempTemplates[0].components.quantities = tempQuantities;
-                                                    console.log(tempTemplates[0].components)
                                                     setAllTemplates(tempTemplates);
                                                 }}
                                                 value={quantityDetails.price}
@@ -460,7 +463,7 @@ export default function AddNewProduct() {
                                     </div>)}
                                 </div>
                             </>}
-                        </section>} */}
+                        </section>}
                         <section className="category mb-4">
                             <select
                                 className={`category-select form-select p-2 border-2 category-field ${formValidationErrors["category"] ? "border-danger mb-3" : "mb-4"}`}
@@ -518,21 +521,21 @@ export default function AddNewProduct() {
                                 <span>{formValidationErrors["quantity"]}</span>
                             </p>}
                         </section>
-                        {/* <div className="is-display-stock mb-4">
-                            <h6 className="fw-bold mb-3">Is Display Stock ?</h6>
+                        <div className="is-display-stock mb-4">
+                            <h6 className="fw-bold mb-3">Is Stock Displayed ?</h6>
                             <div className="form-check border border-2 border-dark p-3 d-flex align-items-center">
                                 <input
                                     className="form-check-input m-0 me-2"
                                     type="checkbox"
-                                    id="isDisplayStock"
-                                    onChange={(e) => setProductData({ ...productData, isDisplayStock: e.target.checked })}
-                                    value={productData.isDisplayStock}
+                                    id="isStockDisplayed"
+                                    onChange={(e) => setProductData({ ...productData, isStockDisplayed: e.target.checked })}
+                                    value={productData.isStockDisplayed}
                                 />
-                                <label className="form-check-label" htmlFor="isDisplayStock" onClick={(e) => setProductData({ ...productData, isDisplayStock: e.target.checked })}>
-                                    Is Display Stock
+                                <label className="form-check-label" htmlFor="isStockDisplayed" onClick={(e) => setProductData({ ...productData, isDisplayStock: e.target.checked })}>
+                                    Is Stock Displayed
                                 </label>
                             </div>
-                        </div> */}
+                        </div>
                         <h6 className="mb-3 fw-bold">Please Select Product Image</h6>
                         <section className="image mb-4">
                             <input
