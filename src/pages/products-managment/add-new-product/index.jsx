@@ -376,7 +376,7 @@ export default function AddNewProduct() {
                                 <span>{formValidationErrors["description"]}</span>
                             </p>}
                         </section>
-                        <section className="template mb-4">
+                        {/* <section className="template mb-4">
                             <select
                                 className={`template-select form-select p-2 border-2 category-field ${formValidationErrors["template"] ? "border-danger mb-3" : "mb-4"}`}
                                 onChange={handleSelectTemplate}
@@ -391,8 +391,8 @@ export default function AddNewProduct() {
                                 <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                 <span>{formValidationErrors["template"]}</span>
                             </p>}
-                        </section>
-                        {selectedTemplate && <section className="customizations mb-4 border border-3 border-dark p-4">
+                        </section> */}
+                        {/* {selectedTemplate && <section className="customizations mb-4 border border-3 border-dark p-4">
                             <h6 className="fw-bold border-bottom border-2 border-dark pb-2 mb-3">Customizations</h6>
                             <div className="type-details mb-3">
                                 <h6 className="fw-bold">Types</h6>
@@ -460,7 +460,7 @@ export default function AddNewProduct() {
                                     </div>)}
                                 </div>
                             </>}
-                        </section>}
+                        </section>} */}
                         <section className="category mb-4">
                             <select
                                 className={`category-select form-select p-2 border-2 category-field ${formValidationErrors["category"] ? "border-danger mb-3" : "mb-4"}`}
@@ -518,7 +518,7 @@ export default function AddNewProduct() {
                                 <span>{formValidationErrors["quantity"]}</span>
                             </p>}
                         </section>
-                        <div className="is-display-stock mb-4">
+                        {/* <div className="is-display-stock mb-4">
                             <h6 className="fw-bold mb-3">Is Display Stock ?</h6>
                             <div className="form-check border border-2 border-dark p-3 d-flex align-items-center">
                                 <input
@@ -532,7 +532,7 @@ export default function AddNewProduct() {
                                     Is Display Stock
                                 </label>
                             </div>
-                        </div>
+                        </div> */}
                         <h6 className="mb-3 fw-bold">Please Select Product Image</h6>
                         <section className="image mb-4">
                             <input
