@@ -45,7 +45,7 @@ export default function AddNewProduct() {
     const [successMsg, setSuccessMsg] = useState("");
 
     const [selectedTemplate, setSelectedTemplate] = useState("");
-    
+
     const [formValidationErrors, setFormValidationErrors] = useState({});
 
     const productImageFileElementRef = useRef();
@@ -100,6 +100,115 @@ export default function AddNewProduct() {
             case "Flex": return allTemplates[1].components;
             case "Panner": return allTemplates[2].components;
         }
+    }
+
+    const getBussinessCardTypes = (customizations) => {
+        return customizations.types.map((type, typeIndex) => <div className="types border border-dark border-3 p-3 mb-4" key={typeIndex}>
+            <div className="row align-items-center mb-4">
+                <div className="col-md-11">
+                    <input
+                        type="text"
+                        className="form-control p-2 border-2 type-content-field"
+                        placeholder="Please Enter Content"
+                        onChange={(e) => {
+                            let tempTypes = customizations.types;
+                            tempTypes[typeIndex].content = e.target.value;
+                            let tempTemplates = allTemplates.map((template) => template);
+                            tempTemplates[0].components.types = tempTypes;
+                            setAllTemplates(tempTemplates);
+                        }}
+                        value={type.content}
+                    />
+                </div>
+                <div className="col-md-1">
+                    <FaRegPlusSquare className={`add-icon ${customizations.types.length > 1 && "mb-4"}`}
+                        onClick={() => {
+                            let tempTypes = customizations.types.map((type) => type);
+                            tempTypes.push(
+                                {
+                                    content: "",
+                                    quantities: [
+                                        {
+                                            quantity: 1,
+                                            price: 1
+                                        }
+                                    ]
+                                }
+                            );
+                            let tempTemplates = allTemplates.map((template) => template);
+                            tempTemplates[0].components.types = tempTypes;
+                            setAllTemplates(tempTemplates);
+                        }}
+                    />
+                    {customizations.types.length > 1 && <FaRegMinusSquare className="remove-icon"
+                        onClick={() => {
+                            let tempTemplates = allTemplates.map((template) => template);
+                            tempTemplates[0].components.types = tempTemplates[0].components.types.filter((type, index) => index !== typeIndex);
+                            setAllTemplates(tempTemplates);
+                        }}
+                    />}
+                </div>
+            </div>
+            <hr />
+            <div className="quantity-and-price-details mb-3">
+                <h6 className="fw-bold text-center">Quantities</h6>
+                {customizations.types[typeIndex].quantities.map((quantityDetails, quantityIndex) => <div className="row align-items-center mb-4" key={quantityIndex}>
+                    <div className="col-md-5">
+                        <h6 className="fw-bold text-center">Quantity</h6>
+                        <input
+                            type="number"
+                            className="form-control p-2 border-2 type-content-field"
+                            placeholder="Please Enter Quantity"
+                            onChange={(e) => {
+                                let tempQuantities = allTemplates[0].components.types[typeIndex].quantities;
+                                tempQuantities[quantityIndex].quantity = e.target.value;
+                                let tempTemplates = allTemplates.map((template) => template);
+                                tempTemplates[0].components.types[typeIndex].quantities = tempQuantities;
+                                setAllTemplates(tempTemplates);
+                            }}
+                            value={quantityDetails.quantity}
+                        />
+                    </div>
+                    <div className="col-md-6">
+                        <h6 className="fw-bold text-center">Price</h6>
+                        <input
+                            type="number"
+                            className="form-control p-2 border-2 type-content-field"
+                            placeholder="Please Enter Price"
+                            onChange={(e) => {
+                                let tempQuantities = allTemplates[0].components.types[typeIndex].quantities;
+                                tempQuantities[quantityIndex].price = e.target.value;
+                                let tempTemplates = allTemplates.map((template) => template);
+                                tempTemplates[0].components.types[typeIndex].quantities = tempQuantities;
+                                setAllTemplates(tempTemplates);
+                            }}
+                            value={quantityDetails.price}
+                        />
+                    </div>
+                    <div className="col-md-1">
+                        <FaRegPlusSquare className={`add-icon ${allTemplates[0].components.types[typeIndex].quantities.length > 1 && "me-4"}`}
+                            onClick={() => {
+                                let tempQuantitiesDeta = allTemplates[0].components.types[typeIndex].quantities.map((quantity) => quantity);
+                                tempQuantitiesDeta.push({
+                                    quantity: 1,
+                                    price: 1
+                                });
+                                let tempTemplates = allTemplates.map((template) => template);
+                                tempTemplates[0].components.types[typeIndex].quantities = tempQuantitiesDeta;
+                                setAllTemplates(tempTemplates);
+                            }}
+                        />
+                        {allTemplates[0].components.types[typeIndex].quantities.length > 1 && <FaRegMinusSquare className="remove-icon"
+                            onClick={() => {
+                                let tempTemplates = allTemplates.map((template) => template);
+                                tempTemplates[0].components.types[typeIndex].quantities = tempTemplates[0].components.types[typeIndex].quantities.filter((quantity, index) => index !== quantityIndex);
+                                setAllTemplates(tempTemplates);
+                            }}
+                        />}
+                    </div>
+                </div>)}
+            </div>
+        </div>)
     }
 
     const getFlexOrPannerTypes = (customizations) => {
@@ -340,7 +449,7 @@ export default function AddNewProduct() {
                         <PiHandWavingThin className="me-2" />
                         Hi, Mr {adminInfo.firstName + " " + adminInfo.lastName} In Your Add New Product Page
                     </h1>
-                    {allCategories.length > 0 ? <form className="add-new-product-form admin-dashbboard-form" onSubmit={(e) => addNewProduct(e, productData)}>
+                    {allCategories.length > 0 ? <form className="add-new-product-form w-75" onSubmit={(e) => addNewProduct(e, productData)}>
                         <section className="name mb-4">
                             <input
                                 type="text"
@@ -359,7 +468,7 @@ export default function AddNewProduct() {
                                 type="number"
                                 className={`form-control p-2 border-2 product-price-field ${formValidationErrors["price"] ? "border-danger mb-3" : "mb-4"}`}
                                 placeholder="Please Enter Product Price"
-                                onChange={(e) => setProductData({ ...productData, price: e.target.valueAsNumber ? e.target.valueAsNumber : "" })}
+                                onChange={(e) => setProductData({ ...productData, price: (e.target.valueAsNumber || e.target.valueAsNumber === 0) ? e.target.valueAsNumber : "" })}
                                 value={productData.price}
                             />
                             {formValidationErrors["price"] && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
@@ -398,71 +507,11 @@ export default function AddNewProduct() {
                         </section>
                         {selectedTemplate && <section className="customizations mb-4 border border-3 border-dark p-4">
                             <h6 className="fw-bold border-bottom border-2 border-dark pb-2 mb-3">Customizations</h6>
-                            <div className="type-details mb-3">
+                            <div className="type-details mb-3 p-3">
                                 <h6 className="fw-bold">Types</h6>
-                                {selectedTemplate !== "Bussiness Card" && getFlexOrPannerTypes(getSuitableCustomization(selectedTemplate))}
+                                {selectedTemplate !== "Bussiness Card" ? getFlexOrPannerTypes(getSuitableCustomization(selectedTemplate)) : getBussinessCardTypes(allTemplates[0].components)}
                             </div>
                             <hr />
-                            {selectedTemplate === "Bussiness Card" && <>
-                                <div className="quantity-and-price-details mb-3">
-                                    <h6 className="fw-bold">Quantities</h6>
-                                    {allTemplates[0].components.quantities.map((quantityDetails, quantityIndex) => <div className="row align-items-center mb-4" key={quantityIndex}>
-                                        <div className="col-md-5">
-                                            <h6 className="fw-bold">Quantity</h6>
-                                            <input
-                                                type="number"
-                                                className="form-control p-2 border-2 type-content-field"
-                                                placeholder="Please Enter Quantity"
-                                                onChange={(e) => {
-                                                    let tempQuantities = allTemplates[0].components.quantities;
-                                                    tempQuantities[quantityIndex].quantity = e.target.value;
-                                                    let tempTemplates = allTemplates.map((template) => template);
-                                                    tempTemplates[0].components.quantities = tempQuantities;
-                                                    setAllTemplates(tempTemplates);
-                                                }}
-                                                value={quantityDetails.quantity}
-                                            />
-                                        </div>
-                                        <div className="col-md-6">
-                                            <h6 className="fw-bold">Price</h6>
-                                            <input
-                                                type="number"
-                                                className="form-control p-2 border-2 type-content-field"
-                                                placeholder="Please Enter Price"
-                                                onChange={(e) => {
-                                                    let tempQuantities = allTemplates[0].components.quantities;
-                                                    tempQuantities[quantityIndex].price = e.target.value;
-                                                    let tempTemplates = allTemplates.map((template) => template);
-                                                    tempTemplates[0].components.quantities = tempQuantities;
-                                                    setAllTemplates(tempTemplates);
-                                                }}
-                                                value={quantityDetails.price}
-                                            />
-                                        </div>
-                                        <div className="col-md-1">
-                                            <FaRegPlusSquare className={`add-icon ${allTemplates[0].components.quantities.length > 1 && "me-4"}`}
-                                                onClick={() => {
-                                                    let tempQuantitiesDeta = allTemplates[0].components.quantities.map((quantity) => quantity);
-                                                    tempQuantitiesDeta.push({
-                                                        quantity: 1,
-                                                        price: 1
-                                                    });
-                                                    let tempTemplates = allTemplates.map((template) => template);
-                                                    tempTemplates[0].components.quantities = tempQuantitiesDeta;
-                                                    setAllTemplates(tempTemplates);
-                                                }}
-                                            />
-                                            {allTemplates[0].components.quantities.length > 1 && <FaRegMinusSquare className="remove-icon"
-                                                onClick={() => {
-                                                    let tempTemplates = allTemplates.map((template) => template);
-                                                    tempTemplates[0].components.quantities = tempTemplates[0].components.quantities.filter((quantity, index) => index !== quantityIndex);
-                                                    setAllTemplates(tempTemplates);
-                                                }}
-                                            />}
-                                        </div>
-                                    </div>)}
-                                </div>
-                            </>}
                         </section>}
                         <section className="category mb-4">
                             <select
