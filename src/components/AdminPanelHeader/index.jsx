@@ -45,6 +45,7 @@ export default function AdminPanelHeader({ isSuperAdmin = false }) {
                             </>}
                             {isSuperAdmin && <>
                                 <Nav.Link href="/users-managment" as={Link}>Users</Nav.Link>
+                                <Nav.Link href="/taxes-managment" as={Link}>Tax</Nav.Link>
                                 <NavDropdown title="Admins" id="admins-nav-dropdown">
                                     <NavDropdown.Item href="/admins-managment/add-new-admin" as={Link}>Add New</NavDropdown.Item>
                                     <NavDropdown.Divider />
@@ -59,7 +60,6 @@ export default function AdminPanelHeader({ isSuperAdmin = false }) {
                                         Update / Delete
                                     </NavDropdown.Item>
                                 </NavDropdown>
-                                {/* <Nav.Link href="/templates-managment" as={Link}>Templates Managment</Nav.Link> */}
                             </>}
                             <NavDropdown title="Products" id="products-nav-dropdown">
                                 <NavDropdown.Item href="/products-managment/add-new-product" as={Link}>Add New</NavDropdown.Item>
