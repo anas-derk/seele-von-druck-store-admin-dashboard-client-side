@@ -29,7 +29,7 @@ export default function UpdateAndDeleteBrands() {
 
     const [selectedBrandIndex, setSelectedBrandIndex] = useState(-1);
 
-    const [waitChangeBrandImageMsg, setWaitChangeBrandImageMsg] = useState(false);
+    const [waitChangeBrandImageMsg, setWaitChangeBrandImageMsg] = useState("");
 
     const [errorChangeBrandImageMsg, setErrorChangeBrandImageMsg] = useState("");
 
@@ -213,7 +213,7 @@ export default function UpdateAndDeleteBrands() {
                 await router.replace("/login");
             }
             else {
-                setWaitChangeBrandImageMsg(false);
+                setWaitChangeBrandImageMsg("");
                 setErrorChangeBrandImageMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeate The Process !!");
                 let errorTimeout = setTimeout(() => {
                     setErrorChangeBrandImageMsg("");

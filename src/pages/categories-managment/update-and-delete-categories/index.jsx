@@ -27,7 +27,15 @@ export default function UpdateAndDeleteCategories() {
 
     const [waitMsg, setWaitMsg] = useState("");
 
+    const [selectedCateogryImageIndex, setSelectedCategoryImageIndex] = useState(-1);
+
     const [selectedCategoryIndex, setSelectedCategoryIndex] = useState(-1);
+
+    const [waitChangeCategoryImageMsg, setWaitChangeCategoryImageMsg] = useState("");
+
+    const [errorChangeCategoryImageMsg, setErrorChangeCategoryImageMsg] = useState("");
+
+    const [successChangeCategoryImageMsg, setSuccessChangeCategoryImageMsg] = useState("");
 
     const [errorMsg, setErrorMsg] = useState("");
 
@@ -38,7 +46,7 @@ export default function UpdateAndDeleteCategories() {
     const [currentPage, setCurrentPage] = useState(1);
 
     const [totalPagesCount, setTotalPagesCount] = useState(0);
-    
+
     const [formValidationErrors, setFormValidationErrors] = useState({});
 
     const router = useRouter();
@@ -90,7 +98,7 @@ export default function UpdateAndDeleteCategories() {
                 await router.replace("/login");
             }
             else {
-                setErrorMsgOnGetCategoriesData(err?.message === "Network Error" ? "Network Error When Get Brands Data" : "Sorry, Someting Went Wrong When Get Brands Data, Please Repeate The Process !!");
+                setErrorMsgOnGetCategoriesData(err?.message === "Network Error" ? "Network Error When Get Categories Data" : "Sorry, Someting Went Wrong When Get Categories Data, Please Repeate The Process !!");
             }
         }
     }
@@ -110,7 +118,7 @@ export default function UpdateAndDeleteCategories() {
                 await router.replace("/login");
             }
             else {
-                setErrorMsgOnGetCategoriesData(err?.message === "Network Error" ? "Network Error When Get Brands Data" : "Sorry, Someting Went Wrong When Get Brands Data, Please Repeate The Process !!");
+                setErrorMsgOnGetCategoriesData(err?.message === "Network Error" ? "Network Error When Get Categories Data" : "Sorry, Someting Went Wrong When Get Brands Data, Please Repeate The Process !!");
             }
         }
     }
@@ -129,16 +137,84 @@ export default function UpdateAndDeleteCategories() {
                 await router.replace("/login");
             }
             else {
-                setErrorMsgOnGetCategoriesData(err?.message === "Network Error" ? "Network Error When Get Brands Data" : "Sorry, Someting Went Wrong When Get Brands Data, Please Repeate The Process !!");
+                setErrorMsgOnGetCategoriesData(err?.message === "Network Error" ? "Network Error When Get Categories Data" : "Sorry, Someting Went Wrong When Get Brands Data, Please Repeate The Process !!");
             }
         }
     }
 
-    const changeCategoryName = (categoryIndex, newValue) => {
+    const changeCategoryInfo = (categoryIndex, fieldName, newValue) => {
+        setSelectedCategoryImageIndex(-1);
         setSelectedCategoryIndex(-1);
         let categoriesTemp = allCategoriesInsideThePage;
-        categoriesTemp[categoryIndex].name = newValue;
+        categoriesTemp[categoryIndex][fieldName] = newValue;
         setAllCategoriesInsideThePage(categoriesTemp);
+
+    }
+
+    const changeCateogryImage = async (categoryIndex) => {
+        try {
+            setFormValidationErrors({});
+            const errorsObject = inputValuesValidation([
+                {
+                    name: "image",
+                    value: allCategoriesInsideThePage[categoryIndex].image,
+                    rules: {
+                        isRequired: {
+                            msg: "Sorry, This Field Can't Be Empty !!",
+                        },
+                        isImage: {
+                            msg: "Sorry, Invalid Image Type, Please Upload JPG Or PNG Image File !!",
+                        },
+                    },
+                },
+            ]);
+            setSelectedCategoryImageIndex(categoryIndex);
+            setFormValidationErrors(errorsObject);
+            if (Object.keys(errorsObject).length == 0) {
+                setWaitChangeCategoryImageMsg("Please Wait To Change Image ...");
+                let formData = new FormData();
+                formData.append("categoryImage", allCategoriesInsideThePage[categoryIndex].image);
+                const result = (await axios.put(`${process.env.BASE_API_URL}/categories/change-category-image/${allCategoriesInsideThePage[categoryIndex]._id}?language=${process.env.defaultLanguage}`, formData, {
+                    headers: {
+                        Authorization: localStorage.getItem(process.env.adminTokenNameInLocalStorage),
+                    }
+                })).data;
+                if (!result.error) {
+                    setWaitChangeCategoryImageMsg("");
+                    setSuccessChangeCategoryImageMsg("Change Image Successfull !!");
+                    let successTimeout = setTimeout(async () => {
+                        setSuccessChangeCategoryImageMsg("");
+                        setSelectedCategoryImageIndex(-1);
+                        setAllCategoriesInsideThePage((await getAllCategoriesInsideThePage(currentPage, pageSize)).data);
+                        clearTimeout(successTimeout);
+                    }, 1500);
+                }
+                else {
+                    setWaitChangeCategoryImageMsg("");
+                    setErrorChangeCategoryImageMsg("Sorry, Someting Went Wrong, Please Repeate The Process !!");
+                    let errorTimeout = setTimeout(() => {
+                        setErrorChangeCategoryImageMsg("");
+                        setSelectedCategoryImageIndex(-1);
+                        clearTimeout(errorTimeout);
+                    }, 1500);
+                }
+            }
+        }
+        catch (err) {
+            if (err?.response?.status === 401) {
+                localStorage.removeItem(process.env.adminTokenNameInLocalStorage);
+                await router.replace("/login");
+            }
+            else {
+                setWaitChangeCategoryImageMsg("");
+                setErrorChangeCategoryImageMsg(err?.message === "Network Error" ? "Network Error" : "Sorry, Someting Went Wrong, Please Repeate The Process !!");
+                let errorTimeout = setTimeout(() => {
+                    setErrorChangeCategoryImageMsg("");
+                    setSelectedCategoryImageIndex(-1);
+                    clearTimeout(errorTimeout);
+                }, 1500);
+            }
+        }
     }
 
     const updateCategory = async (categoryIndex) => {
@@ -262,6 +338,7 @@ export default function UpdateAndDeleteCategories() {
                             <thead>
                                 <tr>
                                     <th>Name</th>
+                                    <th>Image</th>
                                     <th>Process</th>
                                 </tr>
                             </thead>
@@ -274,13 +351,52 @@ export default function UpdateAndDeleteCategories() {
                                                     type="text"
                                                     className={`form-control d-block mx-auto p-2 border-2 brand-title-field ${formValidationErrors["categoryName"] && categoryIndex === selectedCategoryIndex ? "border-danger mb-3" : "mb-4"}`}
                                                     defaultValue={category.name}
-                                                    onChange={(e) => changeCategoryName(categoryIndex, e.target.value.trim())}
+                                                    onChange={(e) => changeCategoryInfo(categoryIndex, "name", e.target.value.trim())}
                                                 ></input>
                                                 {formValidationErrors["categoryName"] && categoryIndex === selectedCategoryIndex && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
                                                     <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
                                                     <span>{formValidationErrors["categoryName"]}</span>
                                                 </p>}
                                             </section>
+                                        </td>
+                                        <td className="brand-image-cell">
+                                            <img
+                                                src={`${process.env.BASE_API_URL}/${category.imagePath}`}
+                                                alt={`${category.name} Category Image !!`}
+                                                width="100"
+                                                height="100"
+                                                className="d-block mx-auto mb-4"
+                                            />
+                                            <section className="category-image mb-4">
+                                                <input
+                                                    type="file"
+                                                    className={`form-control d-block mx-auto p-2 border-2 category-image-field ${formValidationErrors["image"] && categoryIndex === selectedCateogryImageIndex ? "border-danger mb-3" : "mb-4"}`}
+                                                    onChange={(e) => changeCategoryInfo(categoryIndex, "image", e.target.files[0])}
+                                                    accept=".png, .jpg, .webp"
+                                                />
+                                                {formValidationErrors["image"] && categoryIndex === selectedCateogryImageIndex && <p className="bg-danger p-2 form-field-error-box m-0 text-white">
+                                                    <span className="me-2"><HiOutlineBellAlert className="alert-icon" /></span>
+                                                    <span>{formValidationErrors["image"]}</span>
+                                                </p>}
+                                            </section>
+                                            {(selectedCateogryImageIndex !== categoryIndex && selectedCategoryIndex !== categoryIndex) &&
+                                                <button
+                                                    className="btn btn-success d-block mb-3 w-50 mx-auto global-button"
+                                                    onClick={() => changeCateogryImage(categoryIndex)}
+                                                >Change</button>
+                                            }
+                                            {waitChangeCategoryImageMsg && selectedCateogryImageIndex === categoryIndex && <button
+                                                className="btn btn-info d-block mb-3 mx-auto global-button"
+                                                disabled
+                                            >{waitChangeCategoryImageMsg}</button>}
+                                            {successChangeCategoryImageMsg && selectedCateogryImageIndex === categoryIndex && <button
+                                                className="btn btn-success d-block mx-auto global-button"
+                                                disabled
+                                            >{successChangeCategoryImageMsg}</button>}
+                                            {errorChangeCategoryImageMsg && selectedCateogryImageIndex === categoryIndex && <button
+                                                className="btn btn-danger d-block mx-auto global-button"
+                                                disabled
+                                            >{errorChangeCategoryImageMsg}</button>}
                                         </td>
                                         <td className="update-cell">
                                             {selectedCategoryIndex !== categoryIndex && <>
